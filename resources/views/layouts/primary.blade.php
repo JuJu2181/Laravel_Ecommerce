@@ -1,0 +1,30 @@
+{{-- layout for index --}}
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+	{{-- using partials--}}
+    @include('partials._head')
+</head>
+
+<body class="js">
+	
+	<!-- Preloader -->
+    @include('partials._preloader')
+	<!-- End Preloader -->
+	
+	
+	<!-- Header -->
+    @include('partials._header')
+	<!--/ End Header -->
+	
+    @yield('content')
+
+
+	<!-- Start Footer Area -->
+    @include('partials._footer')
+	<!-- /End Footer Area -->
+ 
+	{{-- javascripts --}}
+    @include('partials._script')
+</body>
+</html>

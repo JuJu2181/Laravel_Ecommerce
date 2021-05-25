@@ -1,0 +1,25 @@
+some additional unwanted codes 
+from web.php 
+//? to create a new produt
+Route::get('/create_product',function(){
+    // Product::create(
+    //     [
+    //         'product_name' => 'Key Boards',
+    //         'product_desc' => 'Premium Gaming keyboards',
+    //         'price'=>'5000',
+    //         'image' => '',
+    //     ]
+    // );
+    // alt way
+    $product = new Product;
+    $product->product_name = 'mouse';
+    $product->product_desc = 'A gaming mouse here';
+    $product->price = '1000';
+    $product->save();
+    return redirect()->route('product.all');
+})->name('product.create');
+//? to get products from db
+Route::get('/get_product',function(){
+    $products = Product::get();
+    return $products;
+});
