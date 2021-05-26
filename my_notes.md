@@ -40,3 +40,16 @@ To solve this problem we use with(relationship) in the eloquent so it helps us t
 # for using foreign keys we need to define relationships in model
 here products and categories have a one to many relationship which we define using eloquent in model
 A category hasMany products and a product belongsTo category
+
+## components in laravel
+they are automatically found in app/View/Components and resource/view/components
+php artisan make:component forms/input
+we can create components and use it in different files so it increases readability
+after registering a component we can use the component using 
+<x-componentName/>
+we can also pass data to components 
+Components can be used to create layouts  
+
+# I will use sections for users and components for admin
+
+## using layouts in bottom up concept and using the components is top-bottom concept 

@@ -1,4 +1,4 @@
-{{-- layout for index --}}
+{{-- Creating layout using partials--}}
 <!DOCTYPE html>
 <html lang="zxx">
 <head>

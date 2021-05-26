@@ -74,9 +74,10 @@ class ProductsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Product $product)
     {
-        //
+        $categories = Category::all();
+        return view('admin.products.edit',["product"=>$product,"categories"=>$categories]);
     }
 
     /**
@@ -86,9 +87,20 @@ class ProductsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Product $product)
     {
         //
+        try {
+            $product->name = $request->input('name');
+            $product->description = $request->input('description');
+            $product->price = $request->input('price');
+            $product->category_id = $request->input('category_id');
+            if($product->save()){
+                return redirect()->route('admin.products.index');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back();
+        }
     }
 
     /**
