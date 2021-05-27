@@ -53,3 +53,10 @@ Components can be used to create layouts
 # I will use sections for users and components for admin
 
 ## using layouts in bottom up concept and using the components is top-bottom concept 
+
+## for session timeout of token we modify the env file in session_time
+
+Assignments
+## form request validation
+## update validation 
+## delete implementation

@@ -11,22 +11,43 @@
                         <td>Name</td>
                         <td>Description</td>
                         <td>Price</td>
+                        <td>Category</td>
                         <td>Actions</td>
                     </tr>
                     @foreach ($products as $product)
-                    <tr>
+                    <tr id="productId{{ $product->id }}">
                         
                         <td>{{ $product->id }}</td>
                         <td>{{ $product->name }}</td>
-                        <td>{{ Str::substr($product->description, 0, 50) }}...</td>
+                        <td>  {{ Str::substr($product->description, 0, 50) }} {{ strlen($product->description) > 50 ? "...": "" }}</td>
                         <td>{{ $product->price }}</td>
+                        <td><a href="">{{ $product->category->name }}</a></td>
                         <td>
-                            <a href={{ route('admin.products.edit',$product->id) }} class="btn btn-info">  
+                            <a href={{ route('admin.products.edit',$product->id) }} class="btn btn-info btn-block">  
+                                Edit
                                 <span><i class="typcn typcn-edit"></i></span>
-                                Edit</a> 
-                            <a href="" class="btn btn-danger">
+                                </a>
+                            {{--deleting by redirecting to delete page  --}}
+                            {{-- <a href={{ route('admin.products.deletePage',$product->id) }} class="btn btn-danger btn-block mt-2">
+                                Delete
                                 <span><i class="typcn typcn-trash"></i></span>
-                                Delete</a>
+                                </a> --}}
+                                
+                                {{-- to directly delete the product instead of redirecting to the delete page --}}
+                                {{-- <form action={{ route('admin.products.delete',$product->id) }} method="post" class="mt-2" id="deleteForm">
+                                @method('DELETE')
+                                @csrf
+                                <button type="submit" class="btn btn-danger btn-block" id="deleteButton">
+                                    Delete
+                                    <span><i class="typcn typcn-trash"></i></span>
+                                </button>
+                                </form> --}}
+
+                                {{-- to delete using ajax request --}}
+                                <meta name="csrf-token" content="{{ csrf_token() }}">
+                                <button id="deleteProduct" data-id="{{ $product->id }}" class="btn btn-danger btn-block mt-2" onclick="deleteProduct({{ $product->id }})">Delete
+                                <span><i class="typcn typcn-trash"></i></span
+                                </button>
                         </td>
                         </tr>
                         @endforeach
@@ -35,4 +56,45 @@
         </div>
     </div>
 </div>    
+@section('scripts')
+    <script>
+        // to toggle active state
+        document.getElementById("products").classList.add("active");
+        // for deleting by form
+        // const deleteButton = document.getElementById("deleteButton");
+        // deleteButton.addEventListener("click",(e)=>{
+        //     e.preventDefault();
+        //     if(confirm("Are you sure to delete this product?\n press 'OK' to confirm")){
+        //         console.log("deleted");
+        //         document.getElementById("deleteForm").submit();
+        //     }else{
+        //         console.log("cancelled");
+        //     }
+        // });
+
+        // for ajax delete
+        // delete is working here but it is not removing row from table
+        function deleteProduct(id){
+            console.log(id);
+            let token = $("meta[name='csrf-token']").attr("content");
+            if(confirm("Are you sure to delete this product?\n press 'OK' to confirm")){
+                $.ajax({
+                url:"/admin/products/delete/"+id,
+                type: 'DELETE',
+                data:{
+                    "id":id,
+                    "_token":token,
+                },
+                success:function(){
+                    console.log("deleted");
+                    $('#productId'+id).remove();
+                }
+                });
+            }else{
+                console.log("cancelled");
+            }
+            
+        }
+    </script>
+@stop
 </x-admin.layout>

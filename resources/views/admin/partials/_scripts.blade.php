@@ -231,3 +231,4 @@
     });
 
 </script>
+@yield('scripts')

@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
-
+use App\Http\Requests\ProductsFormRequest;
 class ProductsController extends Controller
 {
     /**
@@ -15,7 +16,7 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $products = Product::latest()->get();
+        $products = Product::latest('id')->get();
         return view('admin.products.index',['products'=>$products]);
     }
 
@@ -38,23 +39,35 @@ class ProductsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductsFormRequest $request)
     {   
-        try {
-            $product = new Product;
-            $product->name = $request->input('name');
-            $product->description = $request->input('description');
-            $product->price = $request->input('price');
-            $product->category_id = $request->input('category_id');
-            if($product->save()){
-                return redirect()->route('admin.products.index');
-            }
-        } catch (\Throwable $th) {
+        // validation rules
+        // * manually created
+        // $validated = $request->validate(
+        //     [
+        //         'name' => 'required|max:255|min:3',
+        //         'description' => 'required|max:255|min:10',
+        //         'price' => 'required|integer',
+        //         'category_id'=>'required|integer|min:1'
+        //     ],
+        //     // customizing error messages
+        //     [
+        //         'category_id.min'=>'Please select atleast one category'
+        //     ]
+        // );
+
+        // validation rules using the form request
+        $request->validated();
+        $product = new Product;
+        $product->name = $request->input('name');
+        $product->description = $request->input('description');
+        $product->price = $request->input('price');
+        $product->category_id = $request->input('category_id');
+        if($product->save()){
+            return redirect()->route('admin.products.index');
+        }else{
             return redirect()->back();
-        }
-        
-        
-        
+        }     
     }
 
     /**
@@ -87,20 +100,20 @@ class ProductsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductsFormRequest $request, Product $product)
     {
         //
-        try {
-            $product->name = $request->input('name');
-            $product->description = $request->input('description');
-            $product->price = $request->input('price');
-            $product->category_id = $request->input('category_id');
-            if($product->save()){
-                return redirect()->route('admin.products.index');
-            }
-        } catch (\Throwable $th) {
+        $request->validated();
+        $product->name = $request->input('name');
+        $product->description = $request->input('description');
+        $product->price = $request->input('price');
+        $product->category_id = $request->input('category_id');
+        if($product->save()){
+            return redirect()->route('admin.products.index');
+        }else{
             return redirect()->back();
         }
+        
     }
 
     /**
@@ -109,8 +122,20 @@ class ProductsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    // using route model binding
+    public function destroy(Product $product)
     {
         //
+        $product->delete();
+        // for form delete
+        // return redirect()->route('admin.products.index');
+        // for ajax delete
+        return response()->json([
+            'success'=>'Product deleted success'
+        ]);
+    }
+
+    public function delete(Product $product){
+        return view('admin.products.delete',["product"=>$product]);
     }
 }

@@ -9,25 +9,43 @@
                     {{-- Then we need to add the put method as hiden field --}}
                     @method('PUT')
                     @csrf
-                    <label for="name">Product Name: </label> <br>
-                    <input type="text" name="name" id="" class="form-control" value="{{ $product->name }}"><br>
-                    <label for="description">Product Description: </label>
-                    <br>
-                    <textarea name="description" id="" cols="30" rows="10" class="form-control" >{{ $product->description }}</textarea>
-                    <br>
-                    <label for="price">Price: </label> <br>
-                    <input type="text" name="price" id="" class="form-control" value="{{ $product->price }}"><br><br>
-                    <label for="category_id">Category:</label><br>
+                    <label for="name" class="m-1">Product Name: </label> 
+                    <input type="text" name="name" id="" class="form-control @error('name') is-invalid @enderror"  value="{{$product->name}}">
+                    @error('name')
+                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                    @enderror
+                    <label for="description" class="m-1">Product Description: </label>
+                    
+                    <textarea name="description" id="" cols="30" rows="10" class="form-control @error('description') is-invalid @enderror" >{{ $product->description}}</textarea>
+                    @error('description')
+                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                    @enderror
+                    <label for="price" class="m-1">Price: </label> 
+                    <input type="text" name="price" id="" class="form-control @error('price') is-invalid @enderror" value="{{ $product->price }}">
+                    @error('price')
+                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                    @enderror
+                    <label for="category_id" class="m-1">Category:</label><br>
                     <x-forms.select name="category_id" class="form-control">
-                        <option value="0"> Select A Category</option>
+                        <option value="0" disabled> Select A Category</option>
                         @foreach ($categories as $category)
+                            
                             <option value="{{ $category->id }}" {{ $category->id === $product->category_id ? "selected":"" }}>{{ $category->name }}</option>
                         @endforeach
                     </x-forms.select>
-                    <br><br>
-                    <input type="submit" value="Update Product" name="submit" class="btn btn-primary btn-block">
+                    @error('category_id')
+                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                    @enderror
+                    
+                    <input type="submit" value="Update Product" name="submit" class="btn btn-primary btn-block mt-4">
                 </form>
+                <a href={{ route('admin.products.index') }} class="btn btn-warning btn-block mt-2">Discard Changes</a>
             </div>
         </div>
     </div>
+    @section('scripts')
+    <script>
+        document.getElementById("products").classList.add("active");
+    </script>
+    @stop
     </x-admin.layout>

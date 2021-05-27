@@ -6,23 +6,30 @@
         </div><!-- az-header-left -->
         <div class="az-header-menu">
             <div class="az-header-menu-header">
-                <a href="index.html" class="az-logo"><span></span> azia</a>
+                <a href={{ route('admin.dashboard') }} class="az-logo"><span></span> ADMIN</a>
                 <a href="" class="close">&times;</a>
             </div><!-- az-header-menu-header -->
             <ul class="nav">
-                <li class="nav-item active show">
+                <li class="nav-item show" id="dashboard">
                     <a href={{ route('admin.dashboard') }} class="nav-link"><i class="typcn typcn-chart-area-outline"></i>
                         Dashboard</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" id="products">
                   <a href="" class="nav-link with-sub"><i class="typcn typcn-document"></i> Products</a>
                   <nav class="az-menu-sub">
                       <a href={{ route('admin.products.index') }} class="nav-link">List</a>
                       <a href={{ route('admin.products.create') }} class="nav-link">Create</a>
                   </nav>
               </li>
-                <li class="nav-item">
-                    <a href="" class="nav-link with-sub"><i class="typcn typcn-document"></i> Pages</a>
+              <li class="nav-item" id="categories">
+                <a href={{ route('admin.products.index') }} class="nav-link with-sub"><i class="typcn typcn-document"></i> Categories</a>
+                <nav class="az-menu-sub">
+                    <a href={{ route('admin.products.index') }} class="nav-link">List</a>
+                    <a href={{ route('admin.products.create') }} class="nav-link">Create</a>
+                </nav>
+            </li>
+                <li class="nav-item" id="user">
+                    <a href="" class="nav-link with-sub"><i class="typcn typcn-document"></i> User</a>
                     <nav class="az-menu-sub">
                         <a href="page-signin.html" class="nav-link">Sign In</a>
                         <a href="page-signup.html" class="nav-link">Sign Up</a>

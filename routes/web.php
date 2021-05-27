@@ -77,6 +77,12 @@ Route::get('/admin/products/edit/{product}', [App\Http\Controllers\Admin\Product
 Route::put('/admin/products/update/{product}', [App\Http\Controllers\Admin\ProductsController::class, 'update'])->name("admin.products.update");
 
 Route::delete('/admin/products/delete/{product}', [App\Http\Controllers\Admin\ProductsController::class, 'destroy'])->name("admin.products.delete");
+// for redirecting to the delete page if used 
+Route::get('/admin/products/delete/{product}',[App\Http\Controllers\Admin\ProductsController::class,'delete'])->name("admin.products.deletePage");
+
+// * for crud of categories 
+
+
 
 // ?for dashboard
 Route::get('/admin/', [DashboardController::class, 'index'])->name('admin.dashboard');

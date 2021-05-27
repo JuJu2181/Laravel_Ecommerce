@@ -401,4 +401,9 @@
             </div><!-- az-content-body -->
         </div>
     </div><!-- az-content -->
+    @section('scripts')
+    <script>
+        document.getElementById("dashboard").classList.add("active");
+    </script>
+    @stop
 </x-admin.layout>

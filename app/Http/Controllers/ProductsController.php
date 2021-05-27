@@ -11,7 +11,7 @@ class ProductsController extends Controller
     
     public function index(){
         //? fetching from db
-        $products = Product::all();
+        $products = Product::latest('id')->get();
         $categories = Category::all();
         return view(
             'products.index',
