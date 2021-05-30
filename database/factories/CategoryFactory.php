@@ -23,7 +23,7 @@ class CategoryFactory extends Factory
     {
         return [
             // creating fake category data
-            "name" => $this->faker->word(),
+            "name" => $this->faker->unique()->word(),
             "description" => $this->faker->sentence()
         ];
     }

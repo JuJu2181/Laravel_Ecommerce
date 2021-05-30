@@ -23,10 +23,10 @@ class DatabaseSeeder extends Seeder
         // Category::truncate();
         // * first way for database seeding
         // creating a category and then passing it to create a product in seeder
-        $category = Category::create([
-            "name" => "Headphones",
-            "description" => "This Category contains Headphones"
-        ]);
+        // $category = Category::create([
+        //     "name" => "Headphones",
+        //     "description" => "This Category contains Headphones"
+        // ]);
 
         // Product::create([
         //     "product_name" => "Iphone",
@@ -35,10 +35,10 @@ class DatabaseSeeder extends Seeder
         //     "category_id" => $category->id
         // ]);
         // * using second method for creating/seeding fake data using factory 
-        // Category::factory(3)->create();
+        // Category::factory(5)->create();
         //* overriding the default category_id of the factory in seeder
         Product::factory(3)->create([
-            'category_id' => 3
+            'category_id' => 5
         ]);
     }
 }

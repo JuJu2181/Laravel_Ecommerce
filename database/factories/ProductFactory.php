@@ -24,7 +24,7 @@ class ProductFactory extends Factory
         return [
             //creating fake product data
             'name' => $this->faker->word(),
-            'description' => $this->faker->paragraph(),
+            'description' => $this->faker->paragraph(10),
             'price' => 10000,
             "category_id" => 1
         ];
