@@ -4,13 +4,13 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\EshopController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Post;
 use App\Models\Category;
 use GuzzleHttp\Promise\Create;
-use App\Http\Controllers\Admin\DashboardController;
 
 
 /*

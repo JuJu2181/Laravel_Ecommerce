@@ -73,9 +73,11 @@ class ProductsController extends Controller
             // storing with its original name 
             $request->file('image_upload')->storeAs('public/images',$name);
             // for resizing image and saving in db
-            $image_resize = Image::make(storage_path('app/public/images/'.$name));
-            $image_resize->resize(550,750);
-            $image_resize->save(storage_path('app/public/images/thumbnail/'.$name));
+            // $image_resize = Image::make(storage_path('app/public/images/'.$name));
+            // $image_resize->resize(550,750);
+            // $image_resize->save(storage_path('app/public/images/thumbnail/'.$name));
+            // * using the helper function directly
+            image_crop($name,550,750);
             $product->image = $name;
         }
         if($product->save()){
