@@ -62,3 +62,14 @@ Assignments
 ## delete implementation
 
 testing
+
+# to link storage/ public and public we use 
+php artisan storage:link 
+
+# composer require intervention/image for resizing images
+
+# helper functions are the functions that can be accessed from anywhere
+create a new file helpers.php in the app folder then add it in composer.json autoload as
+"files": [
+    "app/helpers.php"
+]

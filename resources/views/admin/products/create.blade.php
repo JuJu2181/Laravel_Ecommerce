@@ -14,7 +14,7 @@
             </div>
             @endif --}}
             <h2>Create Product</h2>
-            <form action={{ route('admin.products.store') }} method="post">
+            <form action={{ route('admin.products.store') }} method="post" enctype="multipart/form-data">
                 @csrf
                 <label for="name" class="m-1">Product Name: </label> 
                 <input type="text" name="name" id="" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}">
@@ -41,6 +41,8 @@
                 @error('category_id')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
+                {{-- for images --}}
+                <input type="file" name="image_upload" id="" class="form-control mt-3">
                 <input type="submit" value="Create Product" name="submit" class="btn btn-success btn-block mt-4">
             </form>
         </div>

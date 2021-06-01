@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductsFormRequest;
+use Intervention\Image\Facades\Image;
 class ProductsController extends Controller
 {
     /**
@@ -63,6 +64,20 @@ class ProductsController extends Controller
         $product->description = $request->input('description');
         $product->price = $request->input('price');
         $product->category_id = $request->input('category_id');
+        // for validating image 
+        if($request->hasFile('image_upload')){
+            // to get original name 
+            $name = $request->file('image_upload')->getClientOriginalName();
+            // this also by default generates a random name
+            // $product->image = $request->file('image_upload')->storage('public/images');
+            // storing with its original name 
+            $request->file('image_upload')->storeAs('public/images',$name);
+            // for resizing image and saving in db
+            $image_resize = Image::make(storage_path('app/public/images/'.$name));
+            $image_resize->resize(550,750);
+            $image_resize->save(storage_path('app/public/images/thumbnail/'.$name));
+            $product->image = $name;
+        }
         if($product->save()){
             return redirect()->route('admin.products.index');
         }else{

@@ -51,12 +51,13 @@
                 </div>
                 <div class="row">
                     @foreach ($products as $product)
+                    
                     <div class="col-lg-4 col-md-6 col-12">
                         <div class="single-product">
                             <div class="product-img">
-                                <a href={{ route('product.single',$product->id) }}>{{ $product->name }}>
-                                    <img class="default-img" src="https://via.placeholder.com/550x750" alt="#">
-                                    <img class="hover-img" src="https://via.placeholder.com/550x750" alt="#">
+                                <a href={{ route('product.single',$product->id) }}>{{ $product->name }}
+                                    <img class="default-img" src="{{ $product->image == ''?"https://via.placeholder.com/550x750" :asset('storage/images/'.$product->image) }}" alt="#">
+                                    <img class="hover-img" src="{{ $product->image == ''?"https://via.placeholder.com/550x750" :asset('storage/images/'.$product->image) }}" alt="#">
                                 </a>
                                 <div class="button-head">
                                     <div class="product-action">
