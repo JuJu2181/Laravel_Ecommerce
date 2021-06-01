@@ -109,17 +109,22 @@
                     <div class="dropdown-footer"><a href="">View All Notifications</a></div>
                 </div><!-- dropdown-menu -->
             </div><!-- az-header-notification -->
+            {{-- for gravatar images --}}
+            @php
+                $hashed_email = md5(strtolower(trim(Auth::user()->email)));
+            @endphp
+            {{-- gravatar end --}}
             <div class="dropdown az-profile-menu">
-                <a href="" class="az-img-user"><img src="/admin_public/img/faces/face1.jpg" alt=""></a>
+                <a href="" class="az-img-user"><img src="{{ Auth::user()->image == ''?"https://www.gravatar.com/avatar/".$hashed_email."?s=32&d=robohash" :image_crop(Auth::user()->image,32,32) }}" alt="user profile pic"></a>
                 <div class="dropdown-menu">
                     <div class="az-dropdown-header d-sm-none">
                         <a href="" class="az-header-arrow"><i class="icon ion-md-arrow-back"></i></a>
                     </div>
                     <div class="az-header-profile">
                         <div class="az-img-user">
-                            <img src="/admin_public/img/faces/face1.jpg" alt="">
+                            <img src="{{ Auth::user()->image == ''?"https://www.gravatar.com/avatar/".$hashed_email."?s=80&d=robohash" :image_crop(Auth::user()->image,80,80) }}" alt="">
                         </div><!-- az-img-user -->
-                        <h6>Aziana Pechon</h6>
+                        <h6>{{Auth::user()->name}}</h6>
                         <span>Premium Member</span>
                     </div><!-- az-header-profile -->
 
@@ -127,8 +132,13 @@
                     <a href="" class="dropdown-item"><i class="typcn typcn-edit"></i> Edit Profile</a>
                     <a href="" class="dropdown-item"><i class="typcn typcn-time"></i> Activity Logs</a>
                     <a href="" class="dropdown-item"><i class="typcn typcn-cog-outline"></i> Account Settings</a>
-                    <a href="page-signin.html" class="dropdown-item"><i class="typcn typcn-power-outline"></i> Sign
-                        Out</a>
+                    <a href="{{route('eshop.home')}}" class="dropdown-item"><i class="typcn typcn-shopping-bag"></i> Store Home</a>
+                    <!-- Authentication -->
+                    <form method="post" action="{{ route('logout') }}">
+                        @csrf
+                        <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault();
+                        this.closest('form').submit();""><i class="typcn typcn-power-outline"></i> Sign Out</a>
+                    </form>
                 </div><!-- dropdown-menu -->
             </div>
         </div><!-- az-header-right -->

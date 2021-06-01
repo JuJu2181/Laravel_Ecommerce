@@ -20,6 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'image',
     ];
 
     /**
@@ -31,7 +32,10 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
+    // default attributes for model
+    protected $attributes = [
+        'image' => '',
+    ];
     /**
      * The attributes that should be cast to native types.
      *

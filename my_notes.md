@@ -73,3 +73,11 @@ create a new file helpers.php in the app folder then add it in composer.json aut
 "files": [
     "app/helpers.php"
 ]
+
+# what is this 
+# it makes the text written translation ready. In case of many langauges defined in the project it helps in translation and using other languages say converting the text to nepali langauage 
+{{ __('Any text')}}
+
+# for using different langaugaes we use the file in resources/lang/ by default en is for english similarly we can use np for nepali. 
+
+Route service provider is the modern way of using routes

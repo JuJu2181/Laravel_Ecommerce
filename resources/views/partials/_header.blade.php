@@ -20,11 +20,23 @@
                         <ul class="list-main">
                             <li><i class="ti-location-pin"></i> Store location</li>
                             <li><i class="ti-alarm-clock"></i> <a href="#">Daily deal</a></li>
-                            <li><i class="ti-user"></i> <a href="#">My account</a></li>
-                            <li><i class="ti-power-off"></i><a href="login.html#">Login</a></li>
+
+                            @if (Route::has('login'))
+                            @auth
+                            <li><i class="ti-user"></i> <a href="{{ url('/admin') }}">My account</a></li>
+                            @else
+                            <li><i class="ti-power-off"></i><a href="{{ route('login') }}">Login</a></li>
+                            @if (Route::has('register'))
+                            <li><i class="ti-user"></i> <a href="{{ route('register') }}">Register</a></li>
+                            @endif
+                            @endauth
+                            @endif
+
+
                         </ul>
                     </div>
                     <!-- End Top Right -->
+
                 </div>
             </div>
         </div>
