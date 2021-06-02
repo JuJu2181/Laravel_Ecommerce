@@ -10,7 +10,7 @@ class CategoriesController extends Controller
 {
     public function index(){
         //? fetching from db
-        $categories = Category::all();
+        $categories = Category::latest('id')->get();
         return view(
             'category.index',
             ['categories' => $categories]
@@ -22,7 +22,7 @@ class CategoriesController extends Controller
         // $products = Product::whereCategoryid($category->id)->get();
         // * accessing product for category using the eloquent relationship
         $products = $category->products;
-        $categories = Category::all();
+        $categories = Category::latest('id')->get();
         return view(
             'category.single',
             ['products'=>$products,

@@ -73,7 +73,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/products/delete/{product}',[App\Http\Controllers\Admin\ProductsController::class,'delete'])->name("admin.products.deletePage");
 
     // * for crud of categories 
+    Route::get('/admin/categories', [App\Http\Controllers\Admin\CategoriesController::class, 'index'])->name("admin.categories.index");
 
+    Route::get('/admin/categories/create', [App\Http\Controllers\Admin\CategoriesController::class, 'create'])->name("admin.categories.create");
+
+    Route::post('/admin/categories/store', [App\Http\Controllers\Admin\CategoriesController::class, 'store'])->name("admin.categories.store");
+
+    Route::get('/admin/categories/edit/{category}', [App\Http\Controllers\Admin\CategoriesController::class, 'edit'])->name("admin.categories.edit");
+
+    Route::put('/admin/categories/update/{category}', [App\Http\Controllers\Admin\CategoriesController::class, 'update'])->name("admin.categories.update");
+
+    Route::delete('/admin/categories/delete/{category}', [App\Http\Controllers\Admin\CategoriesController::class, 'destroy'])->name("admin.categories.delete");
 
 
     // ?for dashboard

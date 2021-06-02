@@ -24,8 +24,8 @@
               <li class="nav-item" id="categories">
                 <a href={{ route('admin.products.index') }} class="nav-link with-sub"><i class="typcn typcn-document"></i> Categories</a>
                 <nav class="az-menu-sub">
-                    <a href={{ route('admin.products.index') }} class="nav-link">List</a>
-                    <a href={{ route('admin.products.create') }} class="nav-link">Create</a>
+                    <a href={{ route('admin.categories.index') }} class="nav-link">List</a>
+                    <a href={{ route('admin.categories.create') }} class="nav-link">Create</a>
                 </nav>
             </li>
                 <li class="nav-item" id="user">

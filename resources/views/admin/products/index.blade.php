@@ -21,7 +21,7 @@
                         <td>{{ $product->name }}</td>
                         <td>  {{ Str::substr($product->description, 0, 50) }} {{ strlen($product->description) > 50 ? "...": "" }}</td>
                         <td>{{ $product->price }}</td>
-                        <td><a href="">{{ $product->category->name }}</a></td>
+                        <td><a href="{{route('category.single',$product->category->id)}}">{{ $product->category->name }}</a></td>
                         <td>
                             <a href={{ route('admin.products.edit',$product->id) }} class="btn btn-info btn-block">  
                                 Edit

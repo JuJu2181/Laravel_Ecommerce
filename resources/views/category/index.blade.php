@@ -26,7 +26,7 @@
                     <div class="col-lg-4 col-md-6 col-12">
 					<!-- Start Single Category -->
 					<div class="shop-single-blog">
-						<img src="https://via.placeholder.com/300x300" alt="#">
+						<img class="default-img" src="{{ $category->image == ''?"https://via.placeholder.com/300x300":image_crop($category->image,300,300) }}" alt="#">
 						<div class="content">
 							<a href={{ route('category.single',$category->id) }} class="title">{{ $category->name }}</a>
 							<a href={{ route('category.single',$category->id) }} class="more-btn">View Category</a>

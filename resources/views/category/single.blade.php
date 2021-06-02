@@ -51,13 +51,21 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-12 my-3">
+                        <h3>{{$category->name}}</h3>
+                        <p class="mt-2">{{$category->description}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mt-5">                <h3>Products In This Category ({{count($products)}})</h3></div>
+
                     @foreach ($products as $product)
                         <div class="col-lg-4 col-md-6 col-12">
                             <div class="single-product">
                                 <div class="product-img">
                                     <a href="product-details.html">
-                                        <img class="default-img" src="https://via.placeholder.com/550x750" alt="#">
-                                        <img class="hover-img" src="https://via.placeholder.com/550x750" alt="#">
+                                        <img class="default-img" src="{{$product->image==''?"https://via.placeholder.com/550x750":image_crop($product->image)}}" alt="#">
+                                        <img class="hover-img" src="{{$product->image==''?"https://via.placeholder.com/550x750":image_crop($product->image)}}" alt="#">
                                     </a>
                                     <div class="button-head">
                                         <div class="product-action">

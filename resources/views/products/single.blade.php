@@ -13,7 +13,7 @@
 @section('content')
     @include('partials._breadcumb')
     <div class="container  p-5">
-        <img src="https://via.placeholder.com/950x460" alt="#">
+        <img src="{{ $product->image == '' ? "https://via.placeholder.com/950x460":image_crop($product->image,950,460)}}" alt="#">
         <article class="m-4">
             <h2 class="m-1">{{ $product['name'] }}</h2>
             <p class="m-1"> {{$product['description']}} </p>

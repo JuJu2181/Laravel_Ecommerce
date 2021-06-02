@@ -77,7 +77,7 @@ class ProductsController extends Controller
             // $image_resize->resize(550,750);
             // $image_resize->save(storage_path('app/public/images/thumbnail/'.$name));
             // * using the helper function directly
-            image_crop($name,550,750);
+            // image_crop($name,550,750);
             $product->image = $name;
         }
         if($product->save()){

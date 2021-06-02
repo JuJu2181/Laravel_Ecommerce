@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Category;
+use App\Http\Requests\CategoriesFormRequest;
+
 
 class CategoriesController extends Controller
 {
@@ -14,7 +17,8 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::latest('id')->get();
+        return view('admin.categories.index',['categories'=>$categories]);
     }
 
     /**
@@ -24,7 +28,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        //
+        return view("admin.categories.create");
     }
 
     /**
@@ -33,9 +37,30 @@ class CategoriesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoriesFormRequest $request)
     {
-        //
+        // validation rules using the form request
+        $request->validated();
+        $category = new Category;
+        $category->name = $request->input('name');
+        $category->description = $request->input('description');
+        // for validating image 
+        if($request->hasFile('image_upload')){
+            // to get original name 
+            $name = $request->file('image_upload')->getClientOriginalName();
+            // this also by default generates a random name
+            // $product->image = $request->file('image_upload')->storage('public/images');
+            // storing with its original name 
+            $request->file('image_upload')->storeAs('public/images',$name);
+            // * using the helper function directly
+            // image_crop($name,550,750);
+            $category->image = $name;
+        }
+        if($category->save()){
+            return redirect()->route('admin.categories.index');
+        }else{
+            return redirect()->back();
+        }  
     }
 
     /**

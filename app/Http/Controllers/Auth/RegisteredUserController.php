@@ -45,7 +45,7 @@ class RegisteredUserController extends Controller
             $name = $request->file('image')->getClientOriginalName();
             $request->file('image')->storeAs('public/images',$name);
             // * using the helper function directly
-            image_crop($name,80,80);
+            // image_crop($name,80,80);
         }else{
             $name = '';
         }
