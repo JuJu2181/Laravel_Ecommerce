@@ -29,7 +29,7 @@ class CategoriesFormRequest extends FormRequest
             'name' => 'required|unique:categories|max:255|min:3',
             'description' => 'required|max:255|min:10',
             'image'=>'image',
-            'slug'=>'required|unique:categories'
+            'slug'=>'required|unique:categories',
         ];
     }
 

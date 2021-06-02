@@ -27,10 +27,11 @@ class ProductsFormRequest extends FormRequest
         return [
             //all validation rules here 
             'name' => 'required|max:255|min:3',
-            'description' => 'required|max:255|min:10',
+            'slug' => 'required|string|unique:products',
+            'description' => 'required|min:10',
             'price' => 'required|integer',
             'category_id'=>'required|integer|min:1',
-            'image'=>'image'
+            'image'=>'image',
         ];
     }
 

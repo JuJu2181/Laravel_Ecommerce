@@ -40,6 +40,7 @@ class CategoriesController extends Controller
      */
     public function store(CategoriesFormRequest $request)
     {
+        // return $request;
         // validation rules using the form request
         $request->validated();
         //* for auto generating slug based on name without form modification. Here slug is not submitted using form but instead it is generated in controller using the submitted name

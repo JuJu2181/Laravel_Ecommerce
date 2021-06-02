@@ -99,6 +99,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
 });
 
+// get all sub categories with category 0 as parent
+Route::get('test',function(){
+    return App\Models\Category::with('children')->where('parent_id',1)->get();
+});
+
 
 // Route::get('/', function () {
 //     return view('welcome');

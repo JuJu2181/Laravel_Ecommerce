@@ -61,6 +61,7 @@ class ProductsController extends Controller
         $request->validated();
         $product = new Product;
         $product->name = $request->input('name');
+        $product->slug = $request->input('slug');
         $product->description = $request->input('description');
         $product->price = $request->input('price');
         $product->category_id = $request->input('category_id');
@@ -122,6 +123,7 @@ class ProductsController extends Controller
         //
         $request->validated();
         $product->name = $request->input('name');
+        $product->slug = $request->input('slug');
         $product->description = $request->input('description');
         $product->price = $request->input('price');
         $product->category_id = $request->input('category_id');

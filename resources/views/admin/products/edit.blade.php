@@ -9,11 +9,20 @@
                     {{-- Then we need to add the put method as hiden field --}}
                     @method('PUT')
                     @csrf
+                    {{-- for name --}}
                     <label for="name" class="m-1">Product Name: </label> 
-                    <input type="text" name="name" id="" class="form-control @error('name') is-invalid @enderror"  value="{{$product->name}}">
+                    <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror"  value="{{$product->name}}">
                     @error('name')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                     @enderror
+                    {{-- for slug --}}
+                <label for="slug" class="m-1">Product Slug: </label>
+                <input type="text" name="slug" id="slug" class="form-control @error('slug') is-invalid @enderror"
+                    value="{{ $product->slug }}">
+                @error('slug')
+                <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+                    {{-- for description --}}
                     <label for="description" class="m-1">Product Description: </label>
                     
                     <textarea name="description" id="" cols="30" rows="10" class="form-control @error('description') is-invalid @enderror" >{{ $product->description}}</textarea>
@@ -46,6 +55,17 @@
     @section('scripts')
     <script>
         document.getElementById("products").classList.add("active");
+        // for auto generating title based on input 
+        $(document).ready(($) => {
+        $('#name').on('change', () => {
+            let name = $('#name').val();
+            console.log('name: ', name);
+            // using regular expression to remove space with -
+            let slug = name.replace(/\s+/g, '-').toLowerCase();
+            console.log('slug', slug);
+            $('#slug').val(slug);
+        });
+    });
     </script>
     @stop
     </x-admin.layout>

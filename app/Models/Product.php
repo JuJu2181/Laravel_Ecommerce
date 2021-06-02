@@ -12,8 +12,9 @@ class Product extends Model
         'name',
         'description',
         'price',
+        'slug',
         'image',
-        'category_id'
+        'category_id',
     ];
     // default attributes for model
     protected $attributes = [

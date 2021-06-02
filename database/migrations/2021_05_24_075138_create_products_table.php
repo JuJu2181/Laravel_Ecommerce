@@ -24,7 +24,7 @@ class CreateProductsTable extends Migration
             // $table->unsignedBigInteger('category_id');
             // $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             //* alt method for foreign key
-            $table->foreignId('category_id')->constrained('categories','id');
+            $table->foreignId('category_id')->constrained('categories','id')->onDelete('cascade');
             $table->timestamps();
         });
     }
