@@ -17,6 +17,10 @@ use App\Http\Controllers\Admin\DashboardController;
 |
 */
 
+// for using auth routes 
+require __DIR__.'/auth.php';
+
+
 //* for eshop template 
 // using controllers
 Route::get('/', [EshopController::class, 'index'])->name('eshop.home');
@@ -56,38 +60,41 @@ Route::get('/post/{post}', [PostController::class, 'getSingle'])->name('post.sin
 
 //*For Admin Panel routes
 // * to add the same middleware to all the admin items we can use the route group
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     //?for crud of products
-    Route::get('/admin/products', [App\Http\Controllers\Admin\ProductsController::class, 'index'])->name("admin.products.index");
+    // Route::get('products', [App\Http\Controllers\Admin\ProductsController::class, 'index'])->name("products.index");
 
-    Route::get('/admin/products/create', [App\Http\Controllers\Admin\ProductsController::class, 'create'])->name("admin.products.create");
+    // Route::get('products/create', [App\Http\Controllers\Admin\ProductsController::class, 'create'])->name("products.create");
 
-    Route::post('/admin/products/store', [App\Http\Controllers\Admin\ProductsController::class, 'store'])->name("admin.products.store");
+    // Route::post('products/store', [App\Http\Controllers\Admin\ProductsController::class, 'store'])->name("products.store");
 
-    Route::get('/admin/products/edit/{product}', [App\Http\Controllers\Admin\ProductsController::class, 'edit'])->name("admin.products.edit");
+    // Route::get('products/{product}/edit', [App\Http\Controllers\Admin\ProductsController::class, 'edit'])->name("products.edit");
 
-    Route::put('/admin/products/update/{product}', [App\Http\Controllers\Admin\ProductsController::class, 'update'])->name("admin.products.update");
+    // Route::put('products/{product}/update', [App\Http\Controllers\Admin\ProductsController::class, 'update'])->name("products.update");
 
-    Route::delete('/admin/products/delete/{product}', [App\Http\Controllers\Admin\ProductsController::class, 'destroy'])->name("admin.products.delete");
+    // Route::delete('products/{product}/delete', [App\Http\Controllers\Admin\ProductsController::class, 'destroy'])->name("products.delete");
+    // * using resourceful routing it auto generates all resource routes
+    Route::resource('products', App\Http\Controllers\Admin\ProductsController::class);
     // for redirecting to the delete page if used 
-    Route::get('/admin/products/delete/{product}',[App\Http\Controllers\Admin\ProductsController::class,'delete'])->name("admin.products.deletePage");
+    Route::get('products/delete/{product}',[App\Http\Controllers\Admin\ProductsController::class,'delete'])->name("products.deletePage");
 
     // * for crud of categories 
-    Route::get('/admin/categories', [App\Http\Controllers\Admin\CategoriesController::class, 'index'])->name("admin.categories.index");
+    // Route::get('categories', [App\Http\Controllers\Admin\CategoriesController::class, 'index'])->name("categories.index");
 
-    Route::get('/admin/categories/create', [App\Http\Controllers\Admin\CategoriesController::class, 'create'])->name("admin.categories.create");
+    // Route::get('categories/create', [App\Http\Controllers\Admin\CategoriesController::class, 'create'])->name("categories.create");
 
-    Route::post('/admin/categories/store', [App\Http\Controllers\Admin\CategoriesController::class, 'store'])->name("admin.categories.store");
+    // Route::post('categories/store', [App\Http\Controllers\Admin\CategoriesController::class, 'store'])->name("categories.store");
 
-    Route::get('/admin/categories/edit/{category}', [App\Http\Controllers\Admin\CategoriesController::class, 'edit'])->name("admin.categories.edit");
+    // Route::get('categories/{category}/edit', [App\Http\Controllers\Admin\CategoriesController::class, 'edit'])->name("categories.edit");
 
-    Route::put('/admin/categories/update/{category}', [App\Http\Controllers\Admin\CategoriesController::class, 'update'])->name("admin.categories.update");
+    // Route::put('categories/{category}/update', [App\Http\Controllers\Admin\CategoriesController::class, 'update'])->name("categories.update");
 
-    Route::delete('/admin/categories/delete/{category}', [App\Http\Controllers\Admin\CategoriesController::class, 'destroy'])->name("admin.categories.delete");
-
+    // Route::delete('categories/{category}/delete', [App\Http\Controllers\Admin\CategoriesController::class, 'destroy'])->name("categories.delete");
+    // * resourceful routing 
+    Route::resource('categories', App\Http\Controllers\Admin\CategoriesController::class);
 
     // ?for dashboard
-    Route::get('/admin/', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
 
 });
@@ -97,8 +104,6 @@ Route::middleware(['auth'])->group(function () {
 //     return view('welcome');
 // });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-
-require __DIR__.'/auth.php';
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth'])->name('dashboard');

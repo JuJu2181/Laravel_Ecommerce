@@ -21,4 +21,8 @@ class Category extends Model
     public function products(){
         return $this->hasMany(Product::class);
     }
+    // * functions to access child categories
+    public function childs(){
+        return $this->hasMany('App\Models\Category','parent_id');
+    }
 }

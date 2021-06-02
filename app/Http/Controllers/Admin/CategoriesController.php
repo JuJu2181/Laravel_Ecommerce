@@ -28,7 +28,8 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        return view("admin.categories.create");
+        $categories = Category::all();
+        return view("admin.categories.create",compact('categories'));
     }
 
     /**
@@ -41,9 +42,21 @@ class CategoriesController extends Controller
     {
         // validation rules using the form request
         $request->validated();
+        //* for auto generating slug based on name without form modification. Here slug is not submitted using form but instead it is generated in controller using the submitted name
+        /**
+         * $slug = strtolower(str_replace(' ','-',$request->input('name)));
+         * $categories = Category::whereSlug($slug)->get();
+         * if($categories->count() > 0){
+         *  return redirect()->back()->withErrors(['Slug must be unique]);
+         * }
+         */
+        //* for allowing users to modify slug we generate the slug using javascript and submit it with the form
         $category = new Category;
         $category->name = $request->input('name');
         $category->description = $request->input('description');
+        // *parent category id and slug 
+        $category->parent_id = $request->input('parent_id');
+        $category->slug = $request->input('slug');
         // for validating image 
         if($request->hasFile('image_upload')){
             // to get original name 

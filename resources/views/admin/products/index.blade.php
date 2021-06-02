@@ -79,7 +79,7 @@
             let token = $("meta[name='csrf-token']").attr("content");
             if(confirm("Are you sure to delete this product?\n press 'OK' to confirm")){
                 $.ajax({
-                url:"/admin/products/delete/"+id,
+                url:"/admin/products/"+id,
                 type: 'DELETE',
                 data:{
                     "id":id,

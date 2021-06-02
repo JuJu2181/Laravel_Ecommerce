@@ -10,7 +10,9 @@
                         <td>S.N.</td>
                         <td>Name</td>
                         <td>Description</td>
+                        <td>Slug</td>
                         <td>No Of Products</td>
+                        <td>Parent Category</td>
                         <td>Actions</td>
                     </tr>
                     @foreach ($categories as $category)
@@ -19,7 +21,15 @@
                         <td>{{ $category->id }}</td>
                         <td>{{ $category->name }}</td>
                         <td>  {{ Str::substr($category->description, 0, 50) }} {{ strlen($category->description) > 50 ? "...": "" }}</td>
+                        <td>{{$category->slug}}</td>
                         <td>{{ count($category->products) }}</td>
+                        <td>
+                            @if (isset($category->parent_id) && !empty($category->parent_id))
+                            {{App\Models\Category::find($category->parent_id)->name}}
+                            @else 
+                            None
+                            @endif
+                        </td>
                         <td>
                             <a href={{ route('admin.categories.edit',$category->id) }} class="btn btn-info btn-block">  
                                 Edit
@@ -77,7 +87,7 @@
             let token = $("meta[name='csrf-token']").attr("content");
             if(confirm("Are you sure to delete this product?\n press 'OK' to confirm")){
                 $.ajax({
-                url:"/admin/categories/delete/"+id,
+                url:"/admin/categories/"+id,
                 type: 'DELETE',
                 data:{
                     "id":id,

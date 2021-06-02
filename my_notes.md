@@ -81,3 +81,5 @@ create a new file helpers.php in the app folder then add it in composer.json aut
 # for using different langaugaes we use the file in resources/lang/ by default en is for english similarly we can use np for nepali. 
 
 Route service provider is the modern way of using routes
+
+# task to create a multi level,category and complete category

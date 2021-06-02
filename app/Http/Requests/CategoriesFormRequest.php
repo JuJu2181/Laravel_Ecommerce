@@ -28,7 +28,8 @@ class CategoriesFormRequest extends FormRequest
             //all validation rules here 
             'name' => 'required|unique:categories|max:255|min:3',
             'description' => 'required|max:255|min:10',
-            'image'=>'image'
+            'image'=>'image',
+            'slug'=>'required|unique:categories'
         ];
     }
 
