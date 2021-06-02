@@ -22,7 +22,7 @@ class CategoriesController extends Controller
         // $products = Product::whereCategoryid($category->id)->get();
         // * accessing product for category using the eloquent relationship
         $products = $category->products;
-        $categories = Category::latest('id')->get();
+        $categories = Category::all();
         return view(
             'category.single',
             ['products'=>$products,

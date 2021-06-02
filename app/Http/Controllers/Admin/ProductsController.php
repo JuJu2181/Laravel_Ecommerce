@@ -68,7 +68,7 @@ class ProductsController extends Controller
         // for validating image 
         if($request->hasFile('image_upload')){
             // to get original name 
-            $name = $request->file('image_upload')->getClientOriginalName();
+            $name = time().'_'.$request->file('image_upload')->getClientOriginalName();
             // this also by default generates a random name
             // $product->image = $request->file('image_upload')->storage('public/images');
             // storing with its original name 

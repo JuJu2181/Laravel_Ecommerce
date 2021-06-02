@@ -30,63 +30,28 @@
                     {{-- for category --}}
                     <label for="parent_id" class="m-1">Parent Category:</label>
                     <x-forms.select name="parent_id" class="form-control ">
-                        {{-- implementing for all categories --}}
+                        {{-- implementing for all categories using recursion --}}
                         <?php
-                        // function generateCategoryList($category,$spaceCount=0){
-                            
-                        //     // * for categories with children
-                        //     if ($category->children->count() > 0)
-                        //     {
-                    ?>
-                        {{-- <option value="{{ $category->id }}" {{ $category->id == old('category_id')?"selected":"" }}>{{ $spaceCount }}
-                            {{ $category->name }}</option> --}}
-                        <?php  
-                        // $spaceCount +=1;
-                        //     foreach ($category->children as $subcategory){
-                        //     generateCategoryList($subcategory,$spaceCount);
-                        //     }
-                        //     // for categories without children
-                        //     }else{
-                        //         $spaceCount +=1;
-                           ?>
-                        {{-- <option value="{{ $category->id }}" {{ $category->id == old('category_id')?"selected":"" }}>{{ $spaceCount }}
-                            {{ $category->name }}</option> --}}
-                            <?php   
-                    // }
+                        function generateCategoryList($category,$spaceCount=0){
+                        ?> 
+                        <option value="{{ $category->id }}" {{ $category->id == old('category_id')?"selected":"" }}>{!!str_repeat('&nbsp;',$spaceCount)!!}>
+                            {{ $category->name }}</option>
+                        <?php    
+                            // * for categories with children
+                            if ($category->children->count() > 0)
+                            {  
+                            $spaceCount +=4;
+                            foreach ($category->children as $subcategory){
+                            generateCategoryList($subcategory,$spaceCount);
+                            }
+                        }
                         
-                    // }
+                    }
                     ?>
-                    {{-- This method is fine but it is messy and hard to understand --}}
                         <option value="0"> Select A Category</option>
                         @foreach (App\Models\Category::with('children')->where('parent_id',0)->get() as $category)
-                        @if ($category->children->count() > 0)
-                        <option value="{{ $category->id }}" {{ $category->id == old('category_id')?"selected":"" }}>
-                        {{ $category->name }}</option>
-                        @foreach ($category->children as $subcategory)
-                        @if ($subcategory->children->count()>0)
-                        <option value="{{ $subcategory->id }}"
-                            {{ $subcategory->id == old('category_id')?"selected":"" }}> {!!str_repeat('&nbsp;',4)!!}->
-                            {{ $subcategory->name }}</option>
-                        @foreach ($subcategory->children as $thirdlevelcategory)
-                        <option value="{{ $thirdlevelcategory->id }}"
-                            {{ $thirdlevelcategory->id == old('category_id')?"selected":"" }}> {!!str_repeat('&nbsp;',8)!!}->
-                            {{ $thirdlevelcategory->name }}</option>
+                        {{ generateCategoryList($category)}}
                         @endforeach
-                        @else
-                        <option value="{{ $subcategory->id }}"
-                            {{ $subcategory->id == old('category_id')?"selected":"" }}> {!!str_repeat('&nbsp;',4)!!}->
-                            {{ $subcategory->name }}</option>
-                        @endif
-                        @endforeach
-                        @else
-                        <option value="{{ $category->id }}" {{ $category->id == old('category_id')?"selected":"" }}>
-                            {{ $category->name }}</option>
-                        @endif
-
-                        {{-- {{ generateCategoryList($category)}} --}}
-
-                        @endforeach
-
                     </x-forms.select>
                     @error('category_id')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>

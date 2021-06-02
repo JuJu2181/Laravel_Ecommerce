@@ -4,7 +4,7 @@
         <div class="single-widget category">
             <h3 class="title"><a href={{ route('category.index') }}>Categories</a></h3>
             <ul class="categor-list">
-                @foreach ($categories as $category)
+                @foreach (App\Models\Category::with('children')->where('parent_id',0)->get() as $category)
                     <li><a href={{ route('category.single',$category->id) }}>{{ $category->name }}</a></li>
                 @endforeach
             </ul>
