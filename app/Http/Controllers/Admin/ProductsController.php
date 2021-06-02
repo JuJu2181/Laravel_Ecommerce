@@ -58,6 +58,7 @@ class ProductsController extends Controller
         // );
 
         // validation rules using the form request
+        // return $request;
         $request->validated();
         $product = new Product;
         $product->name = $request->input('name');

@@ -43,21 +43,29 @@
                 @enderror
                 {{-- for category select --}}
                 <label for="category_id" class="m-1">Category:</label>
-                <x-forms.select name="parent_id" class="form-control ">
+                <x-forms.select name="category_id" class="form-control ">
                     {{-- implementing for all categories using recursion --}}
                     <?php
-                    function generateCategoryList($category,$spaceCount=0){
-                    ?> 
-                    <option value="{{ $category->id }}" {{ $category->id == old('category_id')?"selected":"" }}>{!!str_repeat('&nbsp;',$spaceCount)!!}>
-                        {{ $category->name }}</option>
-                    <?php    
+                    function generateCategoryList($category,$spaceCount=0){  
                         // * for categories with children
                         if ($category->children->count() > 0)
                         {  
+                        ?>
+                        {{-- here we won't allow the products for categories with children --}}
+                            <option disabled value="{{ $category->id }}" {{ $category->id == old('category_id')?"selected":"" }} >{!!str_repeat('&nbsp;',$spaceCount)!!}>
+                        {{ $category->name }}</option>   
+                        <?php
                         $spaceCount +=4;
                         foreach ($category->children as $subcategory){
                         generateCategoryList($subcategory,$spaceCount);
                         }
+                    }else{
+                        $spaceCount +=4;
+                    ?>
+                    {{-- products can only have category without children --}}
+                        <option value="{{ $category->id }}" {{ $category->id == old('category_id')?"selected":"" }}>{!!str_repeat('&nbsp;',$spaceCount)!!}*
+                        {{ $category->name }}</option>
+                    <?php
                     }
                     
                 }
