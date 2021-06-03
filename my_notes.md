@@ -83,3 +83,21 @@ create a new file helpers.php in the app folder then add it in composer.json aut
 Route service provider is the modern way of using routes
 
 # task to create a multi level,category and complete category
+
+# to only include some functions in resourceful routing
+Route::resource('/products',ProductController::class)->only('index','show');
+
+# If additional functions are used inside a resource controller 
+Route::get('/products/search',[ProductController::class,'search'])->name('products.search');
+
+# localScope can be used for the queries that are used more 
+we use it inside the model and have name of scopeName
+- local scope allow you to define common sets of query constraints that you may easily re-use throughout application
+- Mostly used for search purposes.
+- They return query builder instance. 
+## to define a scope we prefix and eloquent model method with scope eg scopeSearch.
+
+
+# Global scopes
+- They are different that global scopes which allow to add constraints to all queries for a given model.It makes sure that every query for a given model receives certain constraints
+- They are defined by implementing Scoepe and applied inside a model by using booted() function

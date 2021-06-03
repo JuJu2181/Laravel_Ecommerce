@@ -3,9 +3,31 @@
         <!-- Single Widget -->
         <div class="single-widget category">
             <h3 class="title"><a href={{ route('category.index') }}>Categories</a></h3>
+            <?php
+            function generateCategoryList($category){
+            ?>
+                <li><a href={{ route('category.single',$category->id) }}>{{ $category->name }}</a>
+            <?php 
+                if($category->children->count() > 0){
+            ?>
+                <ul class="categor-list">
+            <?php 
+                    foreach($category->children as $subcategory){
+                        generateCategoryList($subcategory);
+                    }
+            ?>
+                </ul>
+            <?php
+            }
+            ?>                
+                </li>
+            <?php
+            }
+            ?>
             <ul class="categor-list">
                 @foreach (App\Models\Category::with('children')->where('parent_id',0)->get() as $category)
-                    <li><a href={{ route('category.single',$category->id) }}>{{ $category->name }}</a></li>
+                    {{-- <li><a href={{ route('category.single',$category->id) }}>{{ $category->name }}</a></li> --}}
+                    {{generateCategoryList($category)}}
                 @endforeach
             </ul>
         </div>

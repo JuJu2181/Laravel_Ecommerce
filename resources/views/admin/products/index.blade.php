@@ -73,7 +73,6 @@
         // });
 
         // for ajax delete
-        // delete is working here but it is not removing row from table
         function deleteProduct(id){
             console.log(id);
             let token = $("meta[name='csrf-token']").attr("content");

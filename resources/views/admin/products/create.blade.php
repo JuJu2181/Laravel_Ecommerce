@@ -72,7 +72,7 @@
                 ?>
 
                     <option value="0"> Select A Category</option>
-                    @foreach (App\Models\Category::with('children')->where('parent_id',0)->get() as $category)
+                    @foreach ($categories as $category)
                     {{ generateCategoryList($category)}}
                     @endforeach
 

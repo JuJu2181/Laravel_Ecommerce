@@ -34,4 +34,44 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    //* function for search scope to search products
+    // this acts as a query builder for the search query 
+    public function scopeSearch($query, array $terms){ 
+        // getting search key and category from the search query
+        $search = $terms['search'];
+        $category = $terms['category'];
+        // * alternative for using if we can use when
+
+
+        $query->when($search, function($query, $search){
+            return $query->where('name', 'like', '%'. $search .'%')
+                ->orWhere('description', 'like', '%'. $search .'%')->orWhere('slug', 'like', '%'. $search .'%');
+        }
+        // * this function returns all the products when no input is given
+        // , function($query){
+        //     return $query->where('id', '>', 0);
+        // }
+        );
+
+        $query->when($category, function($query, $category){
+            return $query->whereCategoryId($category);
+            // return $query->where(function($query,$category){
+            //     $query->whereCategoryId($category);
+            // });
+        });
+
+
+
+        // * using if for category builder
+        // if( $search ) {
+        //     $query->where('name', 'like', '%'. $search .'%')
+        //         ->orWhere('description', 'like', '%'. $search .'%')
+        //         ->orWhere('slug', 'like', '%'. $search .'%');
+        //         if($category){
+        //             $query->where('category_id',$category);
+        //         }
+        // }
+        return $query;
+    }
+
 }

@@ -34,6 +34,7 @@
                         <?php
                         function generateCategoryList($category,$spaceCount=0){
                         ?> 
+                    {{-- '&nbsp;' is for printing space --}}
                         <option value="{{ $category->id }}" {{ $category->id == old('category_id')?"selected":"" }}>{!!str_repeat('&nbsp;',$spaceCount)!!}>
                             {{ $category->name }}</option>
                         <?php    
@@ -49,7 +50,7 @@
                     }
                     ?>
                         <option value="0"> Select A Category</option>
-                        @foreach (App\Models\Category::with('children')->where('parent_id',0)->get() as $category)
+                        @foreach ($categories as $category)
                         {{ generateCategoryList($category)}}
                         @endforeach
                     </x-forms.select>

@@ -6,6 +6,8 @@ use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\EshopController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\SearchController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -55,7 +57,8 @@ Route::get('/posts', [PostController::class, 'index'])->name('post.index');
 //? geting a single post by id
 Route::get('/post/{post}', [PostController::class, 'getSingle'])->name('post.single');
 
-
+// ? for search 
+Route::get('search',[SearchController::class,'search'])->name('products.search');
 
 
 //*For Admin Panel routes
@@ -101,7 +104,18 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
 // get all sub categories with category 0 as parent
 Route::get('test',function(){
-    return App\Models\Category::with('children')->where('parent_id',1)->get();
+    //return App\Models\Category::where('parent_id',0)->get();
+    foreach(App\Models\Category::where('parent_id',0)->get() as $category){
+        if($category->children->count() > 0){
+            echo "<pre>";
+            echo($category->children);
+            echo "</pre>";
+        }else{
+            echo "<pre>";
+            echo($category);
+            echo "</pre>";
+        }
+    }
 });
 
 
