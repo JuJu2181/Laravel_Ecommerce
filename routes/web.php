@@ -6,6 +6,8 @@ use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\EshopController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\SearchController;
 
 /*
@@ -31,9 +33,9 @@ Route::get('/shop-grid/', [EshopController::class, 'getShopGrid'])->name('eshop.
 
 Route::get('/contact/', [EshopController::class, 'getContact'])->name('eshop.contact');
 
-Route::get('/checkout/', [EshopController::class, 'getCheckout'])->name('eshop.checkout');
+Route::get('/checkout_template/', [EshopController::class, 'getCheckout'])->name('eshop.checkout');
 
-Route::get('/cart/', [EshopController::class, 'getCart'])->name('eshop.cart');
+Route::get('/cart_template/', [EshopController::class, 'getCart'])->name('eshop.cart');
 
 Route::get('/blog-single/', [EshopController::class, 'getBlog'])->name('eshop.blog-single');
 
@@ -101,6 +103,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
 
 });
+
+
+// * For Order Cart Routes
+Route::resource('/order', OrderController::class);
+Route::resource('/cart', OrderItemController::class)->middleware('auth');
 
 // get all sub categories with category 0 as parent
 Route::get('test',function(){

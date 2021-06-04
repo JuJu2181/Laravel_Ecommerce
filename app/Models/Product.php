@@ -41,12 +41,14 @@ class Product extends Model
         $search = $terms['search'];
         $category = $terms['category'];
         // * alternative for using if we can use when
-
-
+        // using closure for modifying sql for properly selecting category
         $query->when($search, function($query, $search){
-            return $query->where('name', 'like', '%'. $search .'%')
+            $query->where(function($query) use ($search){
+                return $query->where('name', 'like', '%'. $search .'%')
                 ->orWhere('description', 'like', '%'. $search .'%')->orWhere('slug', 'like', '%'. $search .'%');
+            });
         }
+
         // * this function returns all the products when no input is given
         // , function($query){
         //     return $query->where('id', '>', 0);
@@ -55,21 +57,17 @@ class Product extends Model
 
         $query->when($category, function($query, $category){
             return $query->whereCategoryId($category);
-            // return $query->where(function($query,$category){
-            //     $query->whereCategoryId($category);
-            // });
+
         });
 
 
 
         // * using if for category builder
-        // if( $search ) {
-        //     $query->where('name', 'like', '%'. $search .'%')
-        //         ->orWhere('description', 'like', '%'. $search .'%')
-        //         ->orWhere('slug', 'like', '%'. $search .'%');
-        //         if($category){
-        //             $query->where('category_id',$category);
-        //         }
+        // if($search){
+        //     $query->where(function($query) use ($search){
+        //         return $query->where('name', 'like', '%'. $search .'%')
+        //         ->orWhere('description', 'like', '%'. $search .'%')->orWhere('slug', 'like', '%'. $search .'%');
+        //     });
         // }
         return $query;
     }

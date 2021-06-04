@@ -101,3 +101,51 @@ we use it inside the model and have name of scopeName
 # Global scopes
 - They are different that global scopes which allow to add constraints to all queries for a given model.It makes sure that every query for a given model receives certain constraints
 - They are defined by implementing Scoepe and applied inside a model by using booted() function
+
+# For order 
+### For state management we use sessions
+Add to cart
+-> if order is not create create an order
+-> store that order_id in session
+-> create order_item having order_id of the status
+-> for one session create one order and then add order_items when navigating to different places and adding products
+-> update order_table with total from order_items
+Order{
+    order_id = 1,
+    user_id = 1,
+    order_status = cart,
+    sub_total = 1100,
+    shipping_price = 100,
+    discount = 50,
+    total = 1150,
+    shipping_address = Bhaktapur
+}
+
+Order_items(
+    {
+        order_id = 1,
+        id = 1,
+        product_id = 1,
+        price = 100,
+        quantity = 2,
+        total = 200
+    },
+    {
+        order_id = 1,
+        id = 2,
+        product_id = 3,
+        price = 200,
+        quantity = 3,
+        total = 600
+    },
+    {
+        order_id = 1,
+        id = 3,
+        product_id = 6,
+        price = 100,
+        quantity = 3,
+        total = 300
+    }
+)
+
+when add to cart is clicked firstly we check for data i-e order_id in session, if not present create a new order else add order items to same order

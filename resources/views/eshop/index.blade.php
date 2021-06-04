@@ -11,7 +11,10 @@
 <!-- Slider Area -->
 <section class="hero-slider">
     <!-- Single Slider -->
-    <div class="single-slider">
+    <?php
+    $image_url = $products[0]->image == ''?'https://via.placeholder.com/1900x700':image_crop($products[0]->image,1900,700);
+    ?>
+    <div class="single-slider" style="background-image: url({{$image_url}})">
         <div class="container">
             <div class="row no-gutters">
                 <div class="col-lg-9 offset-lg-3 col-12">
@@ -19,9 +22,8 @@
                         <div class="row">
                             <div class="col-lg-7 col-12">
                                 <div class="hero-text">
-                                    <h1><span>UP TO 50% OFF </span>Shirt For Man</h1>
-                                    <p>Maboriosam in a nesciung eget magnae <br> dapibus disting tloctio in the find it
-                                        pereri <br> odiy maboriosm.</p>
+                                    <h1><span>UP TO 50% OFF </span>{{$products[0]->name}}</h1>
+                                    <p>{{$products[0]->description}}</p>
                                     <div class="button">
                                         <a href="#" class="btn">Shop Now!</a>
                                     </div>
@@ -42,13 +44,24 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Single Banner  -->
+            {{-- Error in managing image size --}}
+            {{-- <div class="col-lg-4 col-md-6 col-12">
+                <div class="single-banner">
+                    <img src="{{$products[1]->image == ''?"https://via.placeholder.com/600x370":image_crop($products[1]->image,600,370)}}" alt="#">
+                    <div class="content">
+                        <p>{{$products[1]->category->name}}</p>
+                        <h3>{{$products[1]->name}}</h3>
+                        <a href="#">Discover Now</a>
+                    </div>
+                </div>
+            </div> --}}
             <div class="col-lg-4 col-md-6 col-12">
                 <div class="single-banner">
                     <img src="https://via.placeholder.com/600x370" alt="#">
                     <div class="content">
-                        <p>Man's Collectons</p>
-                        <h3>Summer travel <br> collection</h3>
-                        <a href="#">Discover Now</a>
+                        <p>Bag Collectons</p>
+                        <h3>Awesome Bag <br> 2020</h3>
+                        <a href="#">Shop Now</a>
                     </div>
                 </div>
             </div>
@@ -138,7 +151,13 @@
                                                                 Compare</span></a>
                                                     </div>
                                                     <div class="product-action-2">
-                                                        <a title="Add to cart" href="#">Add to cart</a>
+                                                        {{-- <a title="Add to cart" href="#">Add to cart</a> --}}
+                                <form action="{{route('cart.store')}}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{$product->id}}">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <a title="Add to cart" href="#" onclick="event.preventDefault();this.closest('form').submit();">Add to cart</a>
+                                </form>
                                                     </div>
                                                 </div>
                                             </div>

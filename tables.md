@@ -53,3 +53,22 @@ Users(
     register page for users and sellers
     send email about order to both vendor and user
 )
+
+Order(
+    order_id
+    user_id
+    date
+    order_status
+    sub_total_price
+    discount
+    shippping_price
+    total_price
+)
+
+order_items{
+    order_id
+    product_id
+    product_price
+    quantity
+    total
+}
