@@ -33,9 +33,9 @@ Route::get('/shop-grid/', [EshopController::class, 'getShopGrid'])->name('eshop.
 
 Route::get('/contact/', [EshopController::class, 'getContact'])->name('eshop.contact');
 
-Route::get('/checkout_template/', [EshopController::class, 'getCheckout'])->name('eshop.checkout');
+Route::get('/checkout_template/', [EshopController::class, 'getCheckout'])->middleware('auth')->name('eshop.checkout');
 
-Route::get('/cart_template/', [EshopController::class, 'getCart'])->name('eshop.cart');
+Route::get('/cart_template/', [EshopController::class, 'getCart'])->middleware('auth')->name('eshop.cart');
 
 Route::get('/blog-single/', [EshopController::class, 'getBlog'])->name('eshop.blog-single');
 

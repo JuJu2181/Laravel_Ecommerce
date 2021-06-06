@@ -43,8 +43,7 @@
                                 </button>
                                 </form> --}}
 
-                                {{-- to delete using ajax request --}}
-                                <meta name="csrf-token" content="{{ csrf_token() }}">
+                                id="decrement-btn"
                                 <button id="deleteProduct" data-id="{{ $product->id }}" class="btn btn-danger btn-block mt-2" onclick="deleteProduct({{ $product->id }})">Delete
                                 <span><i class="typcn typcn-trash"></i></span
                                 </button>

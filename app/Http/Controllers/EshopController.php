@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
+
 
 class EshopController extends Controller
 {
@@ -28,11 +31,31 @@ class EshopController extends Controller
     }
 
     public function getCart(){
-        return view('eshop.cart');
+        return redirect(route('order.index'));
     }
 
     public function getCheckout(){
-        return view('eshop.checkout');
+        $order_id = session('order_id',0);
+        // check for valid order_id in session
+        if($order_id < 1){
+            // creating order if not present in the session
+            // if we added user address for registration
+            // $user = Auth::user();
+            // $user->address
+            $order = new Order;
+            $order->user_id = Auth::id();
+            $order->order_status = 'cart';
+            $order->sub_total = 0;
+            $order->discount = 0;
+            $order->shipping_price = 0;
+            $order->total_price = 0;
+            $order->shipping_address = '';
+            $order->save();
+            session(['order_id'=>$order->id]);
+            $order_id = $order->id;
+        }
+        $order = Order::find($order_id);
+        return view('eshop.checkout',compact('order'));
     }
 
     public function getContact(){

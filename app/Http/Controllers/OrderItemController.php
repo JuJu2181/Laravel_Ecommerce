@@ -19,6 +19,7 @@ class OrderItemController extends Controller
     public function index()
     {
         //
+        return redirect(route('order.index'));
     }
 
     /**
@@ -29,7 +30,7 @@ class OrderItemController extends Controller
     public function create()
     {
         //
-        
+
     }
 
     /**
@@ -62,16 +63,22 @@ class OrderItemController extends Controller
             session(['order_id'=>$order->id]);
             $order_id = $order->id;
         }
+        // return $order_id;
         // adding the items to cart -> creating order_item and saving in db
-        $existingOrderItems = OrderItem::where('product_id',$request->input('product_id'))->get();
+        $existingOrderItems = OrderItem::where([['order_id',$order_id],['product_id',$request->input('product_id')]])->get();
+        // return $existingOrderItems;
         // return $existingOrderItems;
         // if the item previously exist in cart update quantity
         if(count($existingOrderItems) > 0){
             // return $request->input('product_id')."exists";
             $order_item = $existingOrderItems[0];
+            $order_item->order_id = $order_id;
             $order_item->quantity +=1;
             $order_item->total = $order_item->quantity*$order_item->product_price;
             $order_item->save();
+            $order = Order::find($order_id);
+            $order->sub_total += $order_item->product_price;
+            $order->total_price = $order->sub_total + $order->discount + $order->shipping_price;
         }else{
             // if it doesn't exist create a new order_item 
             // return $request->input('product_id')."deosn't exists";
@@ -83,6 +90,9 @@ class OrderItemController extends Controller
             $order_item->quantity = $request->input('quantity');
             $order_item->total = $order_item->quantity*$order_item->product_price;
             $order_item->save();
+            $order = Order::find($order_id);
+            $order->sub_total += $order_item->total;
+            $order->total_price = $order->sub_total + $order->discount + $order->shipping_price;
         }
         // $order_item = new OrderItem();
         // $order_item->order_id = $order_id;
@@ -93,9 +103,9 @@ class OrderItemController extends Controller
         // $order_item->total = $order_item->quantity*$order_item->product_price;
         // $order_item->save();
         // updating the order table sub_total price based on the total price of order items
-        $order = Order::find($order_id);
-        $order->sub_total += $order_item->total;
-        $order->total_price = $order->sub_total + $order->discount + $order->shipping_price;
+        // $order = Order::find($order_id);
+        // $order->sub_total += $order_item->total;
+        // $order->total_price = $order->sub_total + $order->discount + $order->shipping_price;
         // update the order table
         $order->save();
         // redirect to order 
@@ -134,6 +144,8 @@ class OrderItemController extends Controller
     public function update(Request $request, OrderItem $orderItem)
     {
         //
+        return "update function";
+
     }
 
     /**
@@ -142,8 +154,30 @@ class OrderItemController extends Controller
      * @param  \App\Models\OrderItem  $orderItem
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OrderItem $orderItem)
+    // this is function for ajax delete
+    // public function destroy($id)
+    // {
+    //     $orderItem = OrderItem::find($id);
+    //     $orderItem->order->sub_total -= $orderItem->total;
+    //     $orderItem->order->total_price = $orderItem->order->sub_total + $orderItem->order->shipping_price + $orderItem->order->total;
+    //     $orderItem->order->save();
+    //     $orderItem->delete();
+    //     // this is not needed for ajax delete
+    //     // return redirect()->route('order.index');
+    //     // for ajax delete
+    //     // return response()->json([
+    //     //     'success'=>'Order Item Deleted Sucessfully'
+    //     // ]);
+    // }
+    // for normal form delete
+    public function destroy($id)
     {
-        //
+        $orderItem = OrderItem::find($id);
+        // return $orderItem;
+        $orderItem->order->sub_total -= $orderItem->total;
+        $orderItem->order->total_price = $orderItem->order->sub_total + $orderItem->order->shipping_price + $orderItem->order->total;
+        $orderItem->order->save();
+        $orderItem->delete();
+        return redirect()->route('order.index');
     }
 }

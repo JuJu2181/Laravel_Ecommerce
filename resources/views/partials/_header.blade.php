@@ -48,7 +48,7 @@
                 <div class="col-lg-2 col-md-2 col-12">
                     <!-- Logo -->
                     <div class="logo">
-                        <a href="index.html"><img src="/images/logo.png" alt="logo"></a>
+                        <a href="{{route('eshop.home')}}"><img src="/images/logo.png" alt="logo"></a>
                     </div>
                     <!--/ End Logo -->
                     <!-- Search Form -->
@@ -76,45 +76,70 @@
                             <a href="#" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
                         </div>
                         <div class="sinlge-bar">
-                            <a href="#" class="single-icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
+                            <a href="{{route('admin.dashboard')}}" class="single-icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
                         </div>
-                        <div class="sinlge-bar shopping">
+                        @auth
+                        @php
+                            $order_id = session('order_id',0);
+                            if($order_id < 1){
+                            // creating order if not present in the session
+                            // if we added user address for registration
+                            // $user = Auth::user();
+                            // $user->address
+                            $order = new App\Models\Order;
+                            $order->user_id = Auth::id();
+                            $order->order_status = 'cart';
+                            $order->sub_total = 0;
+                            $order->discount = 0;
+                            $order->shipping_price = 0;
+                            $order->total_price = 0;
+                            $order->shipping_address = '';
+                            $order->save();
+                            session(['order_id'=>$order->id]);
+                            $order_id = $order->id;
+                            }
+                            $order = App\Models\Order::find($order_id);
+                            $order_items = App\Models\OrderItem::whereOrderId($order_id)->get();
+                        @endphp
+                          <div class="sinlge-bar shopping">
                             <a href="#" class="single-icon"><i class="ti-bag"></i> <span
-                                    class="total-count">2</span></a>
+                                    class="total-count">{{$order_items->count()}}</span></a>
                             <!-- Shopping Item -->
                             <div class="shopping-item">
                                 <div class="dropdown-cart-header">
-                                    <span>2 Items</span>
+                                    <span>{{$order_items->count()}} Items</span>
                                     <a href={{route('eshop.cart')}}>View Cart</a>
                                 </div>
-                                <ul class="shopping-list">
-                                    <li>
-                                        <a href="#" class="remove" title="Remove this item"><i
-                                                class="fa fa-remove"></i></a>
-                                        <a class="cart-img" href="#"><img src="https://via.placeholder.com/70x70"
+                                <!-- navbar shopping cart -->
+                                <ul class="shopping-list" id="headerShoppingList">
+                                    @if ($order_items->count() > 0)          
+                                    @foreach ($order_items as $order_item)
+                                    <li id="#orderItemOfHeader{{$order_item->id}}">
+                                        <a class="cart-img" href="#"><img src='{{$order_item->product->image == ''?"https://via.placeholder.com/70x70":image_crop($order_item->product->image,70,70)}}'
                                                 alt="#"></a>
-                                        <h4><a href="#">Woman Ring</a></h4>
-                                        <p class="quantity">1x - <span class="amount">$99.00</span></p>
+                                        <h4><a href="#">{{$order_item->product->name}}</a></h4>
+                                        <p class="quantity productQuantityInCart" id="">{{$order_item->quantity}}x -<span class="amount">${{$order_item->product_price}}</span></p>
                                     </li>
-                                    <li>
-                                        <a href="#" class="remove" title="Remove this item"><i
-                                                class="fa fa-remove"></i></a>
-                                        <a class="cart-img" href="#"><img src="https://via.placeholder.com/70x70"
-                                                alt="#"></a>
-                                        <h4><a href="#">Woman Necklace</a></h4>
-                                        <p class="quantity">1x - <span class="amount">$35.00</span></p>
-                                    </li>
+                                    @endforeach
+                                    @else
+                                    <li>No Items in Cart</li>
+                                    @endif
                                 </ul>
                                 <div class="bottom">
                                     <div class="total">
                                         <span>Total</span>
-                                        <span class="total-amount">$134.00</span>
+                                        <span class="total-amount" id="totalHeaderCartPrice">${{$order->total_price}}</span>
                                     </div>
                                     <a href={{route('eshop.checkout')}} class="btn animate">Checkout</a>
                                 </div>
                             </div>
                             <!--/ End Shopping Item -->
                         </div>
+                        @endauth
+                      
+                            
+                      
+
                     </div>
                 </div>
             </div>

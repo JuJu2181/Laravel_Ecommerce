@@ -18,7 +18,7 @@
                                                     class="new">New</span></a>
                                             <ul class="dropdown">
                                                 <li><a href={{route('eshop.shop-grid')}}>Shop Grid</a></li>
-                                                <li><a href={{route('eshop.cart')}}>Cart</a></li>
+                                                <li><a href={{route('cart.index')}}>Cart</a></li>
                                                 <li><a href={{route('eshop.checkout')}}>Checkout</a></li>
                                             </ul>
                                         </li>

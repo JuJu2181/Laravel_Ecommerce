@@ -34,4 +34,6 @@
 <script src="/js/active.js"></script>
 <!-- Custom Js -->
 <script src="/js/main.js"></script>
+
+
 @yield('scripts')

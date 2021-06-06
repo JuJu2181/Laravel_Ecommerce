@@ -363,9 +363,9 @@
                         <h2>CART TOTALS</h2>
                         <div class="content">
                             <ul>
-                                <li>Sub Total<span>$330.00</span></li>
-                                <li>(+) Shipping<span>$10.00</span></li>
-                                <li class="last">Total<span>$340.00</span></li>
+                                <li>Sub Total<span>${{$order->sub_total}}</span></li>
+                                <li>(+) Shipping<span>${{$order->shipping_price}}</span></li>
+                                <li class="last">Total<span>${{$order->total_price}}</span></li>
                             </ul>
                         </div>
                     </div>

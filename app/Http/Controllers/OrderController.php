@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\Types\Null_;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -17,11 +20,33 @@ class OrderController extends Controller
     {
         //for all the orders
         $order_id = session('order_id',0);
+        // return $order_id;
+        if($order_id < 1){
+            // creating order if not present in the session
+            // if we added user address for registration
+            // $user = Auth::user();
+            // $user->address
+            $order = new Order;
+            $order->user_id = Auth::id();
+            $order->order_status = 'cart';
+            $order->sub_total = 0;
+            $order->discount = 0;
+            $order->shipping_price = 0;
+            $order->total_price = 0;
+            $order->shipping_address = '';
+            $order->save();
+            session(['order_id'=>$order->id]);
+            $order_id = $order->id;
+        }
+        // return $order_id;
         // find the order based on the order id
         $order = Order::find($order_id);
+        // return gettype($order);
+        // return $order;
         // find order items for the order
         $order_items = OrderItem::whereOrderId($order_id)->get();
-        return $order_items;
+        // return $order_items;
+        return view('eshop.cart',compact('order_items','order'));
     }
 
     /**
@@ -87,6 +112,5 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
     }
 }
