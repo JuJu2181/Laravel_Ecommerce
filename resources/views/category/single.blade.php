@@ -75,6 +75,8 @@
                                         src="{{$product_or_subcategory->image==''?"https://via.placeholder.com/550x750":image_crop($product_or_subcategory->image)}}"
                                         alt="#">
                                 </a>
+                                @unless ($title == "Sub Categories")
+                                    
                                 <div class="button-head">
                                     <div class="product-action">
                                         <a data-toggle="modal" data-target="#exampleModal" title="Quick View"
@@ -85,9 +87,16 @@
                                                 Compare</span></a>
                                     </div>
                                     <div class="product-action-2">
-                                        <a title="Add to cart" href="#">Add to cart</a>
+                                        {{-- <a title="Add to cart" href="#">Add to cart</a> --}}
+                                        <form action="{{route('cart.store')}}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="product_id" value="{{$product_or_subcategory->id}}">
+                                            <input type="hidden" name="quantity" value="1">
+                                            <a title="Add to cart" href="#" onclick="event.preventDefault();this.closest('form').submit();">Add to cart</a>
+                                        </form>
                                     </div>
                                 </div>
+                                @endunless
                             </div>
                             <div class="product-content">
                                 <h3><a href={{ route($nxtroute,$product_or_subcategory->id) }}>{{ $product_or_subcategory->name }}</a></h3>
