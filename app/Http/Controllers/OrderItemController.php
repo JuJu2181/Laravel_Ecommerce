@@ -141,11 +141,23 @@ class OrderItemController extends Controller
      * @param  \App\Models\OrderItem  $orderItem
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, OrderItem $orderItem)
+    // update using form
+    public function update(Request $request, $id)
     {
-        //
-        return "update function";
-
+        //get the order item based on the order id 
+        $orderItem = OrderItem::find($id);
+        // return $orderItem;
+        // return $request->quant[$id];
+        $oldPrice = $orderItem->total;
+        $orderItem->quantity = $request->quant[$id];
+        $orderItem->total = $orderItem->quantity*$orderItem->product_price;
+        // return $orderItem;
+        $orderItem->save();
+        $order = Order::find($orderItem->order_id);
+        $order->sub_total =$order->sub_total + $orderItem->total - $oldPrice;
+        $order->total_price = $order->sub_total + $order->discount + $order->shipping_price;
+        $order->save();
+        return redirect()->route('order.index');
     }
 
     /**
