@@ -202,7 +202,7 @@
                     @foreach ($products as $product)
                         <div class="single-product">
                         <div class="product-img">
-                            <a href="product-details.html">
+                            <a href="{{route('product.single',$product->id)}}">
                                 <img class="default-img" src="{{$product->image == ''?'https://via.placeholder.com/550x750':image_crop($product->image,550,750)}}" alt="#">
                                 <img class="hover-img" src="{{$product->image == ''?'https://via.placeholder.com/550x750':image_crop($product->image,550,750)}}" alt="#">
                                 <span class="out-of-stock">Hot</span>

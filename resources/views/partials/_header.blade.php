@@ -115,9 +115,9 @@
                                     @if ($order_items->count() > 0)          
                                     @foreach ($order_items as $order_item)
                                     <li id="#orderItemOfHeader{{$order_item->id}}">
-                                        <a class="cart-img" href="#"><img src='{{$order_item->product->image == ''?"https://via.placeholder.com/70x70":image_crop($order_item->product->image,70,70)}}'
+                                        <a class="cart-img" href="{{route('product.single',$order_item->product->id)}}"><img src='{{$order_item->product->image == ''?"https://via.placeholder.com/70x70":image_crop($order_item->product->image,70,70)}}'
                                                 alt="#"></a>
-                                        <h4><a href="#">{{$order_item->product->name}}</a></h4>
+                                        <h4><a href="{{route('product.single',$order_item->product->id)}}">{{$order_item->product->name}}</a></h4>
                                         <p class="quantity productQuantityInCart" id="">{{$order_item->quantity}}x -<span class="amount">${{$order_item->product_price}}</span></p>
                                     </li>
                                     @endforeach

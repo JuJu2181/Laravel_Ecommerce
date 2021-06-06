@@ -44,8 +44,8 @@
                                 </div>
                             </div>
                             <ul class="view-mode">
-                                <li class="active"><a href="shop-grid.html"><i class="fa fa-th-large"></i></a></li>
-                                <li><a href="shop-list.html"><i class="fa fa-th-list"></i></a></li>
+                                <li class="active"><a href="#"><i class="fa fa-th-large"></i></a></li>
+                                <li><a href="#"><i class="fa fa-th-list"></i></a></li>
                             </ul>
                         </div>
                         <!--/ End Shop Top -->
@@ -67,7 +67,7 @@
                     <div class="col-lg-4 col-md-6 col-12">
                         <div class="single-product">
                             <div class="product-img">
-                                <a href="product-details.html">
+                                <a href="{{ route($nxtroute,$product_or_subcategory->id) }}">
                                     <img class="default-img"
                                         src="{{$product_or_subcategory->image==''?"https://via.placeholder.com/550x750":image_crop($product_or_subcategory->image)}}"
                                         alt="#">
