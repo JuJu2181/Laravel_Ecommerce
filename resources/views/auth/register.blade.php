@@ -22,11 +22,18 @@
 
             <!--Image --> 
             <div>
-                <x-label for="image" :value="__('Image')" />
+                <x-label for="image" :value="__('Image')" class="mt-4"/>
 
                 <x-input id="image" class="block mt-1 w-full" type="file" name="image" :value="old('image')" />
 
             </div>
+
+            <!--Roles Select -->
+            <x-label for="role" :value="__('Select A Role: ')" class="mt-4"/>
+            <x-forms.select name="role" class="form-control">
+                <option value="user" selected >User</option>
+                <option value="vendor">Vendor</option>
+            </x-forms.select>
 
             <!-- Email Address -->
             <div class="mt-4">

@@ -7,6 +7,8 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductsFormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Intervention\Image\Facades\Image;
 class ProductsController extends Controller
 {
@@ -17,6 +19,9 @@ class ProductsController extends Controller
      */
     public function index()
     {
+        if(Auth::user()->role == "user"){
+            abort(403);
+        }
         $products = Product::latest('id')->get();
         return view('admin.products.index',['products'=>$products]);
     }
@@ -28,6 +33,9 @@ class ProductsController extends Controller
      */
     public function create()
     {
+        if(Auth::user()->role == "user"){
+            abort(403);
+        }
         // $categories = Category::all();
         $categories = Category::with('children')->where('parent_id',0)->get();
         // return view("admin.products.create",["categories"=>$categories]);
@@ -43,7 +51,12 @@ class ProductsController extends Controller
      */
     public function store(ProductsFormRequest $request)
     {   
-        // validation rules
+        if(Auth::user()->role == "user"){
+            abort(403);
+        }
+        //* using authorize helper function to check user authorization
+        //? we use this method when we don't have the product model
+        //! validation rules
         // * manually created
         // $validated = $request->validate(
         //     [
@@ -63,6 +76,7 @@ class ProductsController extends Controller
         $request->validated();
         $product = new Product;
         $product->name = $request->input('name');
+        $product->user_id = Auth::id();
         $product->slug = $request->input('slug');
         $product->description = $request->input('description');
         $product->price = $request->input('price');
@@ -70,7 +84,8 @@ class ProductsController extends Controller
         // for validating image 
         if($request->hasFile('image_upload')){
             // to get original name 
-            $name = time().'_'.$request->file('image_upload')->getClientOriginalName();
+            // $name = time().'_'.$request->file('image_upload')->getClientOriginalName();
+            $name = $request->file('image_upload')->getClientOriginalName();
             // this also by default generates a random name
             // $product->image = $request->file('image_upload')->storage('public/images');
             // storing with its original name 
@@ -80,7 +95,7 @@ class ProductsController extends Controller
             // $image_resize->resize(550,750);
             // $image_resize->save(storage_path('app/public/images/thumbnail/'.$name));
             // * using the helper function directly
-            image_crop($name,550,750);
+            image_crop($name);
             $product->image = $name;
         }
         if($product->save()){
@@ -109,7 +124,8 @@ class ProductsController extends Controller
      */
     public function edit(Product $product)
     {
-        $categories = Category::all();
+        $this->authorize('update',$product);
+        $categories = Category::with('children')->where('parent_id',0)->get();
         return view('admin.products.edit',["product"=>$product,"categories"=>$categories]);
     }
 
@@ -120,15 +136,69 @@ class ProductsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductsFormRequest $request, Product $product)
+    public function update(Request $request, Product $product)
     {
-        //
-        $request->validated();
+        // return $request;
+        // ? using gates for authorization
+        //*to check if updating product is allowed in controller using Gate::allows function
+        // if(!Gate::allows('update-product',$product)){
+        //     abort(403);
+        // }
+        //* alternatively we can use Gate::authorize which will also do the same thing and return 403 error if user is not authorized 
+        // Gate::authorize('update-product',$product);
+
+        // ? using authorize helper function which uses update function from policy for authorization
+        $this->authorize('update',$product);
+        // checking if the slug has changed or not if not then we don't need to check for error
+        if($request->input('slug') == $product->slug){
+            // return "true";
+            $request->validate(
+            [
+                'name' => 'required|max:255|min:3',
+                'description' => 'required|min:10',
+                'price' => 'required|integer',
+                'category_id'=>'required|integer|min:1',
+                'image'=>'image|size:2048'
+            ],
+            // customizing error messages
+            [
+                'category_id.min'=>'Please select atleast one category',
+                'price.integer'=>'Price should be an integer'
+            ]
+        );
+        }else{
+            // return "false";
+        $request->validate(
+            [
+                'name' => 'required|max:255|min:3',
+                'slug' => 'required|string|unique:products',
+                'description' => 'required|min:10',
+                'price' => 'required|integer',
+                'category_id'=>'required|integer|min:1',
+                'image'=>'image|size:2048',
+            ],
+            // customizing error messages
+            [
+                'category_id.min'=>'Please select atleast one category',
+                'price.integer'=>'Price should be an integer'
+            ]);
+
+        }
         $product->name = $request->input('name');
         $product->slug = $request->input('slug');
         $product->description = $request->input('description');
         $product->price = $request->input('price');
         $product->category_id = $request->input('category_id');
+        // for validating image 
+        if($request->hasFile('image_upload')){
+            // to get original name 
+            // $name = time().'_'.$request->file('image_upload')->getClientOriginalName();
+            $name = $request->file('image_upload')->getClientOriginalName();
+            $request->file('image_upload')->storeAs('public/images',$name);
+            image_crop($name);
+            $product->image = $name;
+            // return $product->image;
+        }
         if($product->save()){
             return redirect()->route('admin.products.index');
         }else{
@@ -146,7 +216,8 @@ class ProductsController extends Controller
     // using route model binding
     public function destroy(Product $product)
     {
-        //
+
+        $this->authorize('update',$product);
         $product->delete();
         // for form delete
         // return redirect()->route('admin.products.index');

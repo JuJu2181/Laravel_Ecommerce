@@ -1,1 +1,8 @@
 create table posts and add some data to posts then display posts in view 
+
+# 2 Assign roles to users for superadmin, shopwowner and normal user 
+One user can only see his own products 
+Normal User is not allowed to see the admin dashboard
+Vendor can create product,view products list and update his/product but cannot create and edit categories
+Super Admin can do all 
+hint: modify user table to add roles column 

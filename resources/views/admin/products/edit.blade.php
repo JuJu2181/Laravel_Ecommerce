@@ -1,10 +1,15 @@
-@section('title','Edit Product')
+@section('title',Auth::user()->name.' - Edit Product')
 <x-admin.layout>
     <div class="az-content az-content-dashboard">
         <div class="container">
             <div class="az-content-body">
                 <h2>Edit Product: {{ $product->name }}</h2>
-                <form action={{ route('admin.products.update',$product->id) }} method='POST'>
+                {{-- determines whether one can update product or not --}}
+                {{-- for gate we defined update-product --}}
+                {{-- @can('update-product',$product) --}}
+                {{-- for policy we defined a function called update --}}
+                @can('update',$product)
+                <form action={{ route('admin.products.update',$product->id) }} method='POST' enctype="multipart/form-data">
                     {{-- here we need to use POST instead of put in html as html forms only support post and get--}}
                     {{-- Then we need to add the put method as hiden field --}}
                     @method('PUT')
@@ -29,29 +34,65 @@
                     @error('description')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                     @enderror
+                    {{-- for price --}}
                     <label for="price" class="m-1">Price: </label> 
                     <input type="text" name="price" id="" class="form-control @error('price') is-invalid @enderror" value="{{ $product->price }}">
                     @error('price')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                     @enderror
-                    <label for="category_id" class="m-1">Category:</label><br>
-                    <x-forms.select name="category_id" class="form-control">
-                        <option value="0" disabled> Select A Category</option>
-                        @foreach ($categories as $category)
-                            
-                            <option value="{{ $category->id }}" {{ $category->id === $product->category_id ? "selected":"" }}>{{ $category->name }}</option>
-                        @endforeach
-                    </x-forms.select>
-                    @error('category_id')
-                    <div class="alert alert-danger mt-2">{{ $message }}</div>
-                    @enderror
+                {{-- for category select --}}
+                <label for="category_id" class="m-1">Category:</label>
+                <x-forms.select name="category_id" class="form-control ">
+                    {{-- implementing for all categories using recursion --}}
+                    <?php
+                    function generateCategoryList($category,$spaceCount,$product){  
+                        // * for categories with children
+                        if ($category->children->count() > 0)
+                        {  
+                        ?>
+                        {{-- here we won't allow the products for categories with children --}}
+                            <option disabled value="{{ $category->id }}">{!!str_repeat('&nbsp;',$spaceCount)!!}>
+                        {{ $category->name }}</option>   
+                        <?php
+                        $spaceCount +=4;
+                        foreach ($category->children as $subcategory){
+                        generateCategoryList($subcategory,$spaceCount,$product);
+                        }
+                    }else{
+                        $spaceCount +=4;
+                    ?>
+                    {{-- products can only have category without children --}}
+                    {{-- {{dd($product->category_id)}} --}}
+                        <option value="{{ $category->id }}" {{ $category->id == $product->category_id?"selected":"" }}>{!!str_repeat('&nbsp;',$spaceCount)!!}*
+                        {{ $category->name }}</option>
+                    <?php
+                    }
                     
-                    <input type="submit" value="Update Product" name="submit" class="btn btn-primary btn-block mt-4">
+                }
+                ?>
+
+                    <option value="0"> Select A Category</option>
+                    @foreach ($categories as $category)
+                    {{ generateCategoryList($category,0,$product)}}
+                    @endforeach
+
+                </x-forms.select>
+                @error('category_id')
+                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+                {{-- for images --}}
+                <input type="file" name="image_upload" id="" class="form-control mt-3"  >
+                {{-- for submit btn --}}
+                <input type="submit" value="Update Product" name="submit" class="btn btn-primary btn-block mt-4">
                 </form>
                 <a href={{ route('admin.products.index') }} class="btn btn-warning btn-block mt-2">Discard Changes</a>
+                @else 
+                <p class="text-danger">You are not authorized to edit this product</p>
+                @endcan
             </div>
         </div>
     </div>
+
     @section('scripts')
     <script>
         document.getElementById("products").classList.add("active");

@@ -24,6 +24,13 @@
                             @if (Route::has('login'))
                             @auth
                             <li><i class="ti-user"></i> <a href="{{ url('/admin') }}">My account</a></li>
+                            <li>
+                                <form method="post" action="{{ route('logout') }}">
+                                    @csrf
+                                    <a href="{{ route('logout') }}"  onclick="event.preventDefault();
+                                    this.closest('form').submit();""><i class="ti-power-off"></i> Log Out</a>
+                                </form>
+                            </li>
                             @else
                             <li><i class="ti-power-off"></i><a href="{{ route('login') }}">Login</a></li>
                             @if (Route::has('register'))

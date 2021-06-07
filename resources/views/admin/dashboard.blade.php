@@ -1,4 +1,4 @@
-@section('title','Admin Dashboard')
+@section('title',Auth::user()->name.' - Admin Dashboard')
 <x-admin.layout>
     <div class="az-content az-content-dashboard">
         <div class="container">

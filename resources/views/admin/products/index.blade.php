@@ -1,7 +1,8 @@
-@section('title','All Products')
+@section('title',Auth::user()->name.' - All Products')
 <x-admin.layout>
 <div class="az-content az-content-dashboard">
     <div class="container">
+        @unless(Auth::user()->role == 'user')
         <div class="az-content-body">
             <h2>All Products</h2>
             <div class="table-responsive">
@@ -15,6 +16,8 @@
                         <td>Actions</td>
                     </tr>
                     @foreach ($products as $product)
+                    {{-- for displaying products specific to user --}}
+                    @can('update',$product)
                     <tr id="productId{{ $product->id }}">
                         
                         <td>{{ $product->id }}</td>
@@ -42,17 +45,22 @@
                                     <span><i class="typcn typcn-trash"></i></span>
                                 </button>
                                 </form> --}}
-
-                                id="decrement-btn"
+                                {{-- to delete using ajax request --}}
+                                <meta name="csrf-token" content="{{ csrf_token() }}">
                                 <button id="deleteProduct" data-id="{{ $product->id }}" class="btn btn-danger btn-block mt-2" onclick="deleteProduct({{ $product->id }})">Delete
                                 <span><i class="typcn typcn-trash"></i></span
                                 </button>
-                        </td>
-                        </tr>
+                            </td>
+                    </tr>
+                    @endcan
                         @endforeach
                 </table>
             </div>
+
         </div>
+        @else
+        <h3 class="text-danger">You are unauthorized</h3>
+        @endunless
     </div>
 </div>    
 @section('scripts')

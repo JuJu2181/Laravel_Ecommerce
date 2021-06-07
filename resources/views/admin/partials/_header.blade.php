@@ -13,7 +13,12 @@
                 <li class="nav-item show" id="dashboard">
                     <a href={{ route('admin.dashboard') }} class="nav-link"><i class="typcn typcn-chart-area-outline"></i>
                         Dashboard</a>
-                </li>
+                    </li>
+                    <li class="nav-item show" id="cart">
+                        <a href={{ route('eshop.cart') }} class="nav-link"><i class="typcn typcn-shopping-cart"></i>
+                            Shopping Cart</a>
+                        </li>
+                @unless(Auth::user()->role == 'user')
                 <li class="nav-item" id="products">
                   <a href="" class="nav-link with-sub"><i class="typcn typcn-document"></i> Products</a>
                   <nav class="az-menu-sub">
@@ -21,6 +26,7 @@
                       <a href={{ route('admin.products.create') }} class="nav-link">Create</a>
                   </nav>
               </li>
+              @unless(Auth::user()->role == 'vendor')
               <li class="nav-item" id="categories">
                 <a href={{ route('admin.products.index') }} class="nav-link with-sub"><i class="typcn typcn-document"></i> Categories</a>
                 <nav class="az-menu-sub">
@@ -28,14 +34,22 @@
                     <a href={{ route('admin.categories.create') }} class="nav-link">Create</a>
                 </nav>
             </li>
-                <li class="nav-item" id="user">
-                    <a href="" class="nav-link with-sub"><i class="typcn typcn-document"></i> User</a>
+            <li class="nav-item" id="user">
+                <a href="" class="nav-link with-sub"><i class="typcn typcn-document"></i> User</a>
+                <nav class="az-menu-sub">
+                    <a href="page-signin.html" class="nav-link">List</a>
+                    <a href="page-signup.html" class="nav-link">Register</a>
+                </nav>
+            </li>
+            @endunless
+                <li class="nav-item" id="posts">
+                    <a href="" class="nav-link with-sub"><i class="typcn typcn-document"></i>Post</a>
                     <nav class="az-menu-sub">
-                        <a href="page-signin.html" class="nav-link">Sign In</a>
-                        <a href="page-signup.html" class="nav-link">Sign Up</a>
+                        <a href="page-signin.html" class="nav-link">List</a>
+                        <a href="page-signup.html" class="nav-link">Create</a>
                     </nav>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="chart-chartjs.html" class="nav-link"><i class="typcn typcn-chart-bar-outline"></i>
                         Charts</a>
                 </li>
@@ -57,8 +71,9 @@
                             </div>
                         </div><!-- container -->
                     </div>
-                </li>
+                </li> --}}
             </ul>
+            @endunless
         </div><!-- az-header-menu -->
         <div class="az-header-right">
             <a href="https://www.bootstrapdash.com/demo/azia-free/docs/documentation.html" target="_blank"

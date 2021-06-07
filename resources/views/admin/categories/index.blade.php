@@ -1,7 +1,8 @@
-@section('title','All Categories')
+@section('title',Auth::user()->name.' - All Categories')
 <x-admin.layout>
 <div class="az-content az-content-dashboard">
     <div class="container">
+        @can('authorize-category')
         <div class="az-content-body">
             <h2>All Categories</h2>
             <div class="table-responsive">
@@ -62,6 +63,9 @@
                 </table>
             </div>
         </div>
+        @else  
+        <h3 class="text-danger">You are unauthorized</h3>
+        @endcan
     </div>
 </div>    
 @section('scripts')
@@ -82,7 +86,7 @@
 
         // for ajax delete
         // delete is working here but it is not removing row from table
-        function deleteProduct(id){
+        function deleteCategory(id){
             console.log(id);
             let token = $("meta[name='csrf-token']").attr("content");
             if(confirm("Are you sure to delete this product?\n press 'OK' to confirm")){

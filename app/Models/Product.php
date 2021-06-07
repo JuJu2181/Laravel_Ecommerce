@@ -34,6 +34,8 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    
+
     //* function for search scope to search products
     // this acts as a query builder for the search query 
     public function scopeSearch($query, array $terms){ 

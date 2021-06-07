@@ -33,11 +33,13 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request;
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'image' => 'image',
+            'role' => 'required|string',
         ]);
         
         if($request->hasFile('image')){
@@ -49,15 +51,16 @@ class RegisteredUserController extends Controller
         }else{
             $name = '';
         }
-
+        // return $request->role;
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'role'=>$request->role,
             'password' => Hash::make($request->password),
             'image'=>$name,
         ]);
 
-        
+        // return $user;
 
         event(new Registered($user));
 

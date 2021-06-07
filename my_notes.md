@@ -149,3 +149,25 @@ Order_items(
 )
 
 when add to cart is clicked firstly we check for data i-e order_id in session, if not present create a new order else add order items to same order
+
+# Authorization using gates and policies
+- Laravel provides two primary ways of authorizing actions: gates and policies. Think of gates and policies like routes and controllers. Gates provide a simple, closure-based approach to authorization while policies, like controllers, group logic around a particular model or resource. In this documentation, we'll explore gates first and then examine policies.
+- You do not need to choose between exclusively using gates or exclusively using policies when building an application. Most applications will most likely contain some mixture of gates and policies, and that is perfectly fine!
+- Gates are most applicable to actions which are not related to any model or resource, such as viewing an administrator dashboard. In contrast, policies should be used when you wish to authorize an action for a particular model or resource.
+
+- We use authorization so that the user who created the products or posts can only modify and delete it . 
+
+- We define gates in authserviceprovider class
+- If we want to add a new foreignKey we can set a default value to avoid errors
+
+- We use the @can() function to see if the user can update the product or not, when this function is encountered control is transferred to the authserviceprovider class where we write main logic for authorization using gates
+
+we also check for authorization in controller and if the user is not authorized it gives 403 forbidden
+
+we can also use Gate::authorize method for same purpose
+
+# Instead of gates we can also use policies which can be created using php artisan make:policy
+defining gates directly in auth service provider is same as using functions in routes and defining function in policy is same as defining functions in a controller.
+convention: PascalCase ModelnamePolicy
+
+Then we define policies in authserviceprovider

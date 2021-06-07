@@ -1,7 +1,8 @@
-@section('title','Create New Product')
+@section('title',Auth::user()->name.' - Create New Product')
 <x-admin.layout>
 <div class="az-content az-content-dashboard">
     <div class="container">
+        @unless(Auth::user()->role == 'user')
         <div class="az-content-body">
             {{-- displaying all errors before form--}}
             {{-- @if ($errors->any())
@@ -14,6 +15,8 @@
             </div>
             @endif --}}
             <h2>Create Product</h2>
+            {{-- check if user is authorized to create a product --}}
+            {{-- @can('create',App\models\Product::class) --}}
             <form action={{ route('admin.products.store') }} method="post" enctype="multipart/form-data">
                 @csrf
                 {{-- for name --}}
@@ -81,10 +84,15 @@
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
                 {{-- for images --}}
-                <input type="file" name="image_upload" id="" class="form-control mt-3" required>
+                <input type="file" name="image_upload" id="" class="form-control mt-3" >
+                {{-- submit btn --}}
                 <input type="submit" value="Create Product" name="submit" class="btn btn-success btn-block mt-4">
             </form>
+            {{-- @endcan --}}
         </div>
+        @else 
+        <h3 class="text-danger">You are Not authorized</h3>
+        @endunless
     </div>
 </div>
 @section('scripts')

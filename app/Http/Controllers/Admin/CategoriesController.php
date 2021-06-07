@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CategoriesFormRequest;
+use Illuminate\Support\Facades\Gate;
 
 
 class CategoriesController extends Controller
@@ -17,6 +19,11 @@ class CategoriesController extends Controller
      */
     public function index()
     {
+        // ? using gates for authorization
+        //*to check if updating product is allowed in controller using Gate::allows function
+        if(!Gate::allows('authorize-category')){
+            abort(403);
+        }
         $categories = Category::latest('id')->get();
         return view('admin.categories.index',['categories'=>$categories]);
     }
@@ -28,6 +35,9 @@ class CategoriesController extends Controller
      */
     public function create()
     {
+        if(!Gate::allows('authorize-category')){
+            abort(403);
+        }
         // $categories = Category::all();
         $categories = Category::with('children')->where('parent_id',0)->get();
         // return $categories;
@@ -42,6 +52,9 @@ class CategoriesController extends Controller
      */
     public function store(CategoriesFormRequest $request)
     {
+        if(!Gate::allows('authorize-category')){
+            abort(403);
+        }
         // return $request;
         // validation rules using the form request
         $request->validated();
@@ -63,13 +76,14 @@ class CategoriesController extends Controller
         // for validating image 
         if($request->hasFile('image_upload')){
             // to get original name 
-            $name = time().'_'.$request->file('image_upload')->getClientOriginalName();
+            // $name = time().'_'.$request->file('image_upload')->getClientOriginalName();
+            $name = $request->file('image_upload')->getClientOriginalName();
             // this also by default generates a random name
             // $product->image = $request->file('image_upload')->storage('public/images');
             // storing with its original name 
             $request->file('image_upload')->storeAs('public/images',$name);
             // * using the helper function directly
-            // image_crop($name,550,750);
+            // image_crop($name);
             $category->image = $name;
         }
         if($category->save()){
@@ -98,7 +112,12 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
-        //
+        if(!Gate::allows('authorize-category')){
+            abort(403);
+        }
+        $categories = Category::with('children')->where('parent_id',0)->get();
+        $category1 = Category::find($id);
+        return view("admin.categories.edit",compact('categories','category1'));
     }
 
     /**
@@ -110,7 +129,53 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $category= Category::find($id);
+        if(!Gate::allows('authorize-category')){
+            abort(403);
+        }
+        if($request->input('slug') == $category->slug){
+            // return "true";
+            $request->validate(
+            [
+                'name' => 'required|max:255|min:3',
+                'description' => 'required|max:255|min:10',
+                'image'=>'image|size:2048'
+            ],
+        );
+        }else{
+            // return "false";
+        $request->validate(
+            [
+                'name' => 'required|unique:categories|max:255|min:3',
+                'slug' => 'required|string|unique:categories',
+                'description' => 'required|max:255|min:10',
+                'image'=>'image|size:2048',
+            ],
+        );
+        }
+        $category->name = $request->input('name');
+        $category->description = $request->input('description');
+        // *parent category id and slug 
+        $category->parent_id = $request->input('parent_id');
+        $category->slug = $request->input('slug');
+        // for validating image 
+        if($request->hasFile('image_upload')){
+            // to get original name 
+            // $name = time().'_'.$request->file('image_upload')->getClientOriginalName();
+            $name = $request->file('image_upload')->getClientOriginalName();
+            // this also by default generates a random name
+            // $product->image = $request->file('image_upload')->storage('public/images');
+            // storing with its original name 
+            $request->file('image_upload')->storeAs('public/images',$name);
+            // * using the helper function directly
+            // image_crop($name);
+            $category->image = $name;
+        }
+        if($category->save()){
+            return redirect()->route('admin.categories.index');
+        }else{
+            return redirect()->back();
+        }  
     }
 
     /**
@@ -121,6 +186,10 @@ class CategoriesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(!Gate::allows('authorize-category')){
+            abort(403);
+        }
+        $category = Category::find($id);
+        $category->delete();
     }
 }

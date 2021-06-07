@@ -8,19 +8,20 @@ use App\Models\Category;
             // here I am creating a new image name based on their size and generating their thumbnail for different sizes
             $new_image_name = $width."x".$height."_".$image_name;
             // dd($image_name);
-            if(!file_exists(storage_path('app/public/images/'.$new_image_name))){
-                // dd($image_name);
-                $resized_image = Image::make(storage_path('app/public/images/'.$image_name));
-                $new_image_name = $width."x".$height."_".$image_name;
-                // dd($new_image_name);
-                $resized_image->save(storage_path('app/public/images/'.$new_image_name));
-            }
+            //! instead of creating the new image in images I later directly created it in thumbnail
+            // if(!file_exists(storage_path('app/public/images/'.$new_image_name))){
+            //     // dd($image_name);
+            //     $resized_image = Image::make(storage_path('app/public/images/'.$image_name));
+            //     $new_image_name = $width."x".$height."_".$image_name;
+            //     // dd($new_image_name);
+            //     $resized_image->save(storage_path('app/public/images/'.$new_image_name));
+            // }
 
             if(
-                file_exists(storage_path('app/public/images/'.$new_image_name)) && 
+                file_exists(storage_path('app/public/images/'.$image_name)) && 
                 !file_exists(storage_path('app/public/images/thumbnail/'.$new_image_name))
             ){
-                $image_resize = Image::make(storage_path('app/public/images/'.$new_image_name));
+                $image_resize = Image::make(storage_path('app/public/images/'.$image_name));
                 $image_resize->resize($width, $height);
                 $image_resize->save(storage_path('app/public/images/thumbnail/'.$new_image_name));
             }
