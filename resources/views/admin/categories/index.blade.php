@@ -63,7 +63,7 @@
                         </tr>
                         @endforeach
                 </table>
-                <div class="mt-5">
+                <div class="mt-5 mx-auto">
                     {{ $categories->links() }}
                 </div>
             </div>

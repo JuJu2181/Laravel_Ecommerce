@@ -16,7 +16,7 @@ class AddUserToProducts extends Migration
         Schema::table('products', function (Blueprint $table) {
             // $table->bigInteger('user_id')->nullable();
             // specifying default value for foreign key
-            $table->foreignId('user_id')->default(1)->constrained('users');
+            $table->foreignId('user_id')->default(1)->constrained('users')->onDelete('cascade');
         });
     }
 

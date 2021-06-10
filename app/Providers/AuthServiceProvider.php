@@ -21,6 +21,7 @@ class AuthServiceProvider extends ServiceProvider
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
         // binding product class and product policy
         Product::class => ProductPolicy::class,
+        Post::class => PostPolicy::class,
         // Category::class => CategoryPolicy::class,
     ];
 

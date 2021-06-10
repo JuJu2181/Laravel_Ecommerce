@@ -56,7 +56,7 @@
                         @endforeach
                 </table>
             </div>
-            <div class="mt-5 d-flex justify-center">
+            <div class="mt-5 d-flex justify-center mx-auto">
                 {{ $products->links() }}
             </div>
         </div>

@@ -5,7 +5,7 @@
 @section('bread_list')
 <ul class="bread-list">
     <li><a href={{ route('eshop.home') }}>Home<i class="ti-arrow-right"></i></a></li>
-    <li class="active"><a href={{ route('post.index') }}>All Blogs</a></li>
+    <li class="active"><a href={{ route('posts.index') }}>All Blogs</a></li>
 </ul>
 @endsection
 
@@ -28,17 +28,22 @@
                     <div class="col-lg-4 col-md-6 col-12">
 					<!-- Start Single Blog  -->
 					<div class="shop-single-blog">
-						<img src="https://via.placeholder.com/370x300" alt="#">
+						<img src="{{$post->image==''?'https://via.placeholder.com/370x300':image_crop($post->image,370,300)}}" alt="#">
 						<div class="content">
-							<p class="date">{{ date('F j, Y',strtotime($post->created_at)) }}</p>
-							<a href={{ route('post.single',$post->id) }} class="title">{{ $post->title }}</a>
-                            <p>{{ substr($post->body, 0, 50) }}...</p>
-							<a href={{ route('post.single',$post->id) }} class="more-btn">Continue Reading</a>
+							<p class="date">{{ $post->created_at->diffForHumans() }}</p>
+							<a href={{ route('post.single',$post->slug) }} class="title">{{ $post->title }}</a>
+							 <p class="text-info">By {{$post->user->name}}</p>
+                            <p class="text-warning">{{$post->category->name}}</p>
+                            <p>{{ Str::substr($post->body, 0, 50) }} {{ strlen($post->body) > 50 ? "...": "" }}</p>
+							<a href={{ route('post.single',$post->slug) }} class="more-btn">Continue Reading</a>
 						</div>
 					</div>
 					<!-- End Single Blog  -->
 				</div>
                 @endforeach
+				<div class="mx-auto mt-4">
+					{{$posts->links()}}
+				</div>
 			</div>
 		</div>
 	</section>

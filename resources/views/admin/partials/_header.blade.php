@@ -20,7 +20,7 @@
                         </li>
                 @unless(Auth::user()->role == 'user')
                 <li class="nav-item" id="products">
-                  <a href="" class="nav-link with-sub"><i class="typcn typcn-document"></i> Products</a>
+                  <a href="" class="nav-link with-sub"><i class="typcn typcn-gift"></i> Products</a>
                   <nav class="az-menu-sub">
                       <a href={{ route('admin.products.index') }} class="nav-link">List</a>
                       <a href={{ route('admin.products.create') }} class="nav-link">Create</a>
@@ -28,14 +28,14 @@
               </li>
               @unless(Auth::user()->role == 'vendor')
               <li class="nav-item" id="categories">
-                <a href={{ route('admin.products.index') }} class="nav-link with-sub"><i class="typcn typcn-document"></i> Categories</a>
+                <a href={{ route('admin.products.index') }} class="nav-link with-sub"><i class="typcn typcn-chart-pie"></i> Categories</a>
                 <nav class="az-menu-sub">
                     <a href={{ route('admin.categories.index') }} class="nav-link">List</a>
                     <a href={{ route('admin.categories.create') }} class="nav-link">Create</a>
                 </nav>
             </li>
             <li class="nav-item" id="users">
-                <a href="#" class="nav-link with-sub"><i class="typcn typcn-document"></i> User</a>
+                <a href="#" class="nav-link with-sub"><i class="typcn typcn-group"></i> User</a>
                 <nav class="az-menu-sub">
                     <a href="{{ route('admin.users.index') }}" class="nav-link">List</a>
                     <a href="{{ route('register') }}" class="nav-link">Register</a>
@@ -43,10 +43,10 @@
             </li>
             @endunless
                 <li class="nav-item" id="posts">
-                    <a href="" class="nav-link with-sub"><i class="typcn typcn-document"></i>Post</a>
+                    <a href="#" class="nav-link with-sub"><i class="typcn typcn-document-text"></i>Post</a>
                     <nav class="az-menu-sub">
-                        <a href="page-signin.html" class="nav-link">List</a>
-                        <a href="page-signup.html" class="nav-link">Create</a>
+                        <a href="{{route('admin.posts.index')}}" class="nav-link">List</a>
+                        <a href="{{route('admin.posts.create')}}" class="nav-link">Create</a>
                     </nav>
                 </li>
                 {{-- <li class="nav-item">

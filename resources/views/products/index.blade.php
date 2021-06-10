@@ -81,7 +81,7 @@
                     
 
                 </div>
-                <div class="mt-4" >
+                <div class="mt-4 mx-auto" >
                     {{ $products->links() }}
                 </div>
             </div>

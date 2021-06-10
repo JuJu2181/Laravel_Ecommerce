@@ -47,8 +47,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // * relation between category and product 
+    // * relation between user and product 
     public function products(){
         return $this->hasMany(Product::class);
+    }
+    // relation between user and post
+    public function posts(){
+        return $this->hasMany(Post::class);
     }
 }

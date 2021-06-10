@@ -53,10 +53,9 @@ Route::get('/categories/', [CategoriesController::class, 'index'])->name('catego
 Route::get('/category/{category}/', [CategoriesController::class, 'getSingle'])->name('category.single');
 
 // for posts
-Route::get('/create_post/', [PostController::class, 'createPost'])->name('post.create');
 
 //? getting all posts
-Route::get('/posts', [PostController::class, 'index'])->name('post.index');
+Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 
 //? geting a single post by id
 Route::get('/post/{post}', [PostController::class, 'getSingle'])->name('post.single');
@@ -106,6 +105,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // ? for users 
     Route::resource('users',App\Http\Controllers\Admin\UsersController::class);
 
+    // ? for posts 
+    Route::resource('posts',App\Http\Controllers\Admin\PostsController::class);
 });
 
 

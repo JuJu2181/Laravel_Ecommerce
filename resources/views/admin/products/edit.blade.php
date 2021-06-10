@@ -82,6 +82,7 @@
                 @enderror
                 {{-- for images --}}
                 <input type="file" name="image_upload" id="" class="form-control mt-3"  >
+                <p class="m-2 text-sm text-warning">If you want the previous image to be used don't choose a new file.</p>
                 {{-- for submit btn --}}
                 <input type="submit" value="Update Product" name="submit" class="btn btn-primary btn-block mt-4">
                 </form>

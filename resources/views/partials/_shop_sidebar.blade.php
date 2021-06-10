@@ -70,11 +70,11 @@
             <!-- Single Post -->
             <div class="single-post first">
                 <div class="image">
-                    <img src="{{$post->image==''?'https://via.placeholder.com/75x75':''}}" alt="#">
+                    <img src="{{$post->image==''?'https://via.placeholder.com/75x75':image_crop($post->image,75,75)}}" alt="#">
                 </div>
                 <div class="content">
                     <h5><a href="#">{{ $post->title }}</a></h5>
-                    <p class="price">{{ substr($post->body, 0, 50) (strlen($post->body) > 50 )? "...":"" }}</p>
+                    <p>{{ Str::substr($post->body, 0, 20) }} {{ strlen($post->body) > 20 ? "...": "" }}</p>
                     <ul class="reviews">
                         <li class="yellow"><i class="ti-star"></i></li>
                         <li class="yellow"><i class="ti-star"></i></li>

@@ -27,11 +27,11 @@
                                             <ul class="dropdown">
                                                 <li><a href={{route('eshop.blog-single')}}>Blog Single Sidebar</a>
                                                 </li>
-                                                <li><a href={{route('post.index')}}>All Blogs</a>
+                                                <li><a href={{route('posts.index')}}>All Blogs</a>
                                                 </li>
                                                 @auth
                                                 @unless (Auth::user()->role == 'user')
-                                                    <li><a href={{route('post.create')}}>Create Post</a>
+                                                    <li><a href={{route('admin.posts.create')}}>Create Post</a>
                                                 </li>
                                                 @endunless
                                                 @endauth

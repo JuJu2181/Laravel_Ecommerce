@@ -416,12 +416,14 @@
                 <div class="col-lg-4 col-md-6 col-12">
                     <!-- Start Single Blog  -->
                     <div class="shop-single-blog">
-                        <img src="https://via.placeholder.com/370x300" alt="#">
+                        <img src="{{$post->image==''?'https://via.placeholder.com/370x300':image_crop($post->image,370,300)}}" alt="#">
                         <div class="content">
-                            <p class="date">{{  date('F j, Y',strtotime($post->created_at)) }}</p>
-                            <a href={{ route('post.single',$post->id) }} class="title">{{ $post->title }}</a>
-                            <p>{{ substr($post->body,0,50) }}...</p>
-                            <a href={{ route('post.single',$post->id) }} class="more-btn">Continue Reading</a>
+                            <p class="date"> Posted {{ $post->created_at->diffForHumans()  }}</p>
+                            <p class="text-info">By {{$post->user->name}}</p>
+                            <p class="text-warning">{{$post->category->name}}</p>
+                            <a href={{ route('post.single',$post->slug) }} class="title">{{ $post->title }}</a>
+                            <p>{{ Str::substr($post->body, 0, 50) }} {{ strlen($post->body) > 50 ? "...": "" }}</p>
+                            <a href={{ route('post.single',$post->slug) }} class="more-btn">Continue Reading</a>
                         </div>
                     </div>
                     <!-- End Single Blog  -->

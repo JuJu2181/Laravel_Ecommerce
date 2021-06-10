@@ -61,9 +61,11 @@
                     @enderror
                     {{-- for images --}}
                     <input type="file" name="image_upload" id="" class="form-control mt-3">
+                    <p class="m-2 text-sm text-warning">If you want the previous image to be used don't choose a new file.</p>
                     {{-- submit  --}}
                     <input type="submit" value="Update Category" name="submit" class="btn btn-primary btn-block mt-4">
                 </form>
+                <a href={{ route('admin.categories.index') }} class="btn btn-warning btn-block mt-2">Discard Changes</a>
             </div>
             @else 
             <h3 class="text-danger">You are unauthorized</h3>

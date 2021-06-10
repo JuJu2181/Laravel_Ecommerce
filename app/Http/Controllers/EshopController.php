@@ -24,7 +24,7 @@ class EshopController extends Controller
     $paginated_products = Product::latest('id')->take(6)->get();
     // $products = Product::all();
     $categories = Category::all();
-    $posts = Post::all();
+    $posts = Post::latest('id')->take(4)->get();
     return view('eshop.index',[
         'products'=>$products,
         'categories'=>$categories,

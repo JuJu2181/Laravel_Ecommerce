@@ -5,8 +5,8 @@
 @section('bread_list')
 <ul class="bread-list">
     <li><a href={{ route('eshop.home') }}>Home<i class="ti-arrow-right"></i></a></li>
-    <li><a href={{ route('post.index') }}>Blogs<i class="ti-arrow-right"></i></a></li>
-    <li class="active"><a href={{ route('post.single',$post->id) }}>
+    <li><a href={{ route('posts.index') }}>Blogs<i class="ti-arrow-right"></i></a></li>
+    <li class="active"><a href={{ route('post.single',$post->slug) }}>
     {{ $post->title }}
     </a></li>
 </ul>
@@ -25,14 +25,17 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="image">
-                                <img src="https://via.placeholder.com/950x460" alt="#">
+                                <img src="{{$post->image == ''?'https://via.placeholder.com/950x460':image_crop($post->image,950,460)}}" alt="#">
                             </div>
                             <div class="blog-detail">
                                 <h2 class="blog-title">{{ $post->title }}</h2>
                                 <div class="blog-meta">
-                                    <span class="author"><a href="#"><i class="fa fa-user"></i>By Admin</a><a
-                                            href="#"><i class="fa fa-calendar"></i>{{ date('F j, Y',strtotime($post->created_at)) }}</a><a href="#"><i
+                                    <span class="author"><a href="#"><i class="fa fa-user"></i>By {{$post->user->name}}</a><a
+                                            href="#"><i class="fa fa-calendar"></i>{{ $post->created_at->diffForHumans() }}</a><a href="#"><i
                                                 class="fa fa-comments"></i>Comment (15)</a></span>
+                                </div>
+                                <div>
+                                    <p class="text-info">{{$post->category->name}}</p>
                                 </div>
                                 <div class="content">
                                     <p>{{ $post->body }}</p>

@@ -21,9 +21,13 @@ class ProductsController extends Controller
     {
         if(Auth::user()->role == "user"){
             abort(403);
+        }elseif (Auth::user()->role == "vendor") {
+            $products = Product::latest('id')->where('user_id','=',Auth::id())->paginate(6);
+            return view('admin.products.index',compact('products'));
+        }else{
+            $products = Product::latest('id')->paginate(6);
+            return view('admin.products.index',['products'=>$products]);
         }
-        $products = Product::latest('id')->paginate(6);
-        return view('admin.products.index',['products'=>$products]);
     }
 
     /**
