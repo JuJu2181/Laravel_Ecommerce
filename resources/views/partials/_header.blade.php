@@ -23,7 +23,7 @@
 
                             @if (Route::has('login'))
                             @auth
-                            <li><i class="ti-user"></i> <a href="{{ url('/admin') }}">My account</a></li>
+                            <li><i class="ti-user"></i> <a href="{{ url('/admin') }}">{{ Auth::User()->name }}</a></li>
                             <li>
                                 <form method="post" action="{{ route('logout') }}">
                                     @csrf

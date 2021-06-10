@@ -22,7 +22,7 @@ class ProductsController extends Controller
         if(Auth::user()->role == "user"){
             abort(403);
         }
-        $products = Product::latest('id')->get();
+        $products = Product::latest('id')->paginate(6);
         return view('admin.products.index',['products'=>$products]);
     }
 

@@ -19,14 +19,16 @@
                     @foreach ($categories as $category)
                     <tr id="categoryId{{ $category->id }}">
                         
-                        <td>{{ $category->id }}</td>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $category->name }}</td>
                         <td>  {{ Str::substr($category->description, 0, 50) }} {{ strlen($category->description) > 50 ? "...": "" }}</td>
                         <td>{{$category->slug}}</td>
                         <td>{{ count($category->products) }}</td>
                         <td>
                             @if (isset($category->parent_id) && !empty($category->parent_id))
-                            {{App\Models\Category::find($category->parent_id)->name}}
+                            <a href="{{ route('category.single',$category->parent_id) }}">
+                                {{App\Models\Category::find($category->parent_id)->name}}
+                            </a>
                             @else 
                             None
                             @endif
@@ -61,6 +63,9 @@
                         </tr>
                         @endforeach
                 </table>
+                <div class="mt-5">
+                    {{ $categories->links() }}
+                </div>
             </div>
         </div>
         @else  

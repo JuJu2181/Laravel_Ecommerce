@@ -31,6 +31,8 @@ Route::get('/', [EshopController::class, 'index'])->name('eshop.home');
 
 Route::get('/shop-grid/', [EshopController::class, 'getShopGrid'])->name('eshop.shop-grid');
 
+Route::get('/shop/{vendor}',[EshopController::class,'getSingleShop'])->name('eshop.getSingleShop');
+
 Route::get('/contact/', [EshopController::class, 'getContact'])->name('eshop.contact');
 
 Route::get('/checkout_template/', [EshopController::class, 'getCheckout'])->middleware('auth')->name('eshop.checkout');
@@ -101,6 +103,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // ?for dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
+    // ? for users 
+    Route::resource('users',App\Http\Controllers\Admin\UsersController::class);
 
 });
 

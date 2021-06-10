@@ -1,11 +1,12 @@
 @extends('layouts.primary')
 
-@section('title','All Products')
+@section('title','Shop List')
 
 @section('bread_list')
 <ul class="bread-list">
     <li><a href={{ route('eshop.home') }}>Home<i class="ti-arrow-right"></i></a></li>
-    <li class="active"><a href={{ route('product.index') }}>All Products</a></li>
+    <li><a href={{ route('eshop.shop-grid') }}>Shop Grid</a></li>
+    <li class="active"><a href="{{ route('eshop.getSingleShop',$vendor->id) }}">{{ $vendor->name }}</a></li>
 </ul>
 @endsection
 
@@ -16,6 +17,7 @@
 <section class="product-area shop-sidebar shop section">
     <div class="container">
         <div class="row">
+
             @include('partials._shop_sidebar')
             <div class="col-lg-9 col-md-8 col-12">
                 <div class="row">
@@ -25,6 +27,7 @@
                         <!--/ End Shop Top -->
                     </div>
                 </div>
+                <h2 class="mt-4">Products From {{ $vendor->name }} - {{ $vendor->products->count() }}</h2>
                 <div class="row">
                     @foreach ($products as $product)
                     
@@ -77,12 +80,6 @@
                         </div>
                     </div>
                     @endforeach
-
-                    
-
-                </div>
-                <div class="mt-4" >
-                    {{ $products->links() }}
                 </div>
             </div>
         </div>
@@ -96,6 +93,6 @@
 
 @section('scripts')
     <script>
-        document.getElementById("product").classList.add("active");
+        document.getElementById("shop").classList.add("active");
     </script>
 @endsection

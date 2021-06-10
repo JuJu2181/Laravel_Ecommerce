@@ -64,15 +64,17 @@
         <!--/ End Shop By Price -->
         <!-- Single Widget -->
         <div class="single-widget recent-post">
-            <h3 class="title">Recent post</h3>
+            <h3 class="title">Recent posts</h3>
+            @if (App\Models\Post::all()->count() > 0)
+            @foreach (App\Models\Post::latest('id')->take(5)->get() as $post)
             <!-- Single Post -->
             <div class="single-post first">
                 <div class="image">
-                    <img src="https://via.placeholder.com/75x75" alt="#">
+                    <img src="{{$post->image==''?'https://via.placeholder.com/75x75':''}}" alt="#">
                 </div>
                 <div class="content">
-                    <h5><a href="#">Girls Dress</a></h5>
-                    <p class="price">$99.50</p>
+                    <h5><a href="#">{{ $post->title }}</a></h5>
+                    <p class="price">{{ substr($post->body, 0, 50) (strlen($post->body) > 50 )? "...":"" }}</p>
                     <ul class="reviews">
                         <li class="yellow"><i class="ti-star"></i></li>
                         <li class="yellow"><i class="ti-star"></i></li>
@@ -83,53 +85,23 @@
                 </div>
             </div>
             <!-- End Single Post -->
-            <!-- Single Post -->
-            <div class="single-post first">
-                <div class="image">
-                    <img src="https://via.placeholder.com/75x75" alt="#">
-                </div>
-                <div class="content">
-                    <h5><a href="#">Women Clothings</a></h5>
-                    <p class="price">$99.50</p>
-                    <ul class="reviews">
-                        <li class="yellow"><i class="ti-star"></i></li>
-                        <li class="yellow"><i class="ti-star"></i></li>
-                        <li class="yellow"><i class="ti-star"></i></li>
-                        <li class="yellow"><i class="ti-star"></i></li>
-                        <li><i class="ti-star"></i></li>
-                    </ul>
-                </div>
-            </div>
-            <!-- End Single Post -->
-            <!-- Single Post -->
-            <div class="single-post first">
-                <div class="image">
-                    <img src="https://via.placeholder.com/75x75" alt="#">
-                </div>
-                <div class="content">
-                    <h5><a href="#">Man Tshirt</a></h5>
-                    <p class="price">$99.50</p>
-                    <ul class="reviews">
-                        <li class="yellow"><i class="ti-star"></i></li>
-                        <li class="yellow"><i class="ti-star"></i></li>
-                        <li class="yellow"><i class="ti-star"></i></li>
-                        <li class="yellow"><i class="ti-star"></i></li>
-                        <li class="yellow"><i class="ti-star"></i></li>
-                    </ul>
-                </div>
-            </div>
-            <!-- End Single Post -->
-        </div>
+                 
+            @endforeach
+            @else 
+            <p class="text-secondary">No Posts Available</p>
+            @endif
+       </div>
         <!--/ End Single Widget -->
         <!-- Single Widget -->
         <div class="single-widget category">
             <h3 class="title">Manufacturers</h3>
             <ul class="categor-list">
-                <li><a href="#">Forever</a></li>
-                <li><a href="#">giordano</a></li>
-                <li><a href="#">abercrombie</a></li>
-                <li><a href="#">ecko united</a></li>
-                <li><a href="#">zara</a></li>
+                @foreach (App\Models\User::all() as $user)
+                @if ($user->role == "vendor")
+                    
+                <li><a href="{{ route('eshop.getSingleShop',$user->id) }}">{{ $user->name }}</a></li>
+                @endif
+                @endforeach
             </ul>
         </div>
         <!--/ End Single Widget -->

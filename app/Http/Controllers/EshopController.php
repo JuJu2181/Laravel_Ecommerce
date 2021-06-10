@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -19,15 +20,31 @@ class EshopController extends Controller
     // using with will fetch the category when fetching the product so it will reduce the sql queries in backend and hence improves performance
     // $products = Product::latest('id')->without('category')->get();
     $products = Product::latest('id')->get();
+    // $paginated_products = Product::latest('id')->paginate(6);
+    $paginated_products = Product::latest('id')->take(6)->get();
     // $products = Product::all();
     $categories = Category::all();
     $posts = Post::all();
-    return view('eshop.index',['products'=>$products,'categories'=>$categories,'posts'=>$posts]);
+    return view('eshop.index',[
+        'products'=>$products,
+        'categories'=>$categories,
+        'posts'=>$posts,
+        'paginated_products'=>$paginated_products,
+        ]);
     }
 
     public function getShopGrid(){
+        $vendors = User::where('role','vendor')->get();
         $categories = Category::all();
-        return view('eshop.shop-grid',['categories'=>$categories]);
+        return view('eshop.shop-grid',['categories'=>$categories,'vendors'=>$vendors]);
+    }
+
+    public function getSingleShop(User $vendor){
+        if($vendor->role != 'vendor'){
+            abort(403);
+        }
+        $products = $vendor->products;
+        return view('eshop.singleshop',compact('vendor','products'));
     }
 
     public function getCart(){

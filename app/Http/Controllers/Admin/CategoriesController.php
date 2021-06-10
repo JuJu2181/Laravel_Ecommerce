@@ -24,7 +24,7 @@ class CategoriesController extends Controller
         if(!Gate::allows('authorize-category')){
             abort(403);
         }
-        $categories = Category::latest('id')->get();
+        $categories = Category::latest('id')->paginate(6);
         return view('admin.categories.index',['categories'=>$categories]);
     }
 

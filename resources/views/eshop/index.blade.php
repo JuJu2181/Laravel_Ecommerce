@@ -96,7 +96,7 @@
                         <div class="tab-pane fade show active" id="man" role="tabpanel">
                             <div class="tab-single">
                                 <div class="row">
-									@foreach ($products as $product)
+									@foreach ($paginated_products as $product)
 										<div class="col-xl-3 col-lg-4 col-md-4 col-12">
                                         <div class="single-product">
                                             <div class="product-img">
@@ -127,7 +127,7 @@
                                                 </div>
                                             </div>
                                             <div class="product-content">
-                                                <h3><a href={{ route('product.single',$product->id) }}>{{$product->name}}</a></h3>
+                                                <h3 class="text-dark"><a href={{ route('product.single',$product->id) }}>{{$product->name}}</a></h3>
                                                 <div class="product-price">
                                                     <span>Rs. {{$product->price}}</span>
                                                     <br>
@@ -135,6 +135,14 @@
                                                         <a href={{ route('category.single',$product->category->id) }}>
                                                             {{ $product->category->name }}
                                                         </a>
+                                                    </span>
+                                                    <br>
+                                                    <span class=" text-info text-sm">
+                                                    Added {{ $product->created_at->diffForHumans() }}
+                                                    </span>
+                                                    <br>
+                                                    <span class="text-secondary">
+                                                        By {{ $product->user->name }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -148,6 +156,8 @@
                         <!--/ End Single Tab -->
                     </div>
                 </div>
+                
+        
             </div>
         </div>
     </div>
@@ -465,8 +475,7 @@
         </div>
     </div>
 </section>
-<!-- End Shop Services Area -->
-
+<!-- End Shop Services Area -->  
 <!-- upto here index specific -->
 @include('partials._newsletter')
 @include('partials._modal')

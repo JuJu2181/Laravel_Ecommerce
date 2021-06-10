@@ -20,7 +20,7 @@
                     @can('update',$product)
                     <tr id="productId{{ $product->id }}">
                         
-                        <td>{{ $product->id }}</td>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $product->name }}</td>
                         <td>  {{ Str::substr($product->description, 0, 50) }} {{ strlen($product->description) > 50 ? "...": "" }}</td>
                         <td>{{ $product->price }}</td>
@@ -56,7 +56,9 @@
                         @endforeach
                 </table>
             </div>
-
+            <div class="mt-5 d-flex justify-center">
+                {{ $products->links() }}
+            </div>
         </div>
         @else
         <h3 class="text-danger">You are unauthorized</h3>

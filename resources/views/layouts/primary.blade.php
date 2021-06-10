@@ -4,6 +4,7 @@
 <head>
 	{{-- using partials--}}
     @include('partials._head')
+
 </head>
 
 <body class="js">

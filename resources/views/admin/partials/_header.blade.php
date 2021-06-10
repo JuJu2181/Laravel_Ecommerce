@@ -34,11 +34,11 @@
                     <a href={{ route('admin.categories.create') }} class="nav-link">Create</a>
                 </nav>
             </li>
-            <li class="nav-item" id="user">
-                <a href="" class="nav-link with-sub"><i class="typcn typcn-document"></i> User</a>
+            <li class="nav-item" id="users">
+                <a href="#" class="nav-link with-sub"><i class="typcn typcn-document"></i> User</a>
                 <nav class="az-menu-sub">
-                    <a href="page-signin.html" class="nav-link">List</a>
-                    <a href="page-signup.html" class="nav-link">Register</a>
+                    <a href="{{ route('admin.users.index') }}" class="nav-link">List</a>
+                    <a href="{{ route('register') }}" class="nav-link">Register</a>
                 </nav>
             </li>
             @endunless
