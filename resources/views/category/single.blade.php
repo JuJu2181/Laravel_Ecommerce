@@ -20,13 +20,15 @@
             {{-- including shop sidebar --}}
             @include('partials._shop_sidebar')
             <div class="col-lg-9 col-md-8 col-12">
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-12">
+                        @if ($title == 'Products')
                         <!-- Shop Top -->
                         @include('partials._shoptop')
                         <!--/ End Shop Top -->
+                        @endif
                     </div>
-                </div>
+                </div> --}}
                 <div class="row">
                     <div class="col-12 my-3">
                         <h3>{{$category->name}}</h3>

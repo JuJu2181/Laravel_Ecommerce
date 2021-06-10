@@ -21,7 +21,9 @@
                 <div class="row">
                     <div class="col-12">
                         <!-- Shop Top -->
+                        <form action="{{route('product.index')}}" method="GET">
                         @include('partials._shoptop')
+                        </form>
                         <!--/ End Shop Top -->
                     </div>
                 </div>
@@ -82,7 +84,8 @@
 
                 </div>
                 <div class="mt-4 mx-auto" >
-                    {{ $products->links() }}
+                    {{-- to append get request for pagination --}}
+                    {{ $products->appends($_GET)->links() }}
                 </div>
             </div>
         </div>

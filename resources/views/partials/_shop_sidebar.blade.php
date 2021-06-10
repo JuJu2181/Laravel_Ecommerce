@@ -33,7 +33,7 @@
         </div>
         <!--/ End Single Widget -->
         <!-- Shop By Price -->
-        <div class="single-widget range">
+        {{-- <div class="single-widget range">
             <h3 class="title">Shop by Price</h3>
             <div class="price-filter">
                 <div class="price-filter-inner">
@@ -60,13 +60,13 @@
                         $250<span class="count">(8)</span></label>
                 </li>
             </ul>
-        </div>
+        </div> --}}
         <!--/ End Shop By Price -->
         <!-- Single Widget -->
         <div class="single-widget recent-post">
             <h3 class="title">Recent posts</h3>
             @if (App\Models\Post::all()->count() > 0)
-            @foreach (App\Models\Post::latest('id')->take(5)->get() as $post)
+            @foreach (App\Models\Post::latest('id')->take(3)->get() as $post)
             <!-- Single Post -->
             <div class="single-post first">
                 <div class="image">
