@@ -87,8 +87,9 @@
                         </div>
                         @auth
                         @php
-                            $order_id = session('order_id',0);
-                            if($order_id < 1){
+                            $order = App\Models\Order::where('user_id',Auth::id())->where('order_status','cart')->first();
+                            // dd($order_id);
+                            if(empty($order)){
                             // creating order if not present in the session
                             // if we added user address for registration
                             // $user = Auth::user();
@@ -102,8 +103,10 @@
                             $order->total_price = 0;
                             $order->shipping_address = '';
                             $order->save();
-                            session(['order_id'=>$order->id]);
+                            // session(['order_id'=>$order->id]);
                             $order_id = $order->id;
+                            }else{
+                                $order_id = $order->id;
                             }
                             $order = App\Models\Order::find($order_id);
                             $order_items = App\Models\OrderItem::whereOrderId($order_id)->get();

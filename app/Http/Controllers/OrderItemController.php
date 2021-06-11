@@ -44,9 +44,9 @@ class OrderItemController extends Controller
         //
         //  return $request;
         // ? specifying a default value
-         $order_id = session('order_id',0);
+        $order = Order::where('user_id',Auth::id())->where('order_status','cart')->first();
          // check for valid order_id in session
-         if($order_id < 1){
+         if(empty($order)){
             // creating order if not present in the session
             // if we added user address for registration
             // $user = Auth::user();
@@ -60,7 +60,9 @@ class OrderItemController extends Controller
             $order->total_price = 0;
             $order->shipping_address = '';
             $order->save();
-            session(['order_id'=>$order->id]);
+            // session(['order_id'=>$order->id]);
+            $order_id = $order->id;
+        }else{
             $order_id = $order->id;
         }
         // return $order_id;

@@ -20,12 +20,16 @@
             <p class="m-1"><strong>Price: </strong>{{ $product['price'] }}</p>
             <span> <strong>Category: </strong> {{ $product->category->name }}</span>
         </article>
+        @if ($product->user_id != Auth::id())
         <form action="{{route('cart.store')}}" method="post">
             @csrf
             <input type="hidden" name="product_id" value="{{$product->id}}">
             <input type="hidden" name="quantity" value="1">
             <a title="Add to cart" href="#" onclick="event.preventDefault();this.closest('form').submit();">Add to cart</a>
         </form>
+        @else
+        <p>You Own This Product As A Vendor</p>
+        @endif
     </div>
 @endsection
 

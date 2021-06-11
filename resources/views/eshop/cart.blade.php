@@ -141,7 +141,11 @@
                                     <li class="last">You Pay<span id="totalPrice">${{$order->total_price}}</span></li>
                                 </ul>
                                 <div class="button5">
+                                    @if ($order->orderItems->count()>0)
                                     <a href="{{route('eshop.checkout')}}" class="btn">Checkout</a>
+                                    @else 
+                                    <button class="btn" disabled>Add Items To Checkout</button>
+                                    @endif
                                     <a href="{{route('eshop.home')}}" class="btn">Continue shopping</a>
                                 </div>
                             </div>

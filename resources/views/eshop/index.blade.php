@@ -97,6 +97,7 @@
                             <div class="tab-single">
                                 <div class="row">
 									@foreach ($paginated_products as $product)
+                                    @unless ($product->user->id == Auth::id())
 										<div class="col-xl-3 col-lg-4 col-md-4 col-12">
                                         <div class="single-product">
                                             <div class="product-img">
@@ -148,6 +149,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @endunless
 									@endforeach
 
                                 </div>
@@ -230,12 +232,16 @@
                                 </div>
                                 <div class="product-action-2">
                                     {{-- <a title="Add to cart" href="#">Add to cart</a> --}}
+                                    @if($product->user_id != Auth::id())
                                     <form action="{{route('cart.store')}}" method="post">
                                         @csrf
                                         <input type="hidden" name="product_id" value="{{$product->id}}">
                                         <input type="hidden" name="quantity" value="1">
                                         <a title="Add to cart" href="#" onclick="event.preventDefault();this.closest('form').submit();">Add to cart</a>
                                     </form>
+                                    @else
+                                    <p class="m-2">You Own This Product</p>
+                                    @endif
                                 </div>
                             </div>
                         </div>

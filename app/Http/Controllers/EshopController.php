@@ -21,7 +21,7 @@ class EshopController extends Controller
     // $products = Product::latest('id')->without('category')->get();
     $products = Product::latest('id')->get();
     // $paginated_products = Product::latest('id')->paginate(6);
-    $paginated_products = Product::latest('id')->take(6)->get();
+    $paginated_products = Product::latest('id')->where('user_id','!=',Auth::id())->take(6)->get();
     // $products = Product::all();
     $categories = Category::all();
     $posts = Post::latest('id')->take(4)->get();
@@ -52,9 +52,9 @@ class EshopController extends Controller
     }
 
     public function getCheckout(){
-        $order_id = session('order_id',0);
+        $order = Order::where('user_id',Auth::id())->where('order_status','cart')->first();
         // check for valid order_id in session
-        if($order_id < 1){
+        if(empty($order)){
             // creating order if not present in the session
             // if we added user address for registration
             // $user = Auth::user();
@@ -68,11 +68,18 @@ class EshopController extends Controller
             $order->total_price = 0;
             $order->shipping_address = '';
             $order->save();
-            session(['order_id'=>$order->id]);
+            // session(['order_id'=>$order->id]);
+            $order_id = $order->id;
+        }else{
             $order_id = $order->id;
         }
         $order = Order::find($order_id);
-        return view('eshop.checkout',compact('order'));
+        // return $order->orderItems;
+        if($order->orderItems->count() > 0){
+            return view('eshop.checkout',compact('order'));
+        }else{
+            return redirect(route('order.index'));
+        }
     }
 
     public function getContact(){

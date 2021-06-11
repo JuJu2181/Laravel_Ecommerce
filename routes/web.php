@@ -107,6 +107,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // ? for posts 
     Route::resource('posts',App\Http\Controllers\Admin\PostsController::class);
+
+    // ? for orders 
+    Route::resource('orders', App\Http\Controllers\Admin\OrdersController::class);
+
+    Route::get('orders_for_vendors',[App\Http\Controllers\Admin\OrdersController::class,'getVendorOrders'])->name('orders.getVendorOrders');
 });
 
 

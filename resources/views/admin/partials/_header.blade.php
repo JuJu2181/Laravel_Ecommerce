@@ -17,7 +17,17 @@
                     <li class="nav-item show" id="cart">
                         <a href={{ route('eshop.cart') }} class="nav-link"><i class="typcn typcn-shopping-cart"></i>
                             Shopping Cart</a>
-                        </li>
+                    </li>
+                    <li class="nav-item" id="orders">
+                        <a href="#" class="nav-link with-sub"><i class="typcn typcn-clipboard"></i>
+                            All Orders</a>
+                        <nav class="az-menu-sub">
+                                <a href={{ route('admin.orders.index') }} class="nav-link">My Orders</a>
+                                @unless (Auth::user()->role == 'user')
+                                    <a href="{{route('admin.orders.getVendorOrders')}}" class="nav-link">Orders For Vendor</a>
+                                @endunless
+                            </nav>
+                    </li>
                 @unless(Auth::user()->role == 'user')
                 <li class="nav-item" id="products">
                   <a href="" class="nav-link with-sub"><i class="typcn typcn-gift"></i> Products</a>

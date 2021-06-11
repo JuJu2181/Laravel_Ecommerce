@@ -19,9 +19,10 @@ class OrderController extends Controller
     public function index()
     {
         //for all the orders
-        $order_id = session('order_id',0);
+        // $order_id = session('order_id',0);
+        $order = Order::where('user_id',Auth::id())->where('order_status','cart')->first();
         // return $order_id;
-        if($order_id < 1){
+        if(empty($order)){
             // creating order if not present in the session
             // if we added user address for registration
             // $user = Auth::user();
@@ -35,9 +36,12 @@ class OrderController extends Controller
             $order->total_price = 0;
             $order->shipping_address = '';
             $order->save();
-            session(['order_id'=>$order->id]);
+            // session(['order_id'=>$order->id]);
+            $order_id = $order->id;
+        }else{
             $order_id = $order->id;
         }
+        // return $order_id;
         // return $order_id;
         // find the order based on the order id
         $order = Order::find($order_id);
@@ -112,5 +116,6 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
+        $order->delete();
     }
 }

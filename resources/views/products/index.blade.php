@@ -47,13 +47,16 @@
                                                 Compare</span></a>
                                     </div>
                                     <div class="product-action-2">
-                                        
+                                        @if ($product->user_id != Auth::id())
                                         <form action="{{route('cart.store')}}" method="post">
                                             @csrf
                                             <input type="hidden" name="product_id" value="{{$product->id}}">
                                             <input type="hidden" name="quantity" value="1">
                                             <a title="Add to cart" href="#" onclick="event.preventDefault();this.closest('form').submit();">Add to cart</a>
                                         </form>
+                                        @else
+                                        <p>You Own This Product</p>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
