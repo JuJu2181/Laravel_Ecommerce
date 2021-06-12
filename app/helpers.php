@@ -39,5 +39,15 @@ use App\Models\Category;
         }
     } 
 
+    // helper function to generate code 
+    if(!function_exists('getSecurityCode')){
+        function getSecurityCode($length=8){
+            $code = '';
+            for($i=0;$i<$length;$i++){
+                $code .= mt_rand(0,9);
+            }
+            return $code;
+        }
+    }
 
 ?>

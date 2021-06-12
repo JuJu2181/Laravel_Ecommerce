@@ -3,7 +3,7 @@
 <div class="az-content az-content-dashboard">
     <div class="container">
         <div class="az-content-body">
-            <h2>All Order Items For {{Auth::user()->name}}</h2>
+            <h2>{{$title}}</h2>
             <div class="table-responsive">
                 <table class="table table-hover table-bordered mg-b-0">
                     <tr>
@@ -15,13 +15,11 @@
                             <td>To</td>
                         @endif
                         <td>Date</td>
-                        <td>Status</td>
+                        <td>Order Status/ Item Status</td>
                         <td>Unit Price</td>
                         <td>Quantity</td>
                         <td>Total Price</td>
-                        @if(Auth::user()->role == 'admin')
                         <td>Actions</td>
-                        @endif
                     </tr>
                     @foreach ($order_products as $order_product)
                     <tr> 
@@ -33,19 +31,24 @@
                         <td>{{ $order_product->product->user->name }}</td>
                         @endif
                         <td>{{date('M j, Y, g:i a',strtotime($order_product->created_at))}}</td>
-                        <td>  {{$order_product->order->order_status }} </td>
+                        <td>  {{$order_product->order->order_status }}/{{$order_product->status}} </td>
                         <td>{{$order_product->product_price}}</td>
                         <td>{{$order_product->quantity}}</td>
                         <td>{{ $order_product->total }}</td>     
-                        @if(Auth::user()->role=='admin')
                         <td>   
+                        @if(Auth::user()->role=='admin')
                         {{-- To show product details --}}
                         <a href="{{route('admin.orders.show',$order_product->order->id)}}" class="btn btn-info btn-block">  
                             Show Order Details
                             <span><i class="typcn typcn-edit"></i></span>
                         </a>
-                    </td>
+                        @if ($order_product->product->user_id == Auth::id())
+                        <a href="{{route('admin.orders.getShippingDetailsForOrder',$order_product->id)}}" class="btn btn-success btn-block">Shipping Details<span><i class="typcn typcn-clipboard"></i></span></a>     
                         @endif
+                        @else 
+                        <a href="{{route('admin.orders.getShippingDetailsForOrder',$order_product->id)}}" class="btn btn-success btn-block">Shipping Details<span><i class="typcn typcn-clipboard"></i></span></a>
+                        @endif
+                        </td>
                         {{-- to delete using ajax request --}}
                                 {{-- <meta name="csrf-token" content="{{ csrf_token() }}">
                                 <button id="deleteOrder" data-id="{{ $order->id }}" class="btn btn-danger btn-block mt-2" onclick="deleteOrder({{ $order->id }})">Delete
@@ -55,9 +58,9 @@
                     </tr>
                         @endforeach
                 </table>
-                <div class="mt-4">
+                {{-- <div class="mt-4">
                     {{$order_products->links()}}
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

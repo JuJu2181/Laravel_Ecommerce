@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\ShippingDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -97,21 +98,117 @@ class OrdersController extends Controller
 
     // for vendor orders
     public function getVendorOrders(){
+        $title = "All order items for ".Auth::user()->name;
         if(Auth::user()->role == 'user'){
             abort(403);
         }elseif(Auth::user()->role == 'vendor'){
             $order_products = [];
-            $order_items = OrderItem::latest('id')->paginate(5);
+            $order_items = OrderItem::latest('id')->get();
             foreach($order_items As $order_item){
-                if($order_item->product->user_id == Auth::id()){
+                if($order_item->product->user_id == Auth::id() && $order_item->order->order_status != 'cart'){
                     array_push($order_products,$order_item);
                 }
             }
             // return $order_products;
-            return view('admin.orders.orders_for_vendor',compact('order_products'));
+            return view('admin.orders.orders_for_vendor',compact('order_products','title'));
         }else{
-            $order_products = OrderItem::latest('id')->paginate(5);
-            return view('admin.orders.orders_for_vendor',compact('order_products'));
+            $order_items = OrderItem::latest('id')->get();
+            $order_products = [];
+            foreach($order_items As $order_item){
+                if($order_item->order->order_status != 'cart'){
+                    array_push($order_products,$order_item);
+                }
+            }
+            return view('admin.orders.orders_for_vendor',compact('order_products','title'));
         }
+    }
+
+    public function getPendingVendorOrders(){
+        $title = "All pending order items for ".Auth::user()->name;
+        if(Auth::user()->role == 'user'){
+            abort(403);
+        }elseif(Auth::user()->role == 'vendor'){
+            $order_products = [];
+            $order_items = OrderItem::latest('id')->get();
+            foreach($order_items As $order_item){
+                if($order_item->product->user_id == Auth::id() && $order_item->order->order_status == 'purchased' && $order_item->status == 'pending'){
+                    array_push($order_products,$order_item);
+                }
+            }
+            // return $order_products;
+            return view('admin.orders.orders_for_vendor',compact('order_products','title'));
+        }else{
+            $order_items = OrderItem::latest('id')->get();
+            $order_products = [];
+            foreach($order_items As $order_item){
+                if($order_item->order->order_status == 'purchased' && $order_item->status == 'pending'){
+                    array_push($order_products,$order_item);
+                }
+            }
+            return view('admin.orders.orders_for_vendor',compact('order_products','title'));
+        }
+    }
+
+    public function getCompletedVendorOrders(){
+        $title = "All completed order items for ".Auth::user()->name;
+        if(Auth::user()->role == 'user'){
+            abort(403);
+        }elseif(Auth::user()->role == 'vendor'){
+            $order_products = [];
+            $order_items = OrderItem::latest('id')->get();
+            foreach($order_items As $order_item){
+                if($order_item->product->user_id == Auth::id() && $order_item->status == 'complete'){
+                    array_push($order_products,$order_item);
+                }
+            }
+            // return $order_products;
+            return view('admin.orders.orders_for_vendor',compact('order_products','title'));
+        }else{
+            $order_items = OrderItem::latest('id')->get();
+            $order_products = [];
+            foreach($order_items As $order_item){
+                if($order_item->status == 'complete'){
+                    array_push($order_products,$order_item);
+                }
+            }
+            return view('admin.orders.orders_for_vendor',compact('order_products','title'));
+        }
+    }
+
+    public function getShippingDetailsForOrder($item_id){
+        // return $item_id;
+        $order_item = OrderItem::find($item_id);
+        // return $order_item;
+        $order_id = $order_item->order->id;
+        $shippingDetails = ShippingDetails::where('order_id','=',$order_id)->get();
+        // return $shippingDetails[0]->order->order_status;
+        $orderShippingDetail = "";
+        foreach($shippingDetails as $shippingDetail){
+            if($shippingDetail->order->order_status != 'cart'){
+                $orderShippingDetail = $shippingDetail;
+            }
+        }
+        // return $orderShippingDetail;
+        return view('admin.orders.shipping_details_for_order',compact('order_item','orderShippingDetail'));
+    }
+
+    public function completeOrderByVendor(Request $request){
+        // return $request;
+        $order_item = OrderItem::find($request->order_item_id);
+        // return $order_item;
+        $order_item->status = 'complete';
+        $order_item->save();
+        $order = Order::find($order_item->order->id);
+        $flag = 1;
+        foreach($order->orderItems as $order_item){
+            if($order_item->status == 'pending'){
+                $flag = 0;
+            }
+        }   
+        if($flag == 1){
+            $order->order_status = 'completed';
+            $order->save();
+        }
+        return redirect()->route('admin.orders.getCompletedVendorOrders');
     }
 }

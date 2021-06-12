@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
+use App\Mail\OrderShipped;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Post;
+use App\Models\ShippingDetails;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+
 
 
 class EshopController extends Controller
@@ -88,6 +93,63 @@ class EshopController extends Controller
 
     public function getBlog(){
         return view('eshop.blog-single-sidebar');
+    }
+
+    public function sendCheckoutEmail(Request $request){
+        // return $request;
+        $request->validate(
+            [
+                'name'=>'required|string',
+                'email'=>'required|email',
+                'order'=>'required',
+                'country_name'=>'required',
+                'number'=>'required|numeric',
+                'state'=>'required',
+                'post'=>'required|numeric',
+                'address1'=>'required',
+                'address2'=>'required',
+            ]
+        );
+        $shipping_details = new ShippingDetails;
+        $shipping_details->order_id = $request->order;
+        $shipping_details->name = $request->name;
+        $shipping_details->email = $request->email;
+        $shipping_details->number = $request->number;
+        $shipping_details->country = $request->country_name;
+        $shipping_details->state = $request->state;
+        $shipping_details->post = $request->post;
+        $shipping_details->address1 = $request->address1;
+        $shipping_details->address2 = $request->address2;
+        if($shipping_details->save()){
+        $order_details = $request;
+        $email = $request->email;
+        $order = $request->order;
+        Mail::to($request->email)->send(new OrderShipped($order_details));
+        return redirect()->route('eshop.checkout.confirm',['email'=>$email,'id'=>$order]);
+        }else{
+            return redirect()->back();
+        }
+    }
+
+    public function confirmOrder($email,$id){
+        // return $order_details;
+        return view('orders.confirmOrder',compact('email','id'));
+    }
+
+    public function getCompletedOrder(){
+        return view('orders.orderComplete');
+    }
+// for confirming purchase
+    public function confirmCode(Request $request){
+        $original_code = session('security_code',0);
+        if($original_code == $request->security_code){
+            $order = Order::find($request->order);
+            $order->order_status = "purchased";
+            $order->save();
+            return redirect()->route('eshop.completed_order');
+        }else{
+            return redirect()->back();
+        }
     }
 
 }

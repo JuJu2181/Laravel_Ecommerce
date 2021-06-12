@@ -16,7 +16,7 @@ TODO:
 Home Page 
 - show categories list done
 - complete cart functionality done
-- checkout/complete order placing process 
+- checkout/complete order placing process done
 - reviews and ratings 
     - only those users can review or rate the product if they've purchased respective product 
     - show average ratings (3,4,5 = 4) 
@@ -36,16 +36,16 @@ a  Products done
 b Categories done
     - show all listing for admin user. Others cannot manage category . 
 3 Orders 
-    a Show all orders to admin 
+    a Show all orders to admin done
         i customer details 
         ii order details (products, quantity and price)
         iii shipping address 
         iv List of vendor associated with ordered products 
-    b Show orders specific to respective vendor's product 
+    b Show orders specific to respective vendor's product done
         i customer details 
         ii order details respective to vendor's product only (product, quantity , price)
         iii shipping address 
-4 Reports for admin and vendor 
+4 Reports for admin and vendor remaining
         Daily, weekly , monthly, yearly 
     a order reports : 
         i No of orders received 

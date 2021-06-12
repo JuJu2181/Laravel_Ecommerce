@@ -11,6 +11,16 @@
 
 @section('content')
 @include('partials._breadcumb')
+{{-- displaying all errors before form--}}
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
 <!-- star of checkout only -->
 <!-- Start Checkout -->
 <section class="shop checkout section">
@@ -21,12 +31,14 @@
                     <h2>Make Your Checkout Here</h2>
                     <p>Please register in order to checkout more quickly</p>
                     <!-- Form -->
-                    <form class="form" method="post" action="#">
+                    <form class="form" method="post" action="{{route('eshop.checkout.email')}}">
+                        @csrf
+                        <input type="hidden" name="order" value="{{$order->id}}">
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-12">
                                 <div class="form-group">
                                     <label>User Name<span>*</span></label>
-                                    <input type="text" name="name" value="{{Auth::user()->name}}" disabled required="required">
+                                    <input type="text" name="name" value="{{Auth::user()->name}}"  required="required">
                                 </div>
                             </div>
                             {{-- <div class="col-lg-6 col-md-6 col-12">
@@ -38,7 +50,7 @@
                             <div class="col-lg-6 col-md-6 col-12">
                                 <div class="form-group">
                                     <label>Email Address<span>*</span></label>
-                                    <input type="email" name="email" value="{{Auth::user()->email}}" disabled required="required">
+                                    <input type="email" name="email" value="{{Auth::user()->email}}"  required="required">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-12">
@@ -354,7 +366,7 @@
                                 </div>
                             </div> --}}
                         </div>
-                    </form>
+                    {{-- </form> --}}
                     <!--/ End Form -->
                 </div>
             </div>
@@ -398,11 +410,12 @@
                     <div class="single-widget get-button">
                         <div class="content">
                             <div class="button">
-                                <a href="#" class="btn">proceed to checkout</a>
+                                <input class="btn" type="submit" value="proceed to checkout" style="color: black; background:#00fe00"></input>
                             </div>
                         </div>
                     </div>
                     <!--/ End Button Widget -->
+                </form>
                 </div>
             </div>
         </div>

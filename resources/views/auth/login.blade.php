@@ -31,7 +31,8 @@
                                 type="password"
                                 name="password"
                                 required autocomplete="current-password" />
-            </div>
+                            </div>
+                            <button class="text-sm" id="show-btn">Show</button>
 
             <!-- Remember Me -->
             <div class="block mt-4">
@@ -56,4 +57,16 @@
             </div>
         </form>
     </x-auth-card>
+    <script>
+        document.getElementById("show-btn").addEventListener("click",(e)=>{
+            e.preventDefault();
+            let pwd = document.getElementById("password");
+            let inputType = pwd.getAttribute("type");
+            if(inputType == "password"){
+                pwd.setAttribute("type","text");
+            }else{
+                pwd.setAttribute("type","password");
+            }
+        });
+    </script>
 </x-guest-layout>

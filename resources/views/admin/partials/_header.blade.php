@@ -24,7 +24,14 @@
                         <nav class="az-menu-sub">
                                 <a href={{ route('admin.orders.index') }} class="nav-link">My Orders</a>
                                 @unless (Auth::user()->role == 'user')
-                                    <a href="{{route('admin.orders.getVendorOrders')}}" class="nav-link">Orders For Vendor</a>
+                                    <a href="#" class="nav-link with-sub">Orders For Vendor</a>
+                                    <nav class="az-menu-sub">
+                                        <a href="{{route('admin.orders.getVendorOrders')}}" class="nav-link">All Orders</a>
+                                        <a href="{{route('admin.orders.getPendingVendorOrders')}}" class="nav-link">
+                                        Pending Orders</a>
+                                        <a href="{{route('admin.orders.getCompletedVendorOrders')}}" class="nav-link">
+                                            Completed Orders</a>
+                                    </nav>
                                 @endunless
                             </nav>
                     </li>

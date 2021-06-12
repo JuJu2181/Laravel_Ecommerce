@@ -14,7 +14,7 @@
                 <div class="text-info" style="font-size: 1.1rem;">Shipping Price: Rs {{$order->shipping_price}}</div>
                 <div class="text-info" style="font-size: 1.1rem;">Total Price: Rs {{$order->total_price}}</div>
                {{-- check if it is order maker --}}
-                @if ($order->user_id == Auth::id()) 
+                @if ($order->user_id == Auth::id() && $order->order_status == 'cart') 
                 <a href="{{route('cart.index')}}" class="btn btn-outline-secondary btn-block mt-3"><i class="typcn typcn-shopping-cart mr-3"></i>View Shopping Cart</a>
                  {{-- to directly delete the product instead of redirecting to the delete page --}}
                 <form action={{ route('admin.orders.destroy',$order->id) }} method="post" class="mt-2" id="deleteForm">

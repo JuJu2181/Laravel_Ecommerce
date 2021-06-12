@@ -37,6 +37,14 @@ Route::get('/contact/', [EshopController::class, 'getContact'])->name('eshop.con
 
 Route::get('/checkout_template/', [EshopController::class, 'getCheckout'])->middleware('auth')->name('eshop.checkout');
 
+Route::post('/checkout/email',[EshopController::class,'sendCheckoutEmail'])->middleware('auth')->name('eshop.checkout.email');
+
+Route::get('/checkout/confirm/{email}/{id}',[EshopController::class,'confirmOrder'])->middleware('auth')->name('eshop.checkout.confirm');
+
+Route::post('checkout/confirm_code',[EshopController::class,'confirmCode'])->middleware('auth')->name('eshop.checkout.confirm_code');
+
+Route::get('order_completed',[EshopController::class,'getCompletedOrder'])->middleware('auth')->name('eshop.completed_order');
+
 Route::get('/cart_template/', [EshopController::class, 'getCart'])->middleware('auth')->name('eshop.cart');
 
 Route::get('/blog-single/', [EshopController::class, 'getBlog'])->name('eshop.blog-single');
@@ -66,6 +74,7 @@ Route::get('search',[SearchController::class,'search'])->name('products.search')
 
 //*For Admin Panel routes
 // * to add the same middleware to all the admin items we can use the route group
+// * for verification we need to add a middleware verified 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     //?for crud of products
     // Route::get('products', [App\Http\Controllers\Admin\ProductsController::class, 'index'])->name("products.index");
@@ -112,6 +121,17 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('orders', App\Http\Controllers\Admin\OrdersController::class);
 
     Route::get('orders_for_vendors',[App\Http\Controllers\Admin\OrdersController::class,'getVendorOrders'])->name('orders.getVendorOrders');
+
+    Route::get('pending_orders_for_vendors',[App\Http\Controllers\Admin\OrdersController::class,'getPendingVendorOrders'])->name('orders.getPendingVendorOrders');
+
+    Route::get('completed_orders_for_vendors',[App\Http\Controllers\Admin\OrdersController::class,'getCompletedVendorOrders'])->name('orders.getCompletedVendorOrders');
+
+    Route::get('shipping_details_for_order/{item_id}',[App\Http\Controllers\Admin\OrdersController::class,'getShippingDetailsForOrder'])->name('orders.getShippingDetailsForOrder');
+
+    // ? for shipping details 
+    // Route::resource('shipping_details',App\Http\Controllers\Admin\ShippingDetailsController::class);
+
+    Route::post('complete_order_by_vendor',[App\Http\Controllers\Admin\OrdersController::class,'completeOrderByVendor'])->name('orders.completeOrderByVendor');
 });
 
 

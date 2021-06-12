@@ -16,4 +16,8 @@ class Order extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    public function shippingDetails(){
+        return $this->belongsTo(ShippingDetails::class);
+    }
 }
