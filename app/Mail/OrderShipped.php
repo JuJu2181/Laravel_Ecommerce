@@ -31,10 +31,12 @@ class OrderShipped extends Mailable
      */
     public function build()
     {
-        // getting the security code 
+        // getting the security code using explicit helper function
         $security_code = getSecurityCode();
+        // store the security code in session for validation
         session(['security_code'=>$security_code]);
         // return $this->order_details;
+        // order id for the checkout product we need it to modify the view for email
         $order = Order::find($this->order_details->order);
         // view for the shipped email
         return $this->from('noreply@juju.com')

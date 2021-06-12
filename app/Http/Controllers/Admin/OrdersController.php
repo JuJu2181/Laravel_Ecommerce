@@ -96,11 +96,13 @@ class OrdersController extends Controller
         return redirect()->route('admin.orders.index');
     }
 
-    // for vendor orders
+    // for all vendor orders
     public function getVendorOrders(){
         $title = "All order items for ".Auth::user()->name;
+        // for user we forbid it
         if(Auth::user()->role == 'user'){
             abort(403);
+        //for vendor we will show the items specific to that vendor only 
         }elseif(Auth::user()->role == 'vendor'){
             $order_products = [];
             $order_items = OrderItem::latest('id')->get();
@@ -111,6 +113,7 @@ class OrdersController extends Controller
             }
             // return $order_products;
             return view('admin.orders.orders_for_vendor',compact('order_products','title'));
+        // for for admin we show all the items for all the vendors as well as admin products
         }else{
             $order_items = OrderItem::latest('id')->get();
             $order_products = [];
@@ -122,7 +125,7 @@ class OrdersController extends Controller
             return view('admin.orders.orders_for_vendor',compact('order_products','title'));
         }
     }
-
+//  function to get all the pending order items for vendors
     public function getPendingVendorOrders(){
         $title = "All pending order items for ".Auth::user()->name;
         if(Auth::user()->role == 'user'){
@@ -130,6 +133,7 @@ class OrdersController extends Controller
         }elseif(Auth::user()->role == 'vendor'){
             $order_products = [];
             $order_items = OrderItem::latest('id')->get();
+            // get only the items with pending status and order with purchased status
             foreach($order_items As $order_item){
                 if($order_item->product->user_id == Auth::id() && $order_item->order->order_status == 'purchased' && $order_item->status == 'pending'){
                     array_push($order_products,$order_item);
@@ -140,6 +144,7 @@ class OrdersController extends Controller
         }else{
             $order_items = OrderItem::latest('id')->get();
             $order_products = [];
+            // get the orders with status purchased and item status pending
             foreach($order_items As $order_item){
                 if($order_item->order->order_status == 'purchased' && $order_item->status == 'pending'){
                     array_push($order_products,$order_item);
@@ -148,7 +153,7 @@ class OrdersController extends Controller
             return view('admin.orders.orders_for_vendor',compact('order_products','title'));
         }
     }
-
+// function to get all the completed order items for vendors
     public function getCompletedVendorOrders(){
         $title = "All completed order items for ".Auth::user()->name;
         if(Auth::user()->role == 'user'){
@@ -156,6 +161,7 @@ class OrdersController extends Controller
         }elseif(Auth::user()->role == 'vendor'){
             $order_products = [];
             $order_items = OrderItem::latest('id')->get();
+            // get the orders with status purchased and item status complete
             foreach($order_items As $order_item){
                 if($order_item->product->user_id == Auth::id() && $order_item->status == 'complete'){
                     array_push($order_products,$order_item);
@@ -166,6 +172,7 @@ class OrdersController extends Controller
         }else{
             $order_items = OrderItem::latest('id')->get();
             $order_products = [];
+            // get the orders with status purchased and item status complete
             foreach($order_items As $order_item){
                 if($order_item->status == 'complete'){
                     array_push($order_products,$order_item);
@@ -174,37 +181,48 @@ class OrdersController extends Controller
             return view('admin.orders.orders_for_vendor',compact('order_products','title'));
         }
     }
-
+// function to get the shipping details for a certain order_item to complete its order
     public function getShippingDetailsForOrder($item_id){
         // return $item_id;
+        // firstly we will get the order item for id
         $order_item = OrderItem::find($item_id);
         // return $order_item;
+        // then using eloquent relationship we get the parent order for order item
         $order_id = $order_item->order->id;
-        $shippingDetails = ShippingDetails::where('order_id','=',$order_id)->get();
+        // then we get the shipping details for that order in form of an array
+        // $shippingDetails = ShippingDetails::where('order_id','=',$order_id)->get();
         // return $shippingDetails[0]->order->order_status;
-        $orderShippingDetail = "";
-        foreach($shippingDetails as $shippingDetail){
-            if($shippingDetail->order->order_status != 'cart'){
-                $orderShippingDetail = $shippingDetail;
-            }
-        }
+        //? Don't know exactly if this is needed or not Here I thought that order associated with the shipping detail may have different statuses like cart and purchased and we will create a shipping detail for an order when checkout form is submitted but its status is changed to purchased only when the security code validation finishes so if a use discard the buying in confirm order page then shipping detail will be created but its order status will still be cart and we don't want such orders. 
+        //! I later thought that as all the shipping details will have same order which will be changed when I confirm order so we don't need to loop instad we can simply get the latest shipping detail with the same order id 
+        $orderShippingDetail = ShippingDetails::latest('id')->where('order_id','=',$order_id)->first();
+        // $orderShippingDetail = "";
+        // foreach($shippingDetails as $shippingDetail){
+        //     if($shippingDetail->order->order_status != 'cart'){
+        //         $orderShippingDetail = $shippingDetail;
+        //     }
+        // }
         // return $orderShippingDetail;
         return view('admin.orders.shipping_details_for_order',compact('order_item','orderShippingDetail'));
     }
-
+//POST: function to complete the order of a specific item by specific vendor and ultimately update the entire order status if all the order_items have been completed
     public function completeOrderByVendor(Request $request){
         // return $request;
         $order_item = OrderItem::find($request->order_item_id);
         // return $order_item;
+        // firstly save the status of item as complete
         $order_item->status = 'complete';
         $order_item->save();
+        // get the order representing the order item
         $order = Order::find($order_item->order->id);
         $flag = 1;
+        // check for all the order items in that order
         foreach($order->orderItems as $order_item){
+            // if any item is pending then we don't update status for the order
             if($order_item->status == 'pending'){
                 $flag = 0;
             }
         }   
+        // if all the items have been completed by vendors then update the order status
         if($flag == 1){
             $order->order_status = 'completed';
             $order->save();

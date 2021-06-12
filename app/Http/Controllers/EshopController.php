@@ -94,9 +94,10 @@ class EshopController extends Controller
     public function getBlog(){
         return view('eshop.blog-single-sidebar');
     }
-
+// when user presses checkout after validating the form we will send an email to the user 
     public function sendCheckoutEmail(Request $request){
         // return $request;
+        // validate the checkout form
         $request->validate(
             [
                 'name'=>'required|string',
@@ -110,6 +111,7 @@ class EshopController extends Controller
                 'address2'=>'required',
             ]
         );
+        // create shipping details based on the order
         $shipping_details = new ShippingDetails;
         $shipping_details->order_id = $request->order;
         $shipping_details->name = $request->name;
@@ -120,6 +122,7 @@ class EshopController extends Controller
         $shipping_details->post = $request->post;
         $shipping_details->address1 = $request->address1;
         $shipping_details->address2 = $request->address2;
+        // if the shipping details are saved in db then mail code to the user and redirect to the confirmation page
         if($shipping_details->save()){
         $order_details = $request;
         $email = $request->email;
@@ -130,17 +133,18 @@ class EshopController extends Controller
             return redirect()->back();
         }
     }
-
+// simply return the view where user will enter the security code 
     public function confirmOrder($email,$id){
         // return $order_details;
         return view('orders.confirmOrder',compact('email','id'));
     }
-
+// simply return the view that is displayed when purchase is completed
     public function getCompletedOrder(){
         return view('orders.orderComplete');
     }
-// for confirming purchase
+//POST: for confirming purchase here we compare the code stored in session to the code sent in email and if they are correct then we update the status of the product to purchased from cart
     public function confirmCode(Request $request){
+        // get the security code from the session
         $original_code = session('security_code',0);
         if($original_code == $request->security_code){
             $order = Order::find($request->order);
