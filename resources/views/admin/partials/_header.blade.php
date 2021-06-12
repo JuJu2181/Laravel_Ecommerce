@@ -58,6 +58,12 @@
                     <a href="{{ route('register') }}" class="nav-link">Register</a>
                 </nav>
             </li>
+            <li class="nav-item" id="contacts">
+                <a href="#" class="nav-link with-sub"><i class="typcn typcn-mail"></i> Contact Messages</a>
+                <nav class="az-menu-sub">
+                    <a href="{{ route('admin.contacts.index') }}" class="nav-link">List</a>
+                </nav>
+            </li>
             @endunless
                 <li class="nav-item" id="posts">
                     <a href="#" class="nav-link with-sub"><i class="typcn typcn-document-text"></i>Post</a>

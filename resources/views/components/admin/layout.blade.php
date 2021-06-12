@@ -8,6 +8,8 @@
 <body>
 
     @include('admin.partials._header')
+
+    @include('partials._flash_messages')
     {{-- This is equivalent to @section('content') --}}
     {{ $slot }}
 

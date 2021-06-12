@@ -135,6 +135,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Route::resource('shipping_details',App\Http\Controllers\Admin\ShippingDetailsController::class);
 
     Route::post('complete_order_by_vendor',[App\Http\Controllers\Admin\OrdersController::class,'completeOrderByVendor'])->name('orders.completeOrderByVendor');
+
+    // for contact details 
+    Route::resource('contacts',App\Http\Controllers\Admin\ContactController::class);
 });
 
 

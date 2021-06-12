@@ -94,7 +94,7 @@
         function deleteCategory(id){
             console.log(id);
             let token = $("meta[name='csrf-token']").attr("content");
-            if(confirm("Are you sure to delete this product?\n press 'OK' to confirm")){
+            if(confirm("Are you sure to delete this category?\n press 'OK' to confirm")){
                 $.ajax({
                 url:"/admin/categories/"+id,
                 type: 'DELETE',
