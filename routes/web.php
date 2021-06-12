@@ -35,6 +35,9 @@ Route::get('/shop/{vendor}',[EshopController::class,'getSingleShop'])->name('esh
 
 Route::get('/contact/', [EshopController::class, 'getContact'])->name('eshop.contact');
 
+// Route for replying contact
+Route::post('/contact_reply/',[EshopController::class,'sendContactReply'])->name('eshop.reply_contact');
+
 Route::get('/checkout_template/', [EshopController::class, 'getCheckout'])->middleware('auth')->name('eshop.checkout');
 
 Route::post('/checkout/email',[EshopController::class,'sendCheckoutEmail'])->middleware('auth')->name('eshop.checkout.email');

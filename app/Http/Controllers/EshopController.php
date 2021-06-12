@@ -7,12 +7,14 @@ use App\Mail\OrderShipped;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Contact;
 use App\Models\Order;
 use App\Models\Post;
 use App\Models\ShippingDetails;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\ContactMail;
 
 
 
@@ -89,6 +91,30 @@ class EshopController extends Controller
 
     public function getContact(){
         return view('eshop.contact');
+    }
+
+    public function sendContactReply(Request $request){
+        $request->validate([
+            'name'=>'required|string|max:255|min:3',
+            'subject'=>'required|string|max:255|min:10',
+            'email'=>'required|email',
+            'number'=>'required|numeric',
+            'message'=>'required|min:10'
+        ]);
+        $contact = new Contact;
+        $contact->name = $request->name;
+        $contact->subject = $request->subject;
+        $contact->email = $request->email;
+        $contact->number = $request->number;
+        $contact->message = $request->message; 
+        if($contact->save()){
+            $contact_details = $request;
+            $email = $request->email;
+            Mail::to($email)->send(new ContactMail($contact_details));
+        return redirect()->back()->with('success','Your Message has been received, you can check your mail for confirmation');
+        }else{
+            return redirect()->back()->with('error','Error in contact Form');
+        }
     }
 
     public function getBlog(){

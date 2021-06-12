@@ -23,7 +23,18 @@
                             <h4>Get in touch</h4>
                             <h3>Write us a message</h3>
                         </div>
-                        <form class="form" method="post" action="mail/mail.php">
+                        {{-- displaying all errors before form--}}
+                        @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
+                        <form class="form" method="post" action="{{route('eshop.reply_contact')}}">
+                            @csrf
                             <div class="row">
                                 <div class="col-lg-6 col-12">
                                     <div class="form-group">
@@ -46,12 +57,12 @@
                                 <div class="col-lg-6 col-12">
                                     <div class="form-group">
                                         <label>Your Phone<span>*</span></label>
-                                        <input name="company_name" type="text" placeholder="">
+                                        <input name="number" type="text" placeholder="">
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-group message">
-                                        <label>your message<span>*</span></label>
+                                        <label>Your message<span>*</span></label>
                                         <textarea name="message" placeholder=""></textarea>
                                     </div>
                                 </div>

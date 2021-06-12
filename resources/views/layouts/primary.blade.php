@@ -17,7 +17,7 @@
 	<!-- Header -->
     @include('partials._header')
 	<!--/ End Header -->
-	
+	@include('partials._flash_messages')
     @yield('content')
 
 
