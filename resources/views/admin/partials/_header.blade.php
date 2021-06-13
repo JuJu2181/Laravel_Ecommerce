@@ -1,7 +1,7 @@
 <div class="az-header">
     <div class="container">
         <div class="az-header-left">
-            <a href="index.html" class="az-logo"><span></span> azia</a>
+            <a href="{{route('admin.dashboard')}}" class="az-logo"><span></span> azia</a>
             <a href="" id="azMenuShow" class="az-header-menu-icon d-lg-none"><span></span></a>
         </div><!-- az-header-left -->
         <div class="az-header-menu">
@@ -70,6 +70,13 @@
                     <nav class="az-menu-sub">
                         <a href="{{route('admin.posts.index')}}" class="nav-link">List</a>
                         <a href="{{route('admin.posts.create')}}" class="nav-link">Create</a>
+                    </nav>
+                </li>
+                <li class="nav-item" id="reviews">
+                    <a href="#" class="nav-link with-sub"><i class="typcn typcn-messages"></i>Reviews</a>
+                    <nav class="az-menu-sub">
+                        <a href="#" class="nav-link">My Reviews</a>
+                        <a href="#" class="nav-link">Product Reviews</a>
                     </nav>
                 </li>
                 {{-- <li class="nav-item">
@@ -163,7 +170,7 @@
                             <img src="{{ Auth::user()->image == ''?"https://www.gravatar.com/avatar/".$hashed_email."?s=80&d=robohash" :image_crop(Auth::user()->image,80,80) }}" alt="">
                         </div><!-- az-img-user -->
                         <h6>{{Auth::user()->name}}</h6>
-                        <span>Premium Member</span>
+                        <span>{{Auth::user()->role}}</span>
                     </div><!-- az-header-profile -->
 
                     <a href="" class="dropdown-item"><i class="typcn typcn-user-outline"></i> My Profile</a>

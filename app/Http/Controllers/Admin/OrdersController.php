@@ -98,7 +98,7 @@ class OrdersController extends Controller
 
     // for all vendor orders
     public function getVendorOrders(){
-        $title = "All order items for ".Auth::user()->name;
+        $title = "All Vendor order items for ".Auth::user()->name;
         // for user we forbid it
         if(Auth::user()->role == 'user'){
             abort(403);
@@ -127,7 +127,7 @@ class OrdersController extends Controller
     }
 //  function to get all the pending order items for vendors
     public function getPendingVendorOrders(){
-        $title = "All pending order items for ".Auth::user()->name;
+        $title = "All Vendor pending order items for ".Auth::user()->name;
         if(Auth::user()->role == 'user'){
             abort(403);
         }elseif(Auth::user()->role == 'vendor'){
@@ -155,7 +155,7 @@ class OrdersController extends Controller
     }
 // function to get all the completed order items for vendors
     public function getCompletedVendorOrders(){
-        $title = "All completed order items for ".Auth::user()->name;
+        $title = "All Vendor completed order items for ".Auth::user()->name;
         if(Auth::user()->role == 'user'){
             abort(403);
         }elseif(Auth::user()->role == 'vendor'){

@@ -4,7 +4,7 @@
     <div class="container">
         @unless(Auth::user()->role == 'user')
         <div class="az-content-body">
-            <h2>Create Product</h2>
+            <h2>Create Post</h2>
             {{-- check if user is authorized to create a product --}}
             <form action={{ route('admin.posts.store') }} method="post" enctype="multipart/form-data">
                 @csrf

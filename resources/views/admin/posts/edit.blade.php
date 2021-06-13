@@ -3,7 +3,7 @@
     <div class="az-content az-content-dashboard">
         <div class="container">
             <div class="az-content-body">
-                <h2>Edit Post: {{ $post->name }}</h2>
+                <h2>Edit Post: {{ $post->title }}</h2>
                 @can('update',$post)
                 <form action={{ route('admin.posts.update',$post->id) }} method='POST' enctype="multipart/form-data">
                     {{-- here we need to use POST instead of put in html as html forms only support post and get--}}

@@ -3,7 +3,7 @@
 <div class="az-content az-content-dashboard">
     <div class="container">
         <div class="az-content-body">
-            <h2>All Orders</h2>
+            <h2>All Your Orders</h2>
             <div class="table-responsive">
                 <table class="table table-hover table-bordered mg-b-0">
                     <tr>

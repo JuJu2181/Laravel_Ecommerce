@@ -138,6 +138,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // for contact details 
     Route::resource('contacts',App\Http\Controllers\Admin\ContactController::class);
+
+    // For review and ratings 
+    Route::resource('reviews',App\Http\Controllers\Admin\ReviewAndRatingController::class);
 });
 
 

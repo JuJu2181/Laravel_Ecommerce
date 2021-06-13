@@ -10,6 +10,7 @@
                     <tr>
                         <td>S.N.</td>
                         <td>Name</td>
+                        <td>Vendor</td>
                         <td>Description</td>
                         <td>Price</td>
                         <td>Category</td>
@@ -22,6 +23,7 @@
                         
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $product->name }}</td>
+                        <td>{{$product->user->name}}</td>
                         <td>  {{ Str::substr($product->description, 0, 50) }} {{ strlen($product->description) > 50 ? "...": "" }}</td>
                         <td>{{ $product->price }}</td>
                         <td><a href="{{route('category.single',$product->category->id)}}">{{ $product->category->name }}</a></td>

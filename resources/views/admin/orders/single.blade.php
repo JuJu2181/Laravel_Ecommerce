@@ -54,6 +54,7 @@
                         @endforeach
                 </table>
             </div>
+            <a href="{{route('admin.orders.index')}}" class=" mt-5 btn btn-block btn-outline-primary">View All Orders</a>
         </div>
     </div>
 </div>    

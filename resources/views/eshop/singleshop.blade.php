@@ -21,11 +21,11 @@
             @include('partials._shop_sidebar')
             <div class="col-lg-9 col-md-8 col-12">
                 <div class="row">
-                    <div class="col-12">
+                    {{-- <div class="col-12">
                         <!-- Shop Top -->
                         @include('partials._shoptop')
                         <!--/ End Shop Top -->
-                    </div>
+                    </div> --}}
                 </div>
                 <h2 class="mt-4">Products From {{ $vendor->name }} - {{ $vendor->products->count() }}</h2>
                 <div class="row">
