@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\ReviewAndRating;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class ReviewAndRatingController extends Controller
@@ -35,16 +35,16 @@ class ReviewAndRatingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return $request;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ReviewAndRating  $reviewAndRating
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(ReviewAndRating $reviewAndRating)
+    public function show($id)
     {
         //
     }
@@ -52,10 +52,10 @@ class ReviewAndRatingController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ReviewAndRating  $reviewAndRating
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(ReviewAndRating $reviewAndRating)
+    public function edit($id)
     {
         //
     }
@@ -64,10 +64,10 @@ class ReviewAndRatingController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ReviewAndRating  $reviewAndRating
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ReviewAndRating $reviewAndRating)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -75,10 +75,10 @@ class ReviewAndRatingController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ReviewAndRating  $reviewAndRating
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ReviewAndRating $reviewAndRating)
+    public function destroy($id)
     {
         //
     }

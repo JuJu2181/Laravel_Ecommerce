@@ -7,8 +7,10 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 use Illuminate\Support\Facades\Gate;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\ReviewAndRating;
 use App\Policies\CategoryPolicy;
 use App\Policies\ProductPolicy;
+use App\Policies\ReviewAndRatingPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,7 @@ class AuthServiceProvider extends ServiceProvider
         // binding product class and product policy
         Product::class => ProductPolicy::class,
         Post::class => PostPolicy::class,
+        ReviewAndRating::class => ReviewAndRatingPolicy::class,
         // Category::class => CategoryPolicy::class,
     ];
 
