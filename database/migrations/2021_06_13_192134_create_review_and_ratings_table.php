@@ -15,6 +15,10 @@ class CreateReviewAndRatingsTable extends Migration
     {
         Schema::create('review_and_ratings', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_id')->constrained('products','id')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete;
+            $table->float("rating")->default(0);
+            $table->text('review');
             $table->timestamps();
         });
     }

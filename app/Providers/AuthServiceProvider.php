@@ -12,6 +12,7 @@ use App\Policies\CategoryPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\ReviewAndRatingPolicy;
 
+
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -49,6 +50,29 @@ class AuthServiceProvider extends ServiceProvider
         // TODO: Here checkUser will be a function defined in user model
         Gate::define('authorize-category',function(User $user){
             return $user->role == 'admin';
+        });
+
+        // Gate for review product 
+        Gate::define('review-product',function(User $user,Product $product){
+            $review = ReviewAndRating::where('product_id',$product->id)->where('user_id',$user->id)->get();
+            // dd(count($review));
+            if(count($review) <= 0){
+            if($user->role == 'admin'){return true;}
+            else{
+            $orders = $user->orders;
+            foreach($orders as $order){
+                $order_items = $order->orderItems;
+                foreach($order_items as $order_item){
+                    if($order_item->product_id == $product->id){
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        }else{
+            return false;
+        }
         });
     }
 }

@@ -229,8 +229,9 @@ label {
     <script>
         document.getElementById("product").classList.add("active");
         $(document).ready(function(){
+        $("input[type='radio']").prop('checked',false);
         $("input[type='radio']").click(function(){
-        $(".reset-option").show();
+        // $(".reset-option").show();
         var sim = $("input[type='radio']:checked").val();
         //alert(sim);
         if (sim<3) { 

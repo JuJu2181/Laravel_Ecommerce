@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
-
+use App\Models\ReviewAndRating;
 
 class ProductsController extends Controller
 {
@@ -48,6 +48,8 @@ class ProductsController extends Controller
     }
     // using route model binding to find that product automatically
     public function getSingle(Product $product){
-        return view('products.single',['product'=>$product]);
+        $reviews = ReviewAndRating::where('product_id',$product->id)->get();
+        // return $reviews;
+        return view('products.single',['product'=>$product,'reviews'=>$reviews]);
     }
 }

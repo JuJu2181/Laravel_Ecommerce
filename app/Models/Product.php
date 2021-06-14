@@ -38,6 +38,15 @@ class Product extends Model
         return $this->belongsTo(User::class);
     }
     
+    // A product can have many order items 
+    public function orderItems(){
+        return $this->hasMany(OrderItem::class);
+    }
+
+    // A product can have many reviews 
+    public function reviews(){
+        return $this->hasMany(ReviewAndRating::class);
+    }
 
     //* function for search scope to search products
     // this acts as a query builder for the search query 

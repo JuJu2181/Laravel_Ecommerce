@@ -152,3 +152,14 @@ for category multi level select
             }
             }
         </script>
+
+
+## for ratings and review table 
+id 
+timestamps() 
+product_id => foreign 
+one product can have many reviews 
+user_id 
+one user can only review the product once but can later edit his review 
+rating count 
+review text 
