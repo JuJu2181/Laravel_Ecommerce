@@ -57,17 +57,19 @@ class AuthServiceProvider extends ServiceProvider
             $review = ReviewAndRating::where('product_id',$product->id)->where('user_id',$user->id)->get();
             // dd(count($review));
             if(count($review) <= 0){
-            if($user->role == 'admin'){return true;}
-            else{
+            // if($user->role == 'admin'){
+            //     return true;
+            // }
+            // else{
             $orders = $user->orders;
             foreach($orders as $order){
                 $order_items = $order->orderItems;
                 foreach($order_items as $order_item){
-                    if($order_item->product_id == $product->id){
+                    if($order_item->product_id == $product->id && $order_item->review_status == 'not_reviewed'){
                         return true;
                     }
                 }
-            }
+            // }
             return false;
         }
         }else{

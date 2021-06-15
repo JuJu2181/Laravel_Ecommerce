@@ -2,6 +2,7 @@
     <div class="row justify-content-center">
         <div class="col-xl-7 col-lg-8 col-md-10 col-12 text-center mb-5">
             <h2 class="text-secondary">All Reviews For {{$product->name}} ({{$reviews->count()}})</h2>
+            @if ($reviews->count() > 0)
             <div class="card">
                 <div class="row justify-content-left d-flex">
                     <div class="col-md-4 d-flex flex-column">
@@ -11,7 +12,7 @@
                         </div>
                         <div> 
                         @for ($i=1;$i<=5;$i++)
-                            @if ($i < $product->average_rating)
+                            @if ($i <= $product->average_rating)
                             <span class="fa fa-star star-active mx-1"></span> 
                             @else 
                             <span
@@ -94,10 +95,14 @@
                     </div>
                 </div>
             </div>
+            @else
+            <h5 class="text-secondary text-center">This Product Has No Reviews.</h5>    
+            @endif
+            
             @foreach ($reviews as $review)
             <div class="card">
                 <div class="row d-flex">
-                    <div class=""> <img class="profile-pic" src="{{$review->user->image == ''?'https://i.imgur.com/V3ICjlm.jpg':image_crop($review->user->image,100,100)}}"> </div>
+                    <div class=""> <img class="profile-pic" src="{{$review->user->image == ''?"https://www.gravatar.com/avatar/".Auth::user()->email."?s=80&d=robohash":image_crop($review->user->image,100,100)}}"> </div>
                     <div class="d-flex flex-column">
                         <h3 class="mt-2 mb-0">{{$review->user->name}}</h3>
                         <div>
@@ -124,6 +129,7 @@
                 </div>
             </div>
             @endforeach
+            @auth
             @can('review-product',$product)
             {{-- Reviews and rating form --}}
             <form class="form" action="{{route('admin.reviews.store')}}" method="POST">
@@ -175,18 +181,21 @@
                             </div>
                         </div>
             </form>
-            @else 
+            @else
+            {{-- {{dd(App\Models\ReviewAndRating::where('user_id',Auth::id())->where('product_id',$product->id)->get()) }} --}}
+            {{-- {{dd(Auth::user()->review)}} --}}
+            @if(App\Models\ReviewAndRating::where('user_id',Auth::id())->where('product_id',$product->id)->get()->count() > 0)
             <div class="card">
                 <h5 class="text-info m-3">You Have Already Reviewed This Product <br> This is Your Review</h5>
                 <hr>
                 <div class="row d-flex">
-                    <div class=""> <img class="profile-pic" src="{{Auth::user()->image==''?'https://i.imgur.com/V3ICjlm.jpg':image_crop(Auth::user()->image,100,100)}}"> </div>
+                    <div class=""> <img class="profile-pic" src="{{Auth::user()->image==''?"https://www.gravatar.com/avatar/".Auth::user()->email."?s=80&d=robohash":image_crop(Auth::user()->image,100,100)}}"> </div>
                     <div class="d-flex flex-column">
                         <h3 class="mt-2 mb-0">{{Auth::user()->name}}</h3>
                         <div>
-                            <p class="text-left"><span class="text-muted">{{Auth::user()->review->rating}}</span> 
+                            <p class="text-left"><span class="text-muted">{{App\Models\ReviewAndRating::where('user_id',Auth::id())->where('product_id',$product->id)->first()->rating}}</span> 
                                 @for ($i=1;$i<=5;$i++)
-                                @if($i <= Auth::user()->review->rating)
+                                @if($i <= App\Models\ReviewAndRating::where('user_id',Auth::id())->where('product_id',$product->id)->first()->rating)
                                 <span
                                     class="fa fa-star star-active ml-1">
                                 </span>
@@ -199,15 +208,17 @@
                         </div>
                     </div>
                     <div class="ml-auto">
-                        <p class="text-muted pt-5 pt-sm-3">{{Auth::user()->review->created_at->diffForHumans()}}</p>
+                        <p class="text-muted pt-5 pt-sm-3">{{App\Models\ReviewAndRating::where('user_id',Auth::id())->where('product_id',$product->id)->first()->created_at->diffForHumans()}}</p>
                     </div>
                 </div>
                 <div class="row text-left">
                     {{-- <h4 class="blue-text mt-3">"{{Auth::user()->review->review}}"</h4> --}}
-                    <p class="content mt-3 text-center">"{{Auth::user()->review->review}}"</p>
+                    <p class="content mt-3 text-center">"{{App\Models\ReviewAndRating::where('user_id',Auth::id())->where('product_id',$product->id)->first()->review}}"</p>
                 </div>
             </div>
+            @endif
             @endcan
+            @endauth
             <!-- End Comment Form -->
         </div>
     </div>
