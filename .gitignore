@@ -12,7 +12,4 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 .gitigonre
-assignment1
-extras.txt 
-my_notes.md 
-
+/self_notes
