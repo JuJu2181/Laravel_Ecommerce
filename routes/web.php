@@ -141,6 +141,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // For review and ratings 
     Route::resource('reviews',App\Http\Controllers\Admin\ReviewAndRatingController::class);
+
+    Route::get('product_reviews',[App\Http\Controllers\Admin\ReviewAndRatingController::class,'getProductReviews'])->name('reviews.getProductReviews');
+
+    Route::get('product_reviews/{id}',[App\Http\Controllers\Admin\ReviewAndRatingController::class,'getProductReviewDetail'])->name('reviews.getProductReviewDetail');
+
+    Route::delete('product_reviews/delete/{id}/{currentPage}', [App\Http\Controllers\Admin\ReviewAndRatingController::class,'deleteReview'])->name('reviews.delete_review');
 });
 
 

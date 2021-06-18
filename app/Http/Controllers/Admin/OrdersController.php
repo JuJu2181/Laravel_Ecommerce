@@ -88,10 +88,10 @@ class OrdersController extends Controller
      */
     public function destroy($id)
     {
-        if($id == Auth::id()){
+        $order = Order::find($id);
+        if($order->user_id != Auth::id()){
             abort(403);
         }
-        $order = Order::find($id);
         $order->delete();
         return redirect()->route('admin.orders.index');
     }

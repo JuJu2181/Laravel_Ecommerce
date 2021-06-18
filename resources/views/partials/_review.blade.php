@@ -108,7 +108,7 @@
                         <div>
                             <p class="text-left"><span class="text-muted">{{$review->rating}}</span> 
                             @for ($i=1;$i<=5;$i++)
-                                @if($i < $review->rating)
+                                @if($i <= $review->rating)
                                 <span
                                 class="fa fa-star star-active ml-1"></span>
                                 @else
@@ -187,7 +187,24 @@
             @if(App\Models\ReviewAndRating::where('user_id',Auth::id())->where('product_id',$product->id)->get()->count() > 0)
             <div class="card">
                 <h5 class="text-info m-3">You Have Already Reviewed This Product <br> This is Your Review</h5>
-                <hr>
+                <div class="row">
+                    <div class="col-6">
+                <a href="{{route('admin.reviews.edit',$review->id)}}" class="btnn">
+                <span><i class="ti-pencil"></i></span></a>
+            </div>
+            <div class="col-6">
+                <form action={{ route('admin.reviews.delete_review',['id'=>$review->id,'currentPage'=>'product_detail']) }} method="post"
+                    class="mt-2" id="deleteForm">
+                    @method('DELETE')
+                    @csrf
+                    <button type="submit" class="btnn" id="deleteButton">
+                        
+                        <span><i class="ti-trash"></i></span>
+                    </button>
+                </form>
+            </div>   
+            </div>             
+            <hr>
                 <div class="row d-flex">
                     <div class=""> <img class="profile-pic" src="{{Auth::user()->image==''?"https://www.gravatar.com/avatar/".Auth::user()->email."?s=80&d=robohash":image_crop(Auth::user()->image,100,100)}}"> </div>
                     <div class="d-flex flex-column">

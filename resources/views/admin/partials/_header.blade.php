@@ -35,6 +35,16 @@
                                 @endunless
                             </nav>
                     </li>
+                    <li class="nav-item" id="reviews">
+                        <a href="#" class="nav-link with-sub"><i class="typcn typcn-pencil"></i>
+                            All Reviews</a>
+                        <nav class="az-menu-sub">
+                                <a href={{ route('admin.reviews.index') }} class="nav-link">My Reviews</a>
+                                @unless (Auth::user()->role == 'user')
+                                    <a href="{{route('admin.reviews.getProductReviews')}}" class="nav-link">Product Reviews</a>
+                                @endunless
+                            </nav>
+                    </li>
                 @unless(Auth::user()->role == 'user')
                 <li class="nav-item" id="products">
                   <a href="" class="nav-link with-sub"><i class="typcn typcn-gift"></i> Products</a>
@@ -72,13 +82,7 @@
                         <a href="{{route('admin.posts.create')}}" class="nav-link">Create</a>
                     </nav>
                 </li>
-                <li class="nav-item" id="reviews">
-                    <a href="#" class="nav-link with-sub"><i class="typcn typcn-messages"></i>Reviews</a>
-                    <nav class="az-menu-sub">
-                        <a href="#" class="nav-link">My Reviews</a>
-                        <a href="#" class="nav-link">Product Reviews</a>
-                    </nav>
-                </li>
+
                 {{-- <li class="nav-item">
                     <a href="chart-chartjs.html" class="nav-link"><i class="typcn typcn-chart-bar-outline"></i>
                         Charts</a>

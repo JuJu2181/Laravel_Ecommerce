@@ -116,6 +116,9 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
+        if($order->order_status != 'cart'){
+            abort(403);
+        }
         $order->delete();
     }
 }

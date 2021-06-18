@@ -32,11 +32,13 @@
                             Show Details
                             <span><i class="typcn typcn-edit"></i></span>
                         </a>
+                        @if($order->order_status == 'cart')
                         {{-- to delete using ajax request --}}
                                 <meta name="csrf-token" content="{{ csrf_token() }}">
                                 <button id="deleteOrder" data-id="{{ $order->id }}" class="btn btn-danger btn-block mt-2" onclick="deleteOrder({{ $order->id }})">Delete
                                 <span><i class="typcn typcn-trash"></i></span
                                 </button>
+                        @endif
                             </td>
                     </tr>
                         @endforeach
@@ -59,6 +61,7 @@
             let token = $("meta[name='csrf-token']").attr("content");
             if(confirm("Are you sure to delete this order?\n press 'OK' to confirm")){
                 $.ajax({
+                // I dindlt use admin/orders/delete as it was used for form delete
                 url:"/order/"+id,
                 type: 'DELETE',
                 data:{
