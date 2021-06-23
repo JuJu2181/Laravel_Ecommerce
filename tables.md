@@ -72,3 +72,12 @@ order_items{
     quantity
     total
 }
+
+comments table{
+    id
+    user_id
+    post_id
+    parent_comment_id
+    text comment
+    timestamps 
+}

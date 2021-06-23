@@ -147,6 +147,15 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('product_reviews/{id}',[App\Http\Controllers\Admin\ReviewAndRatingController::class,'getProductReviewDetail'])->name('reviews.getProductReviewDetail');
 
     Route::delete('product_reviews/delete/{id}/{currentPage}', [App\Http\Controllers\Admin\ReviewAndRatingController::class,'deleteReview'])->name('reviews.delete_review');
+
+    // for comments 
+    Route::resource('comments', App\Http\Controllers\Admin\CommentController::class);
+
+    Route::get('post_comments',[App\Http\Controllers\Admin\CommentController::class,'getPostComments'])->name('comments.getPostComments');
+
+    Route::get('post_comments/{id}',[App\Http\Controllers\Admin\CommentController::class,'getPostCommentDetail'])->name('comments.getPostCommentDetail');
+
+    Route::delete('post_comments/delete/{id}/{currentPage}', [App\Http\Controllers\Admin\CommentController::class,'deleteComment'])->name('comments.delete_comment');
 });
 
 

@@ -28,9 +28,16 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
+        $nextRoute = session('nextRoute',0);
+        $post_slug = session('post_slug',0);
+        // return $post_id;
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        if($nextRoute && $post_slug){
+            return redirect()->route($nextRoute,$post_slug);
+        }
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

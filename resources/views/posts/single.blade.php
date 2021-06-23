@@ -31,17 +31,18 @@
                                 <h2 class="blog-title">{{ $post->title }}</h2>
                                 <div class="blog-meta">
                                     <span class="author"><a href="#"><i class="fa fa-user"></i>By {{$post->user->name}}</a><a
-                                            href="#"><i class="fa fa-calendar"></i>{{ $post->created_at->diffForHumans() }}</a><a href="#"><i
-                                                class="fa fa-comments"></i>Comment (15)</a></span>
+                                            href="#"><i class="fa fa-calendar"></i>{{ $post->created_at->diffForHumans() }}</a><a href="#comments"><i
+                                                class="fa fa-comments"></i>Comment ({{$post->comments->count()}})</a></span>
                                 </div>
                                 <div>
-                                    <p class="text-info">{{$post->category->name}}</p>
+                                    <p class="text-info mb-4"> Category: {{$post->category->name}}</p>
                                 </div>
                                 <div class="content">
                                     <p>{{ $post->body }}</p>
                                 </div>
                             </div>
-                            <div class="share-social">
+
+                            {{-- <div class="share-social">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="content-tags">
@@ -55,27 +56,60 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
+
                         <div class="col-12">
-                            <div class="comments">
-                                <h3 class="comment-title">Comments (3)</h3>
+                            <div class="comments" id="comments">
+                                <h3 class="comment-title">Comments ({{$post->comments->count()}})</h3>
+                                <?php
+                                function generateCommentsList($comment,$spaceCount = 0){
+                                ?>
+                                @if ($comment->parent_id > 0)
+                                <p class="my-3" style="color: #3333ff">
+                                    {!!str_repeat('#',$spaceCount)!!} Reply to " {{ Str::substr(App\Models\Comment::find($comment->parent_id)->body, 0, 25) }} {{ strlen(App\Models\Comment::find($comment->parent_id)->body) > 25 ? "...": "" }}"
+                                </p>
+                                @endif
                                 <!-- Single Comment -->
                                 <div class="single-comment">
-                                    <img src="https://via.placeholder.com/80x80" alt="#">
+                                    <img src="{{$comment->author->image == ''?'https://i.pravatar.cc/80?u='.$comment->author->id:image_crop($comment->author->image,80,80)}}" alt="#">
                                     <div class="content">
-                                        <h4>Alisa harm <span>At 8:59 pm On Feb 28, 2018</span></h4>
-                                        <p>Enthusiastically leverage existing premium quality vectors with
-                                            enterprise-wide innovation collaboration Phosfluorescently leverage others
-                                            enterprisee Phosfluorescently leverage.</p>
+                                        <h4>{{$comment->author->name}} <span>{{$comment->created_at->diffForHumans()}}</span></h4>
+                                        <p id="commentBody">{{$comment->body}}</p>
                                         <div class="button">
-                                            <a href="#" class="btn"><i class="fa fa-reply"
-                                                    aria-hidden="true"></i>Reply</a>
+                                    {{-- javascript to update parent id when clicking the reply button --}}
+                                    <a onclick="console.log({{$comment->id}});document.getElementById('parentId').setAttribute('value',{{$comment->id}})" href="#commentForm" class="btn"><i class="fa fa-reply"
+                                    aria-hidden="true" ></i>Reply</a>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                    <a href="{{route('admin.comments.edit',$comment->id)}}" class=" m-2"><i class="ti ti-pencil"></i></a>
+                                    <form action={{ route('admin.comments.delete_comment',['id'=>$comment->id,'currentPage'=>'post_detail']) }} method="post"
+                                        class="m-2" id="deleteForm">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button type="submit"  id="deleteButton">
+                                            
+                                            <span><i class="ti ti-trash"></i></span>
+                                        </button>
+                                    </form>
                                 </div>
+                                </div>
+                                <hr>
                                 <!-- End Single Comment -->
-                                <!-- Single Comment -->
+                                <?php
+                            if ($comment->children->count() > 0)
+                            {  
+                            $spaceCount +=1;
+                            foreach ($comment->children as $commentReply){
+                            generateCommentsList($commentReply,$spaceCount);
+                            }
+                        }
+                                }
+                                ?>
+                                @foreach ($post->comments->where('parent_id',0) as $comment)                       {{generateCommentsList($comment)}}                      
+                                @endforeach
+                                {{-- <!-- Single Comment for child comment-->
                                 <div class="single-comment left">
                                     <img src="https://via.placeholder.com/80x80" alt="#">
                                     <div class="content">
@@ -89,47 +123,26 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- End Single Comment -->
-                                <!-- Single Comment -->
-                                <div class="single-comment">
-                                    <img src="https://via.placeholder.com/80x80" alt="#">
-                                    <div class="content">
-                                        <h4>megan mart <span>Feb 28, 2018 at 8:59 pm</span></h4>
-                                        <p>Enthusiastically leverage existing premium quality vectors with
-                                            enterprise-wide innovation collaboration Phosfluorescently leverage others
-                                            enterprisee Phosfluorescently leverage.</p>
-                                        <div class="button">
-                                            <a href="#" class="btn"><i class="fa fa-reply"
-                                                    aria-hidden="true"></i>Reply</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- End Single Comment -->
+                                <!-- End Single Comment --> --}}
                             </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12" id="commentForm">
                             <div class="reply">
+                                @auth
                                 <div class="reply-head">
                                     <h2 class="reply-title">Leave a Comment</h2>
                                     <!-- Comment Form -->
-                                    <form class="form" action="#">
+                                    <form class="form" action="{{route('admin.comments.store')}}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="user_id" value="{{Auth::id()}}">
+                                        <input type="hidden" name="post_id" value="{{$post->id}}">
+                                        <input type="hidden" name="parent_id" value="" id="parentId">
                                         <div class="row">
-                                            <div class="col-lg-6 col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label>Your Name<span>*</span></label>
-                                                    <input type="text" name="name" placeholder="" required="required">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-12">
-                                                <div class="form-group">
-                                                    <label>Your Email<span>*</span></label>
-                                                    <input type="email" name="email" placeholder="" required="required">
-                                                </div>
-                                            </div>
                                             <div class="col-12">
                                                 <div class="form-group">
-                                                    <label>Your Message<span>*</span></label>
-                                                    <textarea name="message" placeholder=""></textarea>
+                                                    <p id="replytext" class="mt-3 text-center"></p>
+                                                    <label id="commentTitle">Your Comment<span>*</span></label>
+                                                    <textarea name="body"required ></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-12">
@@ -141,6 +154,10 @@
                                     </form>
                                     <!-- End Comment Form -->
                                 </div>
+                                @else
+                                {{session(['nextRoute'=>Route::currentRouteName(),'post_slug'=>$post->slug])}}
+                                <a class="btn btn-primary text-white btn-block text-center" href="{{route('login')}}">Login to Comment</a>
+                                @endauth
                             </div>
                         </div>
                     </div>
@@ -256,5 +273,16 @@
 @section('scripts')
     <script>
         document.getElementById("blog").classList.add("active");
+        document.getElementById("commentForm").addEventListener("mouseenter",()=>{
+        let replyValue = document.getElementById("parentId").getAttribute("value");
+        let commentBody = document.getElementById("commentBody").innerText;
+        if(replyValue > 0){
+        document.getElementById("replytext").innerHTML="You are replying to comment : "+commentBody;
+        }
+        });
+        document.getElementById("commentForm").addEventListener("mouseleave",()=>{
+            document.getElementById("parentId").setAttribute("value","");
+            document.getElementById("replytext").innerHTML="";
+        })
     </script>
 @endsection

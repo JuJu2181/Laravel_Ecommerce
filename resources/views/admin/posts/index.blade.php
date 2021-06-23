@@ -13,6 +13,7 @@
                         <td>Body</td>
                         <td>Author</td>
                         <td>Category</td>
+                        <td>Comments</td>
                         <td>Actions</td>
                     </tr>
                     @foreach ($posts as $post)
@@ -25,6 +26,7 @@
                         <td>  {{ Str::substr($post->body, 0, 50) }} {{ strlen($post->body) > 50 ? "...": "" }}</td>
                         <td>{{ $post->user->name }}</td>
                         <td><a href="{{route('category.single',$post->category->id)}}">{{ $post->category->name }}</a></td>
+                        <td><a href="#">{{$post->comments->count()}}</a></td>
                         <td>
                             <a href={{ route('admin.posts.edit',$post->id) }} class="btn btn-info btn-block">  
                                 Edit

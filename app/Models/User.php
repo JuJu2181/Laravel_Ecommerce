@@ -64,4 +64,9 @@ class User extends Authenticatable implements MustVerifyEmail
     public function review(){
         return $this->hasOne(ReviewAndRating::class);
     }
+
+    // relation between user and comments 
+    public function comments(){
+        return $this->hasMany(Comment::class);
+    }
 }

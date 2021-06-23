@@ -45,6 +45,16 @@
                                 @endunless
                             </nav>
                     </li>
+                    <li class="nav-item" id="comments">
+                        <a href="#" class="nav-link with-sub"><i class="typcn typcn-messages"></i>
+                            All Comments</a>
+                        <nav class="az-menu-sub">
+                                <a href={{ route('admin.comments.index') }} class="nav-link">My Comments</a>
+                                @unless (Auth::user()->role == 'user')
+                                    <a href="{{route('admin.comments.getPostComments')}}" class="nav-link">Post Comments</a>
+                                @endunless
+                            </nav>
+                    </li>
                 @unless(Auth::user()->role == 'user')
                 <li class="nav-item" id="products">
                   <a href="" class="nav-link with-sub"><i class="typcn typcn-gift"></i> Products</a>
