@@ -104,6 +104,9 @@ class OrdersController extends Controller
             abort(403);
         //for vendor we will show the items specific to that vendor only 
         }elseif(Auth::user()->role == 'vendor'){
+            if(Auth::user()->vendor_status != 'verified'){
+                abort(403);
+            }
             $order_products = [];
             $order_items = OrderItem::latest('id')->get();
             foreach($order_items As $order_item){
@@ -131,6 +134,9 @@ class OrdersController extends Controller
         if(Auth::user()->role == 'user'){
             abort(403);
         }elseif(Auth::user()->role == 'vendor'){
+            if(Auth::user()->vendor_status != 'verified'){
+                abort(403);
+            }
             $order_products = [];
             $order_items = OrderItem::latest('id')->get();
             // get only the items with pending status and order with purchased status
@@ -159,6 +165,9 @@ class OrdersController extends Controller
         if(Auth::user()->role == 'user'){
             abort(403);
         }elseif(Auth::user()->role == 'vendor'){
+            if(Auth::user()->vendor_status != 'verified'){
+                abort(403);
+            }
             $order_products = [];
             $order_items = OrderItem::latest('id')->get();
             // get the orders with status purchased and item status complete

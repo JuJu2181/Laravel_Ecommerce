@@ -113,6 +113,65 @@ class DashboardController extends Controller
             'my_all_orders','my_completed_orders','my_purchased_orders'
             ));
         }elseif(Auth::user()->role == 'vendor'){
+            if(Auth::user()->vendor_status != 'verified'){
+                switch ($dateRange) {
+                    case 'Day':
+                        foreach($myOrders as $order){
+                            if($currentDateTime->diffInDays($order->created_at) <= 1){
+                                array_push($my_all_orders,$order);
+                                if($order->order_status == 'completed'){
+                                    array_push($my_completed_orders,$order);
+                                }elseif($order->order_status == 'purchased'){
+                                    array_push($my_purchased_orders,$order);
+                                }
+                            }
+                        }
+                        break;
+                    
+                    case 'Week':
+                        foreach($myOrders as $order){
+                            if($currentDateTime->diffInWeeks($order->created_at) <= 1){
+                                array_push($my_all_orders,$order);
+                                if($order->order_status == 'completed'){
+                                    array_push($my_completed_orders,$order);
+                                }elseif($order->order_status == 'purchased'){
+                                    array_push($my_purchased_orders,$order);
+                                }
+                            }
+                        }
+                        break;
+        
+                    case 'Month':
+                        foreach($myOrders as $order){
+                            if($currentDateTime->diffInMonths($order->created_at) <= 1){
+                                array_push($my_all_orders,$order);
+                                if($order->order_status == 'completed'){
+                                    array_push($my_completed_orders,$order);
+                                }elseif($order->order_status == 'purchased'){
+                                    array_push($my_purchased_orders,$order);
+                                }
+                            }
+                        }
+                        break;
+        
+                    default:
+                        foreach($myOrders as $order){
+                            if($currentDateTime->diffInYears($order->created_at) <= 1){
+                                array_push($my_all_orders,$order);
+                                if($order->order_status == 'completed'){
+                                    array_push($my_completed_orders,$order);
+                                }elseif($order->order_status == 'purchased'){
+                                    array_push($my_purchased_orders,$order);
+                                }
+                            }
+                        }
+                        break;
+                }
+                return view("admin.dashboard",
+                compact(
+                'my_all_orders','my_completed_orders','my_purchased_orders'
+                ));
+            }else{
             switch ($dateRange) {
                 case 'Day':
                     foreach($orderItemsForMe as $orderItem){
@@ -210,6 +269,7 @@ class DashboardController extends Controller
             compact(
                 'all_orderItems','completed_orderItems','pending_orderItems','my_all_orders','my_completed_orders','my_purchased_orders'
             ));
+        }
         }else{
 
         switch ($dateRange) {

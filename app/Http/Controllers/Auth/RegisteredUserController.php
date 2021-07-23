@@ -52,12 +52,20 @@ class RegisteredUserController extends Controller
             $name = '';
         }
         // return $request->role;
+        if($request->role == 'user'){
+            $vendor_status = 'normal_user';
+        }elseif($request->role == 'vendor'){
+            $vendor_status = 'not_verified';
+        }elseif($request->role == 'subvendor'){
+            $vendor_status = 'verified';
+        }
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'role'=>$request->role,
             'password' => Hash::make($request->password),
             'image'=>$name,
+            'vendor_status'=>$vendor_status,
         ]);
 
         // return $user;

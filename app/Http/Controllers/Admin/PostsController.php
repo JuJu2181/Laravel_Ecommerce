@@ -24,6 +24,9 @@ class PostsController extends Controller
         if(Auth::user()->role == "user"){
             abort(403);
         }elseif (Auth::user()->role == "vendor") {
+            if(Auth::user()->vendor_status != 'verified'){
+                abort(403);
+            }
             $posts = Post::latest('id')->where('user_id','=',Auth::id())->paginate(4);
             return view('admin.posts.index',compact('posts'));
         }else{
@@ -58,7 +61,9 @@ class PostsController extends Controller
         if(Auth::user()->role == "user"){
             abort(403);
         }
-
+        if(Auth::user()->vendor_status != 'verified'){
+            abort(403);
+        }
         // validation rules using the form request
         // return $request;
         $request->validated();

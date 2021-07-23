@@ -11,7 +11,9 @@
                     </div>
 
                 </div><!-- az-dashboard-one-title -->
-
+                @if (Auth::user()->role =='vendor' && Auth::user()->vendor_status == 'not_verified')
+                    <p>You have been added to vendors list for verification. This may take time. Sorry but till you are not verified you can't access vendor features. We will notify you when available</p>
+                @endif
                 {{-- <div class="az-dashboard-nav">
                     <nav class="nav">
                         <a class="nav-link active" data-toggle="tab" href="#">Overview</a>
@@ -48,7 +50,7 @@
                         </div>
                     </div>
                 </div>
-                @unless (Auth::user()->role == 'user')
+                @unless (Auth::user()->role == 'user' || Auth::user()->vendor_status == 'not_verified')
                 @if (Auth::user()->role == 'admin')
                 <div class="row row-sm mg-b-20">
                     <div class="col-lg-7 ht-lg-100p mt-3">

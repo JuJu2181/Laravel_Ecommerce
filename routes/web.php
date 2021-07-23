@@ -117,6 +117,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // ? for users 
     Route::resource('users',App\Http\Controllers\Admin\UsersController::class);
 
+    Route::get('vendor_requests',[App\Http\Controllers\Admin\UsersController::class,'getVendorRequests'])->name('users.getVendorRequests');
+
+    Route::post('verify_vendor/{id}',[App\Http\Controllers\Admin\UsersController::class,'verifyVendor'])->name('users.verify_vendor');
+
+    Route::get('verified_vendors',[App\Http\Controllers\Admin\UsersController::class,'getVerifiedVendors'])->name('users.getVerifiedVendors');
     // ? for posts 
     Route::resource('posts',App\Http\Controllers\Admin\PostsController::class);
 

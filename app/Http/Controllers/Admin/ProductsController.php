@@ -22,6 +22,9 @@ class ProductsController extends Controller
         if(Auth::user()->role == "user"){
             abort(403);
         }elseif (Auth::user()->role == "vendor") {
+            if(Auth::user()->vendor_status != 'verified'){
+                abort(403);
+            }
             $products = Product::latest('id')->where('user_id','=',Auth::id())->paginate(6);
             return view('admin.products.index',compact('products'));
         }else{
@@ -40,6 +43,9 @@ class ProductsController extends Controller
         if(Auth::user()->role == "user"){
             abort(403);
         }
+        if(Auth::user()->vendor_status != 'verified'){
+            abort(403);
+        }
         // $categories = Category::all();
         $categories = Category::with('children')->where('parent_id',0)->get();
         // return view("admin.products.create",["categories"=>$categories]);
@@ -56,6 +62,9 @@ class ProductsController extends Controller
     public function store(ProductsFormRequest $request)
     {   
         if(Auth::user()->role == "user"){
+            abort(403);
+        }
+        if(Auth::user()->vendor_status != 'verified'){
             abort(403);
         }
         //* using authorize helper function to check user authorization

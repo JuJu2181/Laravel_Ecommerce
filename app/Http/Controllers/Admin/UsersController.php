@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VendorVerificationMail;
 
 class UsersController extends Controller
 {
@@ -63,6 +65,9 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
+        if(Auth::user()->role != 'admin'){
+            abort(403);
+        }
         $user = User::find($id);
         return view('admin.users.edit',compact('user'));
     }
@@ -99,5 +104,36 @@ class UsersController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    // function to get all pending vendors
+    public function getVendorRequests(){
+        if(Auth::user()->role != 'admin'){
+            abort(403);
+        }
+        $pending_vendors = User::latest('id')->where('role','=','vendor')->where('vendor_status','=','not_verified')->paginate(6);
+        return view('admin.users.vendor_requests',compact('pending_vendors'));
+    }
+
+    public function verifyVendor($id){
+        $vendor = User::find($id);
+        $vendor->vendor_status = 'verified';
+        if($vendor->save()){
+            $email = $vendor->email;
+            Mail::to($email)->send(new VendorVerificationMail());
+        return redirect()->route('admin.users.getVerifiedVendors')->with('success','Vendor Verified');
+        }else{
+            return redirect()->back()->with('error','Error in verifying vendor');
+        }
+
+    }
+
+    // function to get all the verified vendors 
+    public function getVerifiedVendors(){
+        if(Auth::user()->role != 'admin'){
+            abort(403);
+        }
+        $verified_vendors = User::latest('id')->where('role','=','vendor')->where('vendor_status','=','verified')->paginate(6);
+        return view('admin.users.verified_vendors',compact('verified_vendors'));
     }
 }

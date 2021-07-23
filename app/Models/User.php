@@ -23,6 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'image',
         'role',
+        'vendor_status',
     ];
 
     /**
@@ -68,5 +69,10 @@ class User extends Authenticatable implements MustVerifyEmail
     // relation between user and comments 
     public function comments(){
         return $this->hasMany(Comment::class);
+    }
+
+    // relation between user and subvendors 
+    public function subvendors(){
+        return $this->hasMany(SubVendor::class);
     }
 }

@@ -118,6 +118,9 @@ class CommentController extends Controller
         if(Auth::user()->role == 'user'){
             abort(403);
         }elseif(Auth::user()->role == 'vendor'){
+            if(Auth::user()->vendor_status != 'verified'){
+                abort(403);
+            }
         $posts = Post::where('user_id',Auth::id())->get();
         }else{
             $posts = Post::all();

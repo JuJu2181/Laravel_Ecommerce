@@ -211,6 +211,9 @@ class ReviewAndRatingController extends Controller
         if(Auth::user()->role == 'user'){
             abort(403);
         }elseif(Auth::user()->role == 'vendor'){
+        if(Auth::user()->vendor_status != 'verified'){
+                abort(403);
+        }
         $products = Product::where('user_id',Auth::id())->get();
         $productsWithReviews = [];
         foreach($products as $product){

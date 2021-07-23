@@ -23,7 +23,7 @@
                             All Orders</a>
                         <nav class="az-menu-sub">
                                 <a href={{ route('admin.orders.index') }} class="nav-link">My Orders</a>
-                                @unless (Auth::user()->role == 'user')
+                                @unless (Auth::user()->role == 'user' || Auth::user()->vendor_status == 'not_verified')
                                     <a href="#" class="nav-link with-sub">Orders For Vendor</a>
                                     <nav class="az-menu-sub">
                                         <a href="{{route('admin.orders.getVendorOrders')}}" class="nav-link">All Orders</a>
@@ -40,7 +40,7 @@
                             All Reviews</a>
                         <nav class="az-menu-sub">
                                 <a href={{ route('admin.reviews.index') }} class="nav-link">My Reviews</a>
-                                @unless (Auth::user()->role == 'user')
+                                @unless (Auth::user()->role == 'user'|| Auth::user()->vendor_status == 'not_verified')
                                     <a href="{{route('admin.reviews.getProductReviews')}}" class="nav-link">Product Reviews</a>
                                 @endunless
                             </nav>
@@ -50,12 +50,12 @@
                             All Comments</a>
                         <nav class="az-menu-sub">
                                 <a href={{ route('admin.comments.index') }} class="nav-link">My Comments</a>
-                                @unless (Auth::user()->role == 'user')
+                                @unless (Auth::user()->role == 'user'|| Auth::user()->vendor_status == 'not_verified')
                                     <a href="{{route('admin.comments.getPostComments')}}" class="nav-link">Post Comments</a>
                                 @endunless
                             </nav>
                     </li>
-                @unless(Auth::user()->role == 'user')
+                @unless(Auth::user()->role == 'user'|| Auth::user()->vendor_status == 'not_verified')
                 <li class="nav-item" id="products">
                   <a href="" class="nav-link with-sub"><i class="typcn typcn-gift"></i> Products</a>
                   <nav class="az-menu-sub">
@@ -76,6 +76,8 @@
                 <nav class="az-menu-sub">
                     <a href="{{ route('admin.users.index') }}" class="nav-link">List</a>
                     <a href="{{ route('register') }}" class="nav-link">Register</a>
+                    <a href="{{ route('admin.users.getVendorRequests') }}" class="nav-link">Vendor Requests</a>
+                    <a href="{{ route('admin.users.getVerifiedVendors') }}" class="nav-link">Verified Vendors</a>
                 </nav>
             </li>
             <li class="nav-item" id="contacts">
