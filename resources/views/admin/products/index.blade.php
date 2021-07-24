@@ -2,7 +2,7 @@
 <x-admin.layout>
 <div class="az-content az-content-dashboard">
     <div class="container">
-        @unless(Auth::user()->role == 'user')
+        @unless(Auth::user()->role == 'user' || Auth::user()->vendor_status == 'not_verified')
         <div class="az-content-body">
             <h2>All Products</h2>
             <div class="table-responsive">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\SubVendor;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Carbon;
@@ -44,6 +45,7 @@ class DashboardController extends Controller
         $all_users = [];
         $normal_users = [];
         $vendors = [];
+        $subvendors = [];
         $all_orders = [];
         $completed_orders = [];
         $pending_orders = [];
@@ -112,8 +114,12 @@ class DashboardController extends Controller
             compact(
             'my_all_orders','my_completed_orders','my_purchased_orders'
             ));
-        }elseif(Auth::user()->role == 'vendor'){
-            if(Auth::user()->vendor_status != 'verified'){
+        }elseif(Auth::user()->role == 'vendor' || Auth::user()->role == 'subvendor'){
+            if(Auth::user()->role == 'subvendor'){
+            $subvendor = SubVendor::where('email','=',Auth::user()->email)->first();
+            $vendor_responsibilities = json_decode($subvendor->responsibility);
+            }
+            if(Auth::user()->vendor_status != 'verified' ||(Auth::user()->role == 'subvendor' && !in_array('orders',$vendor_responsibilities))){
                 switch ($dateRange) {
                     case 'Day':
                         foreach($myOrders as $order){
@@ -281,6 +287,8 @@ class DashboardController extends Controller
                             array_push($normal_users,$user);
                         }elseif($user->role == 'vendor'){
                             array_push($vendors,$user);
+                        }elseif($user->role == 'subvendor'){
+                            array_push($subvendors,$user);
                         }
                     }
                 }
@@ -324,6 +332,8 @@ class DashboardController extends Controller
                             array_push($normal_users,$user);
                         }elseif($user->role == 'vendor'){
                             array_push($vendors,$user);
+                        }elseif($user->role == 'subvendor'){
+                            array_push($subvendors,$user);
                         }
                     }
                 }
@@ -367,6 +377,8 @@ class DashboardController extends Controller
                             array_push($normal_users,$user);
                         }elseif($user->role == 'vendor'){
                             array_push($vendors,$user);
+                        }elseif($user->role == 'subvendor'){
+                            array_push($subvendors,$user);
                         }
                     }
                 }
@@ -410,6 +422,8 @@ class DashboardController extends Controller
                             array_push($normal_users,$user);
                         }elseif($user->role == 'vendor'){
                             array_push($vendors,$user);
+                        }elseif($user->role == 'subvendor'){
+                            array_push($subvendors,$user);
                         }
                     }
                 }
@@ -448,7 +462,7 @@ class DashboardController extends Controller
         // return $all_users;
         return view('admin.dashboard',
         compact(
-            'all_users','normal_users','vendors',
+            'all_users','normal_users','vendors','subvendors',
             'all_orders','completed_orders','pending_orders',
             'all_orderItems','completed_orderItems','pending_orderItems','my_all_orders','my_completed_orders','my_purchased_orders'
         ));

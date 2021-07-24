@@ -1,49 +1,55 @@
-@section('title',Auth::user()->name.' - All Posts')
+@section('title',Auth::user()->name.' - All Sub Vendors')
 <x-admin.layout>
 <div class="az-content az-content-dashboard">
     <div class="container">
         @unless(Auth::user()->role == 'user' || Auth::user()->vendor_status == 'not_verified')
         <div class="az-content-body">
-            <h2>All Posts</h2>
+            <h2>All Sub Vendors</h2>
             <div class="table-responsive">
                 <table class="table table-hover table-bordered mg-b-0">
                     <tr>
                         <td>S.N.</td>
-                        <td>Title</td>
-                        <td>Body</td>
-                        <td>Author</td>
-                        <td>Category</td>
-                        <td>Comments</td>
+                        <td>Name</td>
+                        <td>Email</td>
+                        @if(Auth::user()->role == 'admin')
+                        <td>Vendor</td>
+                        @endif
+                        <td>Responsibilities</td>
+                        @if(Auth::user()->role == 'vendor')
                         <td>Actions</td>
+                        @endif
                     </tr>
-                    @foreach ($posts as $post)
-                    {{-- for displaying posts specific to user --}}
-                    @can('update',$post)
-                    <tr id="postId{{ $post->id }}">
+                    @foreach ($subvendors as $subvendor)
+                    {{-- for displaying products specific to user --}}
+                    <tr id="subVendorId{{ $subvendor->id }}">
                         
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $post->title }}</td>
-                        <td>  {{ Str::substr($post->body, 0, 50) }} {{ strlen($post->body) > 50 ? "...": "" }}</td>
-                        <td>{{ $post->user->name }}</td>
-                        <td><a href="{{route('category.single',$post->category->id)}}">{{ $post->category->name }}</a></td>
-                        <td><a href="#">{{$post->comments->count()}}</a></td>
+                        <td>{{ $subvendor->name }}</td>
+                        <td> {{ $subvendor->email }}</td>
+                        @if(Auth::user()->role=='admin')
+                        <td>{{ $subvendor->vendor->name }}</td>
+                        @endif
                         <td>
-                            <a href={{ route('admin.posts.edit',$post->id) }} class="btn btn-info btn-block">  
+                        {{implode(", ",json_decode($subvendor->responsibility))}}
+                        </td>
+                        @if(Auth::user()->role == 'vendor')
+                        <td>
+                            <a href={{ route('admin.subvendors.edit',$subvendor->id) }} class="btn btn-info btn-block">  
                                 Edit
                                 <span><i class="typcn typcn-edit"></i></span>
                                 </a>
                                 <meta name="csrf-token" content="{{ csrf_token() }}">
-                                <button id="deletePost" data-id="{{ $post->id }}" class="btn btn-danger btn-block mt-2" onclick="deletePost({{ $post->id }})">Delete
+                                <button id="deleteSubVendor" data-id="{{ $subvendor->id }}" class="btn btn-danger btn-block mt-2" onclick="deleteSubVendor({{ $subvendor->id }})">Delete
                                 <span><i class="typcn typcn-trash"></i></span
                                 </button>
                             </td>
+                        @endif
                     </tr>
-                    @endcan
                         @endforeach
                 </table>
             </div>
-            <div class="mt-5 d-flex justify-center mx-auto">
-                {{ $posts->links() }}
+            <div class="mt-5 d-flex justify-center">
+                {{ $subvendors->links() }}
             </div>
         </div>
         @else
@@ -54,15 +60,15 @@
 @section('scripts')
     <script>
         // to toggle active state
-        document.getElementById("posts").classList.add("active");
+        document.getElementById("subvendors").classList.add("active");
 
         // for ajax delete
-        function deletePost(id){
+        function deleteSubVendor(id){
             console.log(id);
             let token = $("meta[name='csrf-token']").attr("content");
-            if(confirm("Are you sure to delete this product?\n press 'OK' to confirm")){
+            if(confirm("Are you sure to delete this sub vendor?\n press 'OK' to confirm")){
                 $.ajax({
-                url:"/admin/posts/"+id,
+                url:"/admin/subvendors/"+id,
                 type: 'DELETE',
                 data:{
                     "id":id,
@@ -70,7 +76,7 @@
                 },
                 success:function(){
                     console.log("deleted");
-                    $('#postId'+id).remove();
+                    $('#subVendorId'+id).remove();
                 }
                 });
             }else{

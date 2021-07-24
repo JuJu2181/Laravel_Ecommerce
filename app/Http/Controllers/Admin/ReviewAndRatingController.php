@@ -8,6 +8,7 @@ use App\Models\ReviewAndRating;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
+use App\Models\SubVendor;
 
 class ReviewAndRatingController extends Controller
 {
@@ -215,6 +216,19 @@ class ReviewAndRatingController extends Controller
                 abort(403);
         }
         $products = Product::where('user_id',Auth::id())->get();
+        $productsWithReviews = [];
+        foreach($products as $product){
+            if($product->reviews->count() > 0){
+                array_push($productsWithReviews,$product);
+            }
+        }
+        }elseif(Auth::user()->role == 'subvendor'){
+            $subvendor = SubVendor::where('email','=',Auth::user()->email)->first();
+            // return $subvendor;
+            if(!in_array('reviews',json_decode($subvendor->responsibility))){
+                abort(403);
+            }
+            $products = Product::where('user_id',$subvendor->vendor->id)->get();
         $productsWithReviews = [];
         foreach($products as $product){
             if($product->reviews->count() > 0){

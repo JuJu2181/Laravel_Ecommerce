@@ -7,6 +7,7 @@ use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
+use App\Models\SubVendor;
 
 class CommentController extends Controller
 {
@@ -122,6 +123,13 @@ class CommentController extends Controller
                 abort(403);
             }
         $posts = Post::where('user_id',Auth::id())->get();
+        }elseif(Auth::user()->role == 'subvendor'){
+            $subvendor = SubVendor::where('email','=',Auth::user()->email)->first();
+            // return $subvendor;
+            if(!in_array('comments',json_decode($subvendor->responsibility))){
+                abort(403);
+            }
+            $posts = Post::where('user_id',$subvendor->vendor->id)->get();
         }else{
             $posts = Post::all();
         }

@@ -9,8 +9,18 @@ class SubVendor extends Model
 {
     use HasFactory;
 
+    protected $table = "subvendors";
+
+    protected $fillable = [
+        'name',
+        'email',
+        'vendor_id',
+        'responsibility'
+    ];
+
+
     // relation between a vendor and a subvendor
     public function vendor(){
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class,'vendor_id');
     }
 }

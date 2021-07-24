@@ -10,6 +10,7 @@ use App\Http\Requests\ProductsFormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Intervention\Image\Facades\Image;
+use App\Models\SubVendor;
 class ProductsController extends Controller
 {
     /**
@@ -26,6 +27,16 @@ class ProductsController extends Controller
                 abort(403);
             }
             $products = Product::latest('id')->where('user_id','=',Auth::id())->paginate(6);
+            return view('admin.products.index',compact('products'));
+        }elseif(Auth::user()->role == 'subvendor'){
+            $subvendor = SubVendor::where('email','=',Auth::user()->email)->first();
+            // return $subvendor;
+            if(!in_array('products',json_decode($subvendor->responsibility))){
+                abort(403);
+            }
+            // return $subvendor->vendor->id;
+            $products = Product::latest('id')->where('user_id','=',$subvendor->vendor->id)->paginate(6);
+            // return $products;
             return view('admin.products.index',compact('products'));
         }else{
             $products = Product::latest('id')->paginate(6);
@@ -44,6 +55,10 @@ class ProductsController extends Controller
             abort(403);
         }
         if(Auth::user()->vendor_status != 'verified'){
+            abort(403);
+        }
+        $subvendor = SubVendor::where('email','=',Auth::user()->email)->first();
+        if(Auth::user()->role == 'subvendor' && !in_array('products',json_decode($subvendor->responsibility))){
             abort(403);
         }
         // $categories = Category::all();
@@ -65,6 +80,10 @@ class ProductsController extends Controller
             abort(403);
         }
         if(Auth::user()->vendor_status != 'verified'){
+            abort(403);
+        }
+        $subvendor = SubVendor::where('email','=',Auth::user()->email)->first();
+        if(Auth::user()->role == 'subvendor' && !in_array('products',json_decode($subvendor->responsibility))){
             abort(403);
         }
         //* using authorize helper function to check user authorization
@@ -89,7 +108,7 @@ class ProductsController extends Controller
         $request->validated();
         $product = new Product;
         $product->name = $request->input('name');
-        $product->user_id = Auth::id();
+        $product->user_id = $subvendor->vendor->id;
         $product->slug = $request->input('slug');
         $product->description = $request->input('description');
         $product->price = $request->input('price');

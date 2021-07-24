@@ -9,6 +9,13 @@
                 <a href={{ route('admin.dashboard') }} class="az-logo"><span></span> ADMIN</a>
                 <a href="" class="close">&times;</a>
             </div><!-- az-header-menu-header -->
+            {{-- some php code for sub vendors responsibility --}}
+            @php
+            if(Auth::user()->role == 'subvendor'){
+                $subvendor = App\Models\SubVendor::where('email','=',Auth::user()->email)->first();
+                $vendor_responsibilities = json_decode($subvendor->responsibility);
+            }
+            @endphp
             <ul class="nav">
                 <li class="nav-item show" id="dashboard">
                     <a href={{ route('admin.dashboard') }} class="nav-link"><i class="typcn typcn-chart-area-outline"></i>
@@ -24,6 +31,7 @@
                         <nav class="az-menu-sub">
                                 <a href={{ route('admin.orders.index') }} class="nav-link">My Orders</a>
                                 @unless (Auth::user()->role == 'user' || Auth::user()->vendor_status == 'not_verified')
+                                @unless(Auth::user()->role == 'subvendor' && !in_array('orders',$vendor_responsibilities))
                                     <a href="#" class="nav-link with-sub">Orders For Vendor</a>
                                     <nav class="az-menu-sub">
                                         <a href="{{route('admin.orders.getVendorOrders')}}" class="nav-link">All Orders</a>
@@ -32,6 +40,7 @@
                                         <a href="{{route('admin.orders.getCompletedVendorOrders')}}" class="nav-link">
                                             Completed Orders</a>
                                     </nav>
+                                    @endunless
                                 @endunless
                             </nav>
                     </li>
@@ -41,7 +50,9 @@
                         <nav class="az-menu-sub">
                                 <a href={{ route('admin.reviews.index') }} class="nav-link">My Reviews</a>
                                 @unless (Auth::user()->role == 'user'|| Auth::user()->vendor_status == 'not_verified')
+                                @unless(Auth::user()->role == 'subvendor' && !in_array('reviews',$vendor_responsibilities))
                                     <a href="{{route('admin.reviews.getProductReviews')}}" class="nav-link">Product Reviews</a>
+                                    @endunless
                                 @endunless
                             </nav>
                     </li>
@@ -51,11 +62,14 @@
                         <nav class="az-menu-sub">
                                 <a href={{ route('admin.comments.index') }} class="nav-link">My Comments</a>
                                 @unless (Auth::user()->role == 'user'|| Auth::user()->vendor_status == 'not_verified')
+                                @unless(Auth::user()->role == 'subvendor' && !in_array('comments',$vendor_responsibilities))
                                     <a href="{{route('admin.comments.getPostComments')}}" class="nav-link">Post Comments</a>
+                                @endunless
                                 @endunless
                             </nav>
                     </li>
                 @unless(Auth::user()->role == 'user'|| Auth::user()->vendor_status == 'not_verified')
+                @unless(Auth::user()->role == 'subvendor' && !in_array('products',$vendor_responsibilities))
                 <li class="nav-item" id="products">
                   <a href="" class="nav-link with-sub"><i class="typcn typcn-gift"></i> Products</a>
                   <nav class="az-menu-sub">
@@ -63,6 +77,19 @@
                       <a href={{ route('admin.products.create') }} class="nav-link">Create</a>
                   </nav>
               </li>
+              @endunless
+              @unless (Auth::user()->role=='subvendor')
+              <li class="nav-item" id="subvendors">
+                <a href="" class="nav-link with-sub"><i class="typcn typcn-group"></i>Sub Vendors</a>
+                <nav class="az-menu-sub">
+                    <a href={{ route('admin.subvendors.index') }} class="nav-link">List</a>
+                    @unless(Auth::user()->role!='vendor')
+                    <a href={{ route('admin.subvendors.create') }} class="nav-link">Register Subvendor</a>
+                    {{-- <a href={{ route('admin.subvendors.change_task') }} class="nav-link">Change Tasks</a> --}}
+                    @endunless
+                </nav>
+            </li>
+            
               @unless(Auth::user()->role == 'vendor')
               <li class="nav-item" id="categories">
                 <a href={{ route('admin.products.index') }} class="nav-link with-sub"><i class="typcn typcn-chart-pie"></i> Categories</a>
@@ -87,6 +114,8 @@
                 </nav>
             </li>
             @endunless
+            @endunless
+            @unless(Auth::user()->role == 'subvendor' && !in_array('posts',$vendor_responsibilities))
                 <li class="nav-item" id="posts">
                     <a href="#" class="nav-link with-sub"><i class="typcn typcn-document-text"></i>Post</a>
                     <nav class="az-menu-sub">
@@ -94,7 +123,7 @@
                         <a href="{{route('admin.posts.create')}}" class="nav-link">Create</a>
                     </nav>
                 </li>
-
+                @endunless
                 {{-- <li class="nav-item">
                     <a href="chart-chartjs.html" class="nav-link"><i class="typcn typcn-chart-bar-outline"></i>
                         Charts</a>

@@ -16,8 +16,9 @@ class CreateSubvendorsTable extends Migration
         Schema::create('subvendors', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('vendor_id')->constrained('users')->onDelete('cascade');
-            $table->string('work');
+            $table->string('email')->unique();
+            $table->foreignId('vendor_id')->constrained('users','id')->onDelete('cascade');
+            $table->string('responsibility');
             $table->timestamps();
         });
     }

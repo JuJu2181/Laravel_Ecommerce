@@ -161,6 +161,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('post_comments/{id}',[App\Http\Controllers\Admin\CommentController::class,'getPostCommentDetail'])->name('comments.getPostCommentDetail');
 
     Route::delete('post_comments/delete/{id}/{currentPage}', [App\Http\Controllers\Admin\CommentController::class,'deleteComment'])->name('comments.delete_comment');
+
+    // for subvendors
+    Route::resource('subvendors', App\Http\Controllers\Admin\SubVendorController::class);
+    // Route::get('change_tasks',[App\Http\Controllers\Admin\SubVendorController::class,'getChangeTaskView'])->name('subvendors.change_task');
+    // Route::post('update_tasks/{id}',[App\Http\Controllers\Admin\SubVendorController::class,'updateSubVendorTasks'])->name('subvendors.update_task');
 });
 
 

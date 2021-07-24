@@ -21,10 +21,10 @@
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                     @enderror
                     {{-- for slug --}}
-                <label for="slug" class="m-1">Email: </label>
-                <input type="text" name="slug" id="slug" class="form-control @error('email') is-invalid @enderror"
+                <label for="email" class="m-1">Email: </label>
+                <input type="text" name="email" id="email" class="form-control @error('email') is-invalid @enderror"
                     value="{{ $user->email }}" disabled>
-                @error('slug')
+                @error('email')
                 <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
                 {{-- for category select --}}

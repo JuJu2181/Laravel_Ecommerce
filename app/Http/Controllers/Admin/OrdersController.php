@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\ShippingDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\SubVendor;
 
 class OrdersController extends Controller
 {
@@ -117,6 +118,22 @@ class OrdersController extends Controller
             // return $order_products;
             return view('admin.orders.orders_for_vendor',compact('order_products','title'));
         // for for admin we show all the items for all the vendors as well as admin products
+        }elseif(Auth::user()->role == 'subvendor'){
+            $subvendor = SubVendor::where('email','=',Auth::user()->email)->first();
+            // return $subvendor;
+            if(!in_array('orders',json_decode($subvendor->responsibility))){
+                abort(403);
+            }
+            $title = "All Vendor order items for ".$subvendor->vendor->name;
+            $order_products = [];
+            $order_items = OrderItem::latest('id')->get();
+            foreach($order_items As $order_item){
+                if($order_item->product->user_id == $subvendor->vendor->id && $order_item->order->order_status != 'cart'){
+                    array_push($order_products,$order_item);
+                }
+            }
+            // return $order_products;
+            return view('admin.orders.orders_for_vendor',compact('order_products','title'));
         }else{
             $order_items = OrderItem::latest('id')->get();
             $order_products = [];
@@ -146,6 +163,22 @@ class OrdersController extends Controller
                 }
             }
             // return $order_products;
+            return view('admin.orders.orders_for_vendor',compact('order_products','title'));
+        }elseif(Auth::user()->role == 'subvendor'){
+            $subvendor = SubVendor::where('email','=',Auth::user()->email)->first();
+            // return $subvendor;
+            if(!in_array('orders',json_decode($subvendor->responsibility))){
+                abort(403);
+            }
+            $title = "All Vendor order items for ".$subvendor->vendor->name;
+            $order_products = [];
+            $order_items = OrderItem::latest('id')->get();
+            // get only the items with pending status and order with purchased status
+            foreach($order_items As $order_item){
+                if($order_item->product->user_id == $subvendor->vendor->id && $order_item->order->order_status == 'purchased' && $order_item->status == 'pending'){
+                    array_push($order_products,$order_item);
+                }
+            }
             return view('admin.orders.orders_for_vendor',compact('order_products','title'));
         }else{
             $order_items = OrderItem::latest('id')->get();
@@ -178,6 +211,24 @@ class OrdersController extends Controller
             }
             // return $order_products;
             return view('admin.orders.orders_for_vendor',compact('order_products','title'));
+        }elseif(Auth::user()->role=='subvendor'){
+            $subvendor = SubVendor::where('email','=',Auth::user()->email)->first();
+            // return $subvendor;
+            if(!in_array('orders',json_decode($subvendor->responsibility))){
+                abort(403);
+            }
+            $title = "All Vendor order items for ".$subvendor->vendor->name;
+            $order_products = [];
+            $order_items = OrderItem::latest('id')->get();
+            // get the orders with status purchased and item status complete
+            foreach($order_items As $order_item){
+                if($order_item->product->user_id == $subvendor->vendor->id && $order_item->status == 'complete'){
+                    array_push($order_products,$order_item);
+                }
+            }
+            // return $order_products;
+            return view('admin.orders.orders_for_vendor',compact('order_products','title'));
+        
         }else{
             $order_items = OrderItem::latest('id')->get();
             $order_products = [];

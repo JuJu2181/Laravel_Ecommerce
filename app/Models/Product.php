@@ -15,10 +15,12 @@ class Product extends Model
         'slug',
         'image',
         'category_id',
+        'average_rating'
     ];
     // default attributes for model
     protected $attributes = [
         'image' => '',
+        'average_rating'=>0.0
     ];
 
     // * instead of defining with in the route it can be directly defined in the model if it is widely used  amd we can sue without to remove with in route

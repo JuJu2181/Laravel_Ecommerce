@@ -2,7 +2,7 @@
 <x-admin.layout>
 <div class="az-content az-content-dashboard">
     <div class="container">
-        @unless(Auth::user()->role == 'user')
+        @unless(Auth::user()->role == 'user' || Auth::user()->vendor_status == 'not_verified')
         <div class="az-content-body">
             {{-- displaying all errors before form--}}
             {{-- @if ($errors->any())

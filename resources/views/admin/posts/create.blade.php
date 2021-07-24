@@ -2,7 +2,7 @@
 <x-admin.layout>
 <div class="az-content az-content-dashboard">
     <div class="container">
-        @unless(Auth::user()->role == 'user')
+        @unless(Auth::user()->role == 'user' || Auth::user()->vendor_staus == 'not_verified')
         <div class="az-content-body">
             <h2>Create Post</h2>
             {{-- check if user is authorized to create a product --}}

@@ -34,7 +34,12 @@
                         @php
                         $dateFilters = ['Day','Week','Month','Year'];
                         $old_filter = request('filterDate') != ""?request('filterDate'):"";
+                        if(Auth::user()->role == 'subvendor'){
+                        $subvendor = App\Models\SubVendor::where('email','=',Auth::user()->email)->first();
+                        $vendor_responsibilities = json_decode($subvendor->responsibility);
+                        }
                         @endphp
+                        {{-- @dd($vendor_responsibilities) --}}
                         <h5>Date Range</h5>
                         <div class="btn-group">
                             <form action="{{route('admin.dashboard')}}" method="GET">
@@ -50,7 +55,7 @@
                         </div>
                     </div>
                 </div>
-                @unless (Auth::user()->role == 'user' || Auth::user()->vendor_status == 'not_verified')
+                @unless (Auth::user()->role == 'user' || Auth::user()->vendor_status == 'not_verified'||(Auth::user()->role == 'subvendor' && !in_array('orders',$vendor_responsibilities)))
                 @if (Auth::user()->role == 'admin')
                 <div class="row row-sm mg-b-20">
                     <div class="col-lg-7 ht-lg-100p mt-3">
@@ -75,6 +80,10 @@
                                     <div>
                                         <label class="mg-b-0">New Vendors</label>
                                         <h2>{{count($vendors)}}</h2>
+                                    </div>
+                                    <div>
+                                        <label class="mg-b-0">New Sub Vendors</label>
+                                        <h2>{{count($subvendors)}}</h2>
                                     </div>
                                     <div>
                                         <label class="mg-b-0">New Purchases</label>

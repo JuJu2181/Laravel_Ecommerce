@@ -11,7 +11,7 @@ use App\Http\Requests\PostsFormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Intervention\Image\Facades\Image;
-
+use App\Models\SubVendor;
 class PostsController extends Controller
 {
     /**
@@ -29,6 +29,14 @@ class PostsController extends Controller
             }
             $posts = Post::latest('id')->where('user_id','=',Auth::id())->paginate(4);
             return view('admin.posts.index',compact('posts'));
+        }elseif(Auth::user()->role == 'subvendor'){
+            $subvendor = SubVendor::where('email','=',Auth::user()->email)->first();
+            // return $subvendor;
+            if(!in_array('posts',json_decode($subvendor->responsibility))){
+                abort(403);
+            }
+            $posts = Post::latest('id')->where('user_id','=',$subvendor->vendor->id)->paginate(4);
+            return view('admin.posts.index',compact('posts'));
         }else{
             $posts = Post::latest('id')->paginate(4);
             return view('admin.posts.index',['posts'=>$posts]);
@@ -43,6 +51,10 @@ class PostsController extends Controller
     public function create()
     {
         if(Auth::user()->role == "user"){
+            abort(403);
+        }
+        $subvendor = SubVendor::where('email','=',Auth::user()->email)->first();
+        if(Auth::user()->role == 'subvendor' && !in_array('posts',json_decode($subvendor->responsibility))){
             abort(403);
         }
         // $categories = Category::all();
@@ -64,12 +76,16 @@ class PostsController extends Controller
         if(Auth::user()->vendor_status != 'verified'){
             abort(403);
         }
+        $subvendor = SubVendor::where('email','=',Auth::user()->email)->first();
+        if(Auth::user()->role == 'subvendor' && !in_array('posts',json_decode($subvendor->responsibility))){
+            abort(403);
+        }
         // validation rules using the form request
         // return $request;
         $request->validated();
         $post = new Post;
         $post->title = $request->input('title');
-        $post->user_id = Auth::id();
+        $post->user_id = $subvendor->vendor->id;
         $post->slug = $request->input('slug');
         $post->body = $request->input('body');
         $post->category_id = $request->input('category_id');
